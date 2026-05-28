@@ -36,6 +36,11 @@ def build_config_from_sidebar() -> SimulationConfig:
         ai_support_level=normalize_percent(st.session_state["ai_support_level"]),
         trust_in_ai=normalize_percent(st.session_state["trust_in_ai"]),
         ai_reliability=normalize_percent(st.session_state["ai_reliability"]),
+        effort_management=normalize_percent(st.session_state["effort_management"]),
+        skills_knowledge_coordination=normalize_percent(st.session_state["skills_knowledge_coordination"]),
+        task_strategy=normalize_percent(st.session_state["task_strategy"]),
+        female_proportion=normalize_percent(st.session_state["female_proportion"]),
+        team_engagement_baseline=normalize_percent(st.session_state["team_engagement_baseline"]),
         task_complexity=normalize_percent(st.session_state["task_complexity"]),
         dashboard_quality=normalize_percent(st.session_state["dashboard_quality"]),
         collective_memory=normalize_percent(st.session_state["collective_memory"]),
@@ -130,10 +135,17 @@ def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
     render_summary_metrics(with_ai, without_ai)
 
     st.subheader("Collective Intelligence Subcomponents")
-    ci_columns = st.columns(3)
+    ci_columns = st.columns(4)
     ci_columns[0].metric("Transactive Memory", f"{with_ai['summary']['transactive_memory']:.2f}")
     ci_columns[1].metric("Social Sensitivity", f"{with_ai['summary']['social_sensitivity']:.2f}")
     ci_columns[2].metric("Participation Balance", f"{with_ai['summary']['participation_balance']:.2f}")
+    ci_columns[3].metric("Skill Diversity", f"{with_ai['summary']['skill_diversity']:.2f}")
+
+    process_columns = st.columns(4)
+    process_columns[0].metric("Team Engagement", f"{with_ai['summary']['team_engagement']:.2f}")
+    process_columns[1].metric("Effort Management", f"{with_ai['summary']['effort_management']:.2f}")
+    process_columns[2].metric("Skills / Knowledge", f"{with_ai['summary']['skills_knowledge_coordination']:.2f}")
+    process_columns[3].metric("Task Strategy", f"{with_ai['summary']['task_strategy']:.2f}")
 
     ci_chart = with_ai["ci_components"].pivot(
         index="Sprint",
@@ -192,6 +204,12 @@ def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
                 "With AI support": round(with_ai["summary"]["team_effectiveness"], 2),
                 "Without AI support": round(without_ai["summary"]["team_effectiveness"], 2),
                 "Difference": round(with_ai["summary"]["team_effectiveness"] - without_ai["summary"]["team_effectiveness"], 2),
+            },
+            {
+                "Metric": "Team Engagement",
+                "With AI support": round(with_ai["summary"]["team_engagement"], 2),
+                "Without AI support": round(without_ai["summary"]["team_engagement"], 2),
+                "Difference": round(with_ai["summary"]["team_engagement"] - without_ai["summary"]["team_engagement"], 2),
             },
         ]
     )
@@ -291,7 +309,7 @@ st.write(
     This academic prototype simulates an agile team working across multiple sprints
     and compares outcomes with and without AI support. Collective Intelligence is
     modeled through transactive memory, shared attention, shared reasoning, social
-    sensitivity, participation balance, and trust calibration.
+    sensitivity, participation balance, team engagement, diversity, and trust calibration.
     """
 )
 
@@ -303,6 +321,11 @@ defaults = {
     "ai_support_level": 70,
     "trust_in_ai": 65,
     "ai_reliability": 78,
+    "effort_management": 65,
+    "skills_knowledge_coordination": 65,
+    "task_strategy": 65,
+    "female_proportion": 50,
+    "team_engagement_baseline": 65,
     "task_complexity": 58,
     "dashboard_quality": 70,
     "collective_memory": 62,
@@ -332,9 +355,45 @@ with st.sidebar:
     st.session_state["ai_reliability"] = st.slider("AI reliability", 0, 100, st.session_state["ai_reliability"])
     st.session_state["task_complexity"] = st.slider("Task complexity", 0, 100, st.session_state["task_complexity"])
     st.session_state["dashboard_quality"] = st.slider("Dashboard quality", 0, 100, st.session_state["dashboard_quality"])
-    st.session_state["collective_memory"] = st.slider("Collective memory", 0, 100, st.session_state["collective_memory"])
-    st.session_state["collective_attention"] = st.slider("Collective attention", 0, 100, st.session_state["collective_attention"])
-    st.session_state["collective_reasoning"] = st.slider("Collective reasoning", 0, 100, st.session_state["collective_reasoning"])
+    with st.expander("Team & Process", expanded=False):
+        st.session_state["effort_management"] = st.slider(
+            "Effort management",
+            0,
+            100,
+            st.session_state["effort_management"],
+        )
+        st.session_state["skills_knowledge_coordination"] = st.slider(
+            "Skills / knowledge coordination",
+            0,
+            100,
+            st.session_state["skills_knowledge_coordination"],
+        )
+        st.session_state["task_strategy"] = st.slider("Task strategy", 0, 100, st.session_state["task_strategy"])
+        st.session_state["female_proportion"] = st.slider(
+            "Female proportion",
+            0,
+            100,
+            st.session_state["female_proportion"],
+        )
+        st.session_state["team_engagement_baseline"] = st.slider(
+            "Initial team engagement",
+            0,
+            100,
+            st.session_state["team_engagement_baseline"],
+        )
+        st.session_state["collective_memory"] = st.slider("Collective memory", 0, 100, st.session_state["collective_memory"])
+        st.session_state["collective_attention"] = st.slider(
+            "Collective focus of attention",
+            0,
+            100,
+            st.session_state["collective_attention"],
+        )
+        st.session_state["collective_reasoning"] = st.slider(
+            "Collective reasoning",
+            0,
+            100,
+            st.session_state["collective_reasoning"],
+        )
     st.session_state["random_seed"] = st.number_input(
         "Random seed",
         min_value=0,

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from statistics import pstdev
 from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -21,6 +22,8 @@ class CollectiveIntelligenceComponents:
     social_sensitivity: float
     participation_balance: float
     transactive_coordination: float
+    team_engagement: float
+    skill_diversity: float
 
     def as_dict(self) -> dict[str, float]:
         return {
@@ -30,6 +33,8 @@ class CollectiveIntelligenceComponents:
             "social_sensitivity": self.social_sensitivity,
             "participation_balance": self.participation_balance,
             "transactive_coordination": self.transactive_coordination,
+            "team_engagement": self.team_engagement,
+            "skill_diversity": self.skill_diversity,
         }
 
 
@@ -55,9 +60,22 @@ def average_social_sensitivity(team_members: List[TeamMember]) -> float:
     return clamp(sum(member.social_sensitivity for member in team_members) / len(team_members))
 
 
+def skill_diversity_score(team_members: List[TeamMember]) -> float:
+    """
+    Functional diversity proxy based on spread in team member skill levels.
+    """
+
+    if len(team_members) < 2:
+        return 0.0
+
+    skill_levels = [member.skill_level for member in team_members]
+    return clamp(pstdev(skill_levels) * 3.0)
+
+
 def transactive_memory_score(
     collective_memory: float,
     team_members: List[TeamMember],
+    skills_knowledge_coordination: float,
 ) -> float:
     """
     Transactive memory combines shared retention with specialization diversity.
@@ -71,7 +89,11 @@ def transactive_memory_score(
 
     skill_levels = [member.skill_level for member in team_members]
     specialization = clamp(max(skill_levels) - min(skill_levels))
-    return clamp((0.60 * collective_memory) + (0.40 * specialization))
+    return clamp(
+        (0.50 * collective_memory)
+        + (0.30 * specialization)
+        + (0.20 * skills_knowledge_coordination)
+    )
 
 
 def transactive_coordination_score(
@@ -91,13 +113,20 @@ def compute_collective_intelligence_components(
     collective_attention: float,
     collective_reasoning: float,
     coordination_need: float,
+    skills_knowledge_coordination: float,
+    team_engagement: float,
     team_members: List[TeamMember],
 ) -> CollectiveIntelligenceComponents:
     participation_balance = participation_balance_score(team_members)
     social_sensitivity = average_social_sensitivity(team_members)
+    skill_diversity = skill_diversity_score(team_members)
 
     return CollectiveIntelligenceComponents(
-        transactive_memory=transactive_memory_score(collective_memory, team_members),
+        transactive_memory=transactive_memory_score(
+            collective_memory,
+            team_members,
+            skills_knowledge_coordination,
+        ),
         shared_attention=clamp(collective_attention),
         shared_reasoning=clamp(collective_reasoning),
         social_sensitivity=social_sensitivity,
@@ -107,6 +136,8 @@ def compute_collective_intelligence_components(
             coordination_need=coordination_need,
             participation_balance=participation_balance,
         ),
+        team_engagement=clamp(team_engagement),
+        skill_diversity=skill_diversity,
     )
 
 
@@ -119,12 +150,14 @@ def collective_intelligence_score(components: CollectiveIntelligenceComponents) 
     """
 
     return clamp(
-        (0.20 * components.transactive_memory)
-        + (0.18 * components.shared_attention)
-        + (0.18 * components.shared_reasoning)
-        + (0.18 * components.social_sensitivity)
-        + (0.13 * components.participation_balance)
-        + (0.13 * components.transactive_coordination)
+        (0.18 * components.transactive_memory)
+        + (0.16 * components.shared_attention)
+        + (0.16 * components.shared_reasoning)
+        + (0.16 * components.social_sensitivity)
+        + (0.10 * components.participation_balance)
+        + (0.10 * components.transactive_coordination)
+        + (0.08 * components.team_engagement)
+        + (0.06 * components.skill_diversity)
     )
 
 
@@ -137,6 +170,8 @@ def decision_quality_score(
     use_ai: bool,
     social_sensitivity: float,
     trust_calibration: float,
+    task_strategy: float,
+    skills_knowledge_coordination: float,
 ) -> float:
     """
     Decision quality is influenced by team cognition, task coordination demands,
@@ -146,11 +181,13 @@ def decision_quality_score(
     ai_bonus = ai_support_level * dashboard_quality * trust_calibration if use_ai else 0.0
 
     return clamp(
-        (0.30 * collective_reasoning)
-        + (0.18 * collective_attention)
-        + (0.18 * coordination_need)
-        + (0.12 * dashboard_quality)
+        (0.24 * collective_reasoning)
+        + (0.16 * collective_attention)
+        + (0.14 * coordination_need)
+        + (0.10 * dashboard_quality)
         + (0.12 * social_sensitivity)
+        + (0.08 * task_strategy)
+        + (0.06 * skills_knowledge_coordination)
         + (0.10 * ai_bonus)
     )
 

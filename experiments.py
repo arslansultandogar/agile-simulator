@@ -20,15 +20,25 @@ SUMMARY_METRICS = [
     "transactive_memory",
     "social_sensitivity",
     "participation_balance",
+    "team_engagement",
+    "skill_diversity",
+    "effort_management",
+    "skills_knowledge_coordination",
+    "task_strategy",
 ]
 
 SENSITIVITY_PARAMETERS = {
     "trust_in_ai": "Trust in AI",
     "ai_support_level": "AI support level",
     "ai_reliability": "AI reliability",
+    "effort_management": "Effort management",
+    "skills_knowledge_coordination": "Skills / knowledge coordination",
+    "task_strategy": "Task strategy",
+    "female_proportion": "Female proportion",
+    "team_engagement_baseline": "Initial team engagement",
     "dashboard_quality": "Dashboard quality",
     "collective_memory": "Collective memory",
-    "collective_attention": "Collective attention",
+    "collective_attention": "Collective focus of attention",
     "collective_reasoning": "Collective reasoning",
     "task_complexity": "Task complexity",
 }

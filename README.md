@@ -25,14 +25,19 @@ The simulator treats team performance as a combination of:
 - AI-supported shared cognition
 - Collective Intelligence
 
-Collective Intelligence is represented with three team-level dimensions:
+Collective Intelligence is represented with team-level cognitive and process dimensions:
 
 - collective memory
-- collective attention
+- collective focus of attention
 - collective reasoning
+- social sensitivity
+- participation balance
+- team engagement
+- skill diversity
+- transactive coordination
 
 These values influence decision quality and are updated slightly from sprint to sprint based
-on communication, dashboard quality, and sprint outcomes.
+on task coordination needs, dashboard quality, trust calibration, and sprint outcomes.
 
 ## How to install dependencies
 
@@ -126,6 +131,21 @@ agile-ai-simulator/
 - `task_type`
   Type of work in the backlog: feature, bug, refactor, or spike. Each type has different coordination need, defect risk, uncertainty, and skill demand.
 
+- `effort_management`
+  Team process criterion for sustaining and allocating effort. It affects capacity and overload tolerance.
+
+- `skills_knowledge_coordination`
+  Team process criterion for using the right expertise at the right time. It improves transactive memory and reduces defects.
+
+- `task_strategy`
+  Team process criterion for selecting and adapting the work approach. It improves allocation quality, decision quality, and completion probability.
+
+- `female_proportion`
+  Proportion of women in the simulated team. It is included because Woolley et al. (2010) found female proportion related to group collective intelligence, partly through social sensitivity.
+
+- `team_engagement_baseline`
+  Initial team engagement level. Engagement then evolves from sprint outcomes, decision quality, and trust calibration.
+
 - `task_complexity`
   Baseline complexity of the work in the backlog.
 
@@ -136,7 +156,7 @@ agile-ai-simulator/
   The team's ability to retain and reuse shared knowledge.
 
 - `collective_attention`
-  The team's ability to focus collectively on the right issues.
+  The team's collective focus of attention on the right issues.
 
 - `collective_reasoning`
   The team's ability to interpret information and make decisions together.
@@ -149,6 +169,7 @@ agile-ai-simulator/
 Each simulated team member has:
 
 - `skill_level`
+- `gender`
 - `availability`
 - `communication_level`
 - `social_sensitivity`
@@ -186,16 +207,33 @@ This reflects the idea that AI can improve coordination by helping the team matc
 This module improves:
 
 - coordination
-- collective attention
+- collective focus of attention
 - decision support
 
 The effect depends on:
 
 - AI support level
 - dashboard quality
-- communication quality
+- task coordination need
+- task strategy
+- trust calibration
 
 This reflects the idea that AI can act as a shared cognition layer that helps teams maintain common situational awareness.
+
+## Connection to process criteria and diversity
+
+The current model includes three team process criteria inspired by Marks, Mathieu, and Zaccaro (2001):
+
+- `effort_management`
+  Represents how well the team sustains and distributes effort during the sprint.
+
+- `skills_knowledge_coordination`
+  Represents how well the team knows who has the relevant expertise and uses that knowledge.
+
+- `task_strategy`
+  Represents how well the team selects and adapts its work approach.
+
+The model also includes `female_proportion` as a research variable following Woolley et al. (2010), and `skill_diversity` as a functional diversity proxy inspired by Hong and Page (2004). The simulator does not implement vocal synchrony or NLP-based audio analysis; instead, `social_sensitivity` represents the underlying social perceptiveness construct.
 
 ## Output metrics
 
@@ -209,6 +247,11 @@ The app reports:
 - transactive memory
 - social sensitivity
 - participation balance
+- team engagement
+- skill diversity
+- effort management
+- skills / knowledge coordination
+- task strategy
 - trust calibration
 - team effectiveness score
 - AI benefit score

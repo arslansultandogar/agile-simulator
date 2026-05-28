@@ -42,6 +42,11 @@ class SimulationConfig:
     ai_support_level: float = 0.70
     trust_in_ai: float = 0.65
     ai_reliability: float = 0.78
+    effort_management: float = 0.65
+    skills_knowledge_coordination: float = 0.65
+    task_strategy: float = 0.65
+    female_proportion: float = 0.50
+    team_engagement_baseline: float = 0.65
     task_complexity: float = 0.58
     dashboard_quality: float = 0.70
     collective_memory: float = 0.62
@@ -50,11 +55,18 @@ class SimulationConfig:
     random_seed: int = 42
 
 
-def _planned_capacity_points(team_members: List[TeamMember]) -> int:
+def _planned_capacity_points(team_members: List[TeamMember], effort_management: float) -> int:
     capacity = 0.0
+    effort_multiplier = 0.90 + (0.20 * effort_management)
 
     for member in team_members:
-        capacity += 8.0 * member.availability * member.work_speed * (0.80 + (0.20 * member.skill_level))
+        capacity += (
+            8.0
+            * member.availability
+            * member.work_speed
+            * (0.80 + (0.20 * member.skill_level))
+            * effort_multiplier
+        )
 
     return max(1, int(round(capacity)))
 
@@ -78,6 +90,9 @@ def _task_completion_probability(
     dashboard_quality: float,
     use_ai: bool,
     trust_calibration: float,
+    effort_management: float,
+    task_strategy: float,
+    team_engagement: float,
 ) -> float:
     profile = get_task_type_profile(task.task_type)
     coordination_need = float(profile["coordination_need"])
@@ -86,7 +101,7 @@ def _task_completion_probability(
     skill_fit = 1.0 - abs(member.skill_level - task.required_skill_level)
     expected_individual_capacity = planned_capacity_points / max(1, team_size)
     overload_ratio = workload_points / max(1.0, expected_individual_capacity)
-    overload_penalty = max(0.0, overload_ratio - 1.0) * 0.12
+    overload_penalty = max(0.0, overload_ratio - 1.0) * (0.15 - (0.06 * effort_management))
     ai_bonus = ai_support_level * dashboard_quality * member.trust_in_ai * trust_calibration if use_ai else 0.0
 
     probability = (
@@ -100,6 +115,8 @@ def _task_completion_probability(
         + (0.08 * decision_quality)
         + (0.06 * coordination_need)
         + completion_bonus
+        + (0.05 * task_strategy)
+        + (0.05 * team_engagement)
         + (0.08 * ai_bonus)
         - (0.14 * task.difficulty)
         - (0.08 * task.uncertainty)
@@ -118,6 +135,7 @@ def _task_defect_probability(
     use_ai: bool,
     trust_calibration: float,
     skill_fit: float,
+    skills_knowledge_coordination: float,
 ) -> float:
     profile = get_task_type_profile(task.task_type)
     defect_risk = float(profile["defect_risk"])
@@ -133,6 +151,7 @@ def _task_defect_probability(
         + (0.10 * defect_risk)
         - (0.10 * decision_quality)
         - (0.08 * ai_quality_bonus)
+        - (0.05 * skills_knowledge_coordination)
         + misfit_penalty
     )
 
@@ -159,6 +178,20 @@ def _update_collective_dimension(
     return clamp(current_value + change, 0.0, 1.0)
 
 
+def _update_team_engagement(
+    current_value: float,
+    outcome_signal: float,
+    decision_quality: float,
+    trust_calibration: float,
+) -> float:
+    change = (
+        0.04 * (outcome_signal - 0.5)
+        + 0.03 * (decision_quality - 0.5)
+        + 0.02 * (trust_calibration - 0.5)
+    )
+    return clamp(current_value + change, 0.0, 1.0)
+
+
 def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, object]:
     rng = np.random.default_rng(config.random_seed)
 
@@ -166,6 +199,7 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
         team_size=config.team_size,
         trust_in_ai=config.trust_in_ai,
         ai_reliability=config.ai_reliability,
+        female_proportion=config.female_proportion,
         rng=rng,
     )
     backlog = generate_backlog(
@@ -178,6 +212,7 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
     collective_memory = config.collective_memory
     collective_attention = config.collective_attention
     collective_reasoning = config.collective_reasoning
+    team_engagement = config.team_engagement_baseline
 
     sprint_records: List[Dict[str, float]] = []
     ci_component_history: List[Dict[str, float]] = []
@@ -186,7 +221,10 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
         if not backlog:
             break
 
-        sprint_capacity_points = _planned_capacity_points(team_members)
+        sprint_capacity_points = _planned_capacity_points(
+            team_members,
+            effort_management=config.effort_management,
+        )
         sprint_tasks = select_sprint_tasks(backlog, sprint_capacity_points)
         planned_points = sum(task.effort_points for task in sprint_tasks)
         sprint_coordination_need = average_coordination_need(sprint_tasks)
@@ -225,11 +263,15 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
                 "decision_gain": config.dashboard_quality * 0.10,
             }
 
+        allocation_quality = clamp((0.85 * allocation_quality) + (0.15 * config.task_strategy))
+
         ci_components = compute_collective_intelligence_components(
             collective_memory=collective_memory,
             collective_attention=collective_attention,
             collective_reasoning=collective_reasoning,
             coordination_need=sprint_coordination_need,
+            skills_knowledge_coordination=config.skills_knowledge_coordination,
+            team_engagement=team_engagement,
             team_members=team_members,
         )
         collective_intelligence = collective_intelligence_score(ci_components)
@@ -243,6 +285,8 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             use_ai=use_ai,
             social_sensitivity=ci_components.social_sensitivity,
             trust_calibration=trust_calibration,
+            task_strategy=config.task_strategy,
+            skills_knowledge_coordination=config.skills_knowledge_coordination,
         )
 
         completed_tasks = 0
@@ -267,6 +311,9 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
                 dashboard_quality=config.dashboard_quality,
                 use_ai=use_ai,
                 trust_calibration=trust_calibration,
+                effort_management=config.effort_management,
+                task_strategy=config.task_strategy,
+                team_engagement=team_engagement,
             )
 
             if rng.random() <= completion_probability:
@@ -283,6 +330,7 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
                     use_ai=use_ai,
                     trust_calibration=trust_calibration,
                     skill_fit=skill_fit,
+                    skills_knowledge_coordination=config.skills_knowledge_coordination,
                 )
 
                 if rng.random() <= defect_probability:
@@ -305,6 +353,12 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             actual_ai_reliability=config.ai_reliability,
             sprint_outcome_signal=outcome_signal,
             use_ai=use_ai,
+        )
+        team_engagement = _update_team_engagement(
+            current_value=team_engagement,
+            outcome_signal=outcome_signal,
+            decision_quality=decision_quality,
+            trust_calibration=trust_calibration,
         )
 
         collective_memory = _update_collective_dimension(
@@ -340,6 +394,8 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             collective_attention=collective_attention,
             collective_reasoning=collective_reasoning,
             coordination_need=sprint_coordination_need,
+            skills_knowledge_coordination=config.skills_knowledge_coordination,
+            team_engagement=team_engagement,
             team_members=team_members,
         )
         collective_intelligence_after_update = collective_intelligence_score(ci_components_after_update)
@@ -387,6 +443,11 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
                 "Transactive Memory": round(ci_components_after_update.transactive_memory * 100, 2),
                 "Social Sensitivity": round(ci_components_after_update.social_sensitivity * 100, 2),
                 "Participation Balance": round(ci_components_after_update.participation_balance * 100, 2),
+                "Team Engagement": round(ci_components_after_update.team_engagement * 100, 2),
+                "Skill Diversity": round(ci_components_after_update.skill_diversity * 100, 2),
+                "Effort Management": round(config.effort_management * 100, 2),
+                "Skills Knowledge": round(config.skills_knowledge_coordination * 100, 2),
+                "Task Strategy": round(config.task_strategy * 100, 2),
                 "Trust Calibration": round(trust_calibration * 100, 2),
                 "Team Effectiveness Score": round(team_effectiveness, 2),
                 "AI Benefit Score": round(ai_benefit, 2),
@@ -410,6 +471,11 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             "transactive_memory": 0.0,
             "social_sensitivity": 0.0,
             "participation_balance": 0.0,
+            "team_engagement": 0.0,
+            "skill_diversity": 0.0,
+            "effort_management": 0.0,
+            "skills_knowledge_coordination": 0.0,
+            "task_strategy": 0.0,
         }
     else:
         summary = {
@@ -424,6 +490,11 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             "transactive_memory": float(results_df["Transactive Memory"].mean()),
             "social_sensitivity": float(results_df["Social Sensitivity"].mean()),
             "participation_balance": float(results_df["Participation Balance"].mean()),
+            "team_engagement": float(results_df["Team Engagement"].mean()),
+            "skill_diversity": float(results_df["Skill Diversity"].mean()),
+            "effort_management": float(results_df["Effort Management"].mean()),
+            "skills_knowledge_coordination": float(results_df["Skills Knowledge"].mean()),
+            "task_strategy": float(results_df["Task Strategy"].mean()),
         }
 
     return {

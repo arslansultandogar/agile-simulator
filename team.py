@@ -12,6 +12,7 @@ class TeamMember:
 
     member_id: int
     name: str
+    gender: str
     skill_level: float
     availability: float
     communication_level: float
@@ -30,19 +31,27 @@ def generate_team(
     team_size: int,
     trust_in_ai: float,
     ai_reliability: float,
+    female_proportion: float,
     rng: np.random.Generator,
 ) -> List[TeamMember]:
     """
     Create a team with slight variation around baseline trust and skill levels.
+
+    Gender is modeled only as a research variable for Woolley et al. (2010),
+    where female proportion relates to collective intelligence partly through
+    social sensitivity.
     """
 
     members: List[TeamMember] = []
+    female_count = int(round(team_size * _clamp(female_proportion)))
 
     for member_id in range(1, team_size + 1):
+        gender = "F" if member_id <= female_count else "M"
         skill_level = _clamp(rng.normal(0.68, 0.12))
         availability = _clamp(rng.normal(0.88, 0.08), 0.55, 1.0)
         communication_level = _clamp(rng.normal(0.72, 0.10))
-        social_sensitivity = _clamp(rng.normal(0.62, 0.12))
+        social_sensitivity_baseline = 0.66 if gender == "F" else 0.60
+        social_sensitivity = _clamp(rng.normal(social_sensitivity_baseline, 0.12))
         member_trust_in_ai = _clamp(rng.normal(trust_in_ai, 0.12))
         perceived_ai_reliability = _clamp(rng.normal(ai_reliability + 0.05, 0.10))
         work_speed = _clamp(rng.normal(0.95, 0.12), 0.55, 1.35)
@@ -62,6 +71,7 @@ def generate_team(
             TeamMember(
                 member_id=member_id,
                 name=f"Member {member_id}",
+                gender=gender,
                 skill_level=skill_level,
                 availability=availability,
                 communication_level=communication_level,
