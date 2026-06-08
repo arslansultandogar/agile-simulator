@@ -1,0 +1,78 @@
+erDiagram
+    SIMULATION ||--o{ SPRINT : contains
+    SIMULATION ||--|| TEAM : has
+    SIMULATION ||--|| BACKLOG : has
+    SIMULATION {
+        int team_size
+        int number_of_sprints
+        string task_type
+        float ai_support_level
+        float trust_in_ai
+        float ai_reliability
+        float effort_management
+        float skills_knowledge_coordination
+        float task_strategy
+        float female_proportion
+        float team_engagement_baseline
+        float collective_memory
+        float collective_attention
+        float collective_reasoning
+    }
+
+    TEAM ||--|{ TEAM_MEMBER : comprises
+    TEAM {
+        int team_size
+        float female_proportion
+    }
+
+    TEAM_MEMBER {
+        int member_id
+        string gender
+        float skill_level
+        float social_sensitivity
+        float trust_in_ai
+        float perceived_ai_reliability
+    }
+
+    BACKLOG ||--|{ TASK : contains
+    BACKLOG {
+        int number_of_tasks
+        string task_type
+        float task_complexity
+    }
+
+    TASK {
+        int task_id
+        string task_type
+        int effort_points
+        float difficulty
+        float uncertainty
+    }
+
+    SPRINT ||--|{ TASK : selects
+    SPRINT ||--|| SPRINT_METRICS : produces
+    SPRINT ||--|| CI_STATE : snapshots
+    SPRINT {
+        int sprint_number
+        int planned_points
+        int completed_points
+    }
+
+    TEAM_MEMBER }o--o{ TASK : assigned
+    SPRINT_METRICS {
+        float velocity
+        float completion_rate
+        float defect_rate
+        float team_effectiveness
+        float ai_benefit
+    }
+
+    CI_STATE {
+        float transactive_memory
+        float shared_attention
+        float shared_reasoning
+        float social_sensitivity
+        float team_engagement
+        float skill_diversity
+        float collective_intelligence
+    }

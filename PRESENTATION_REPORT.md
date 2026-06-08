@@ -172,6 +172,10 @@ In agile work, coordination demand depends strongly on **what kind of work** the
 | **Effort management process criterion** | Sidebar slider `effort_management` | Marks, Mathieu & Zaccaro (2001) action-phase processes | Increases planned capacity and reduces overload penalty |
 | **Skills and knowledge process criterion** | Sidebar slider `skills_knowledge_coordination` | Wegner (1987), Lewis (2003), Marks et al. (2001) | Strengthens transactive memory and reduces defect probability |
 | **Task strategy process criterion** | Sidebar slider `task_strategy` | Marks et al. (2001) strategy formulation and planning | Improves allocation quality, decision quality, and completion probability |
+| **Riedl collaboration-process predictors** | Existing process sliders | Riedl et al. (2021) | Effort, skill congruence / skills-knowledge coordination, and strategy now feed CI systems directly |
+| **Scrum team effectiveness context** | Conceptual mapping, not extra sliders | Verwijs & Russo (2023), Strode et al. (2022) | Grounds agile performance in responsiveness, shared mental models, communication, trust, and teamwork effectiveness |
+| **Hackman effectiveness criteria** | New summary metrics | Hackman (1987), Wageman et al. (2005) | Team effectiveness includes task output, team viability, and member sustainability |
+| **Collective memory, attention, reasoning systems** | CI baseline sliders and computed components | Kommol, Riedl & Woolley (2025), Woolley & Mayo (2025) | Clarifies that CI is structured around memory, attention, and reasoning |
 | **Social perceptiveness / social cognition** | Internal `social_sensitivity` per member | Woolley et al. (2010), Engel et al. (2014) | Feeds CI and decision quality |
 | **Female proportion** | Sidebar slider `female_proportion` | Woolley et al. (2010) | Shapes generated team gender labels and social sensitivity baseline |
 | **Skill diversity** | Computed from team skill spread | Hong & Page (2004) | Adds functional diversity to CI |
@@ -229,6 +233,8 @@ These are **not** set manually in the UI; they emerge from team generation and e
 | **Decision quality (%)** | Quality of team decisions this sprint | Yes |
 | **Collective Intelligence score** | Aggregate CI from subconstructs | Yes |
 | **Transactive memory** | CI subcomponent: shared retention + specialization | Yes |
+| **Shared attention** | CI subcomponent: collective focus of attention plus effort and participation | Yes |
+| **Shared reasoning** | CI subcomponent: collective reasoning plus strategy and knowledge coordination | Yes |
 | **Social sensitivity** | CI subcomponent: interpersonal awareness | Yes |
 | **Participation balance** | CI subcomponent: even contribution across members | Yes |
 | **Team engagement** | Emergent motivational state updated from sprint outcomes | Yes |
@@ -237,19 +243,28 @@ These are **not** set manually in the UI; they emerge from team generation and e
 | **Skills / knowledge coordination** | Process criterion input reflected in results | Yes |
 | **Task strategy** | Process criterion input reflected in results | Yes |
 | **Trust calibration (%)** | Alignment between perceived and actual AI reliability | Yes |
-| **Team effectiveness score** | Combined delivery + quality + CI + decision score | Yes |
+| **Team viability (%)** | Future capacity to keep working well together; based on CI, engagement, trust calibration, and decision quality | Yes |
+| **Member sustainability (%)** | Well-being/sustainability proxy based on engagement, effort management, and low overload | Yes |
+| **Overload pressure (%)** | Workload strain relative to expected member capacity | No |
+| **Team effectiveness score** | Hackman-informed composite of task output, team viability, and member sustainability | Yes |
 | **AI benefit score** | Value added by AI this sprint (0 in non-AI scenario) | Yes |
 | **Backlog remaining** | Tasks still not done | No |
 
 #### Team effectiveness formula (for thesis explanation)
 
-Team effectiveness combines:
+Team effectiveness is now based on Hackman's broader view that effective teams must produce good work, remain viable for future work, and avoid damaging member sustainability. The simulator computes:
 
-- 30% velocity ratio
-- 25% completion rate
-- 15% quality (1 − defect rate)
-- 15% decision quality
-- 15% collective intelligence
+- **Task output** = velocity, completion, and quality (low defect rate)
+- **Team viability** = collective intelligence, engagement, trust calibration, and decision quality
+- **Member sustainability** = engagement, effort management, and low overload pressure
+
+The final team effectiveness score uses simulation weights:
+
+- 55% task output
+- 25% team viability
+- 20% member sustainability
+
+These are transparent model assumptions for simulation and sensitivity analysis, not empirical coefficients estimated from the cited papers.
 
 #### Collective Intelligence formula
 
@@ -263,6 +278,15 @@ CI is computed from eight subconstructs:
 - 10% transactive coordination
 - 8% team engagement
 - 6% skill diversity
+
+The CI subconstructs are now organized around Kommol, Riedl & Woolley's memory-attention-reasoning structure:
+
+- **Collective/shared memory** is the baseline retained knowledge across sprints.
+- **Transactive memory** operationalizes that memory as who knows what, specialization, and skills/knowledge coordination.
+- **Shared attention** combines collective focus, effort management, participation balance, and coordination need.
+- **Shared reasoning** combines collective reasoning, task strategy, social sensitivity, and skills/knowledge coordination.
+
+As above, these percentages are simulation weights for interpretability, not direct empirical percentages from the papers.
 
 ---
 
@@ -378,6 +402,18 @@ Open browser → sidebar parameters → three tabs: **Single Run**, **Monte Carl
 ## 9. Literature Review — All 30 Papers
 
 Below is the full paper set reviewed for this project. For each paper: **citation**, **main finding**, **relevance to the simulator**, and **implemented / partial / future**.
+
+### Additional references added from `new-ref.bib`
+
+| Key | Citation focus | How it changes the simulator |
+|---|---|---|
+| `Verwijs2023` | Theory of Scrum team effectiveness: responsiveness, stakeholder concern, continuous improvement, autonomy, management support | Grounds agile/Scrum performance interpretation beyond generic velocity |
+| `strode2022teamwork` | Agile Teamwork Effectiveness Model: shared leadership, team orientation, redundancy, adaptability, peer feedback, shared mental models, communication, trust | Connects CI systems to agile teamwork mechanisms |
+| `Riedl2021` | CI predicts performance; collaboration process is the strongest predictor, especially skill congruence, strategy, and effort | Makes effort management, skills/knowledge coordination, and task strategy explicit CI predictors |
+| `woolley2025teams` | Teams as interdependent systems; team capability and CI as dynamic constructs under complexity | Supports the dynamic, feedback-based framing of agile teams |
+| `kommol2025structure` | CI structure emerges from collective memory, attention, and reasoning | Reorganizes CI explanation around the three CI systems |
+| `Hackman1987` | Team effectiveness includes task output, member well-being/growth, and future team viability | Adds task output, team viability, and member sustainability framing |
+| `Wageman2005` | Team Diagnostic Survey and conditions supporting team effectiveness | Supports broad team effectiveness and model diagnostics |
 
 ---
 

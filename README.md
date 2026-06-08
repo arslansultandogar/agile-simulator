@@ -222,7 +222,7 @@ This reflects the idea that AI can act as a shared cognition layer that helps te
 
 ## Connection to process criteria and diversity
 
-The current model includes three team process criteria inspired by Marks, Mathieu, and Zaccaro (2001):
+The current model includes three team process criteria inspired by Marks, Mathieu, and Zaccaro (2001) and aligned with Riedl et al. (2021):
 
 - `effort_management`
   Represents how well the team sustains and distributes effort during the sprint.
@@ -233,7 +233,7 @@ The current model includes three team process criteria inspired by Marks, Mathie
 - `task_strategy`
   Represents how well the team selects and adapts its work approach.
 
-The model also includes `female_proportion` as a research variable following Woolley et al. (2010), and `skill_diversity` as a functional diversity proxy inspired by Hong and Page (2004). The simulator does not implement vocal synchrony or NLP-based audio analysis; instead, `social_sensitivity` represents the underlying social perceptiveness construct.
+The model also includes `female_proportion` as a research variable following Woolley et al. (2010), and `skill_diversity` as a functional diversity proxy inspired by Hong and Page (2004). The CI system is explained through collective/shared memory, attention, and reasoning following Kommol, Riedl, and Woolley (2025). The simulator does not implement vocal synchrony or NLP-based audio analysis; instead, `social_sensitivity` represents the underlying social perceptiveness construct.
 
 ## Output metrics
 
@@ -245,6 +245,8 @@ The app reports:
 - decision quality
 - collective intelligence score
 - transactive memory
+- shared attention
+- shared reasoning
 - social sensitivity
 - participation balance
 - team engagement
@@ -253,6 +255,9 @@ The app reports:
 - skills / knowledge coordination
 - task strategy
 - trust calibration
+- team viability
+- member sustainability
+- overload pressure
 - team effectiveness score
 - AI benefit score
 
@@ -260,14 +265,13 @@ These metrics are intentionally simple and interpretable. They are meant for con
 
 ## Connection to agile team effectiveness
 
-The prototype models agile team effectiveness as a combination of:
+The prototype models agile team effectiveness with a Hackman-inspired structure:
 
-- delivery performance
-- work quality
-- decision quality
-- Collective Intelligence
+- task output: delivery performance and work quality
+- team viability: Collective Intelligence, engagement, trust calibration, and decision quality
+- member sustainability: engagement, effort management, and low overload pressure
 
-This aligns with the view that effective agile teams are not only fast, but also adaptive, coordinated, and capable of making good decisions together.
+This aligns with the view that effective agile teams are not only fast, but also adaptive, coordinated, sustainable, and capable of working together in future sprints. The Scrum/teamwork interpretation is grounded in Verwijs and Russo (2023) and Strode, Dingsøyr, and Lindsjørn (2022).
 
 ## Connection to Collective Intelligence
 

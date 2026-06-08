@@ -8,6 +8,24 @@ if TYPE_CHECKING:
     from team import TeamMember
 
 
+CI_COMPONENT_WEIGHTS = {
+    "transactive_memory": 0.18,
+    "shared_attention": 0.16,
+    "shared_reasoning": 0.16,
+    "social_sensitivity": 0.16,
+    "participation_balance": 0.10,
+    "transactive_coordination": 0.10,
+    "team_engagement": 0.08,
+    "skill_diversity": 0.06,
+}
+
+TEAM_EFFECTIVENESS_WEIGHTS = {
+    "task_output": 0.55,
+    "team_viability": 0.25,
+    "member_sustainability": 0.20,
+}
+
+
 def clamp(value: float, minimum: float = 0.0, maximum: float = 1.0) -> float:
     return max(minimum, min(maximum, value))
 
@@ -90,9 +108,51 @@ def transactive_memory_score(
     skill_levels = [member.skill_level for member in team_members]
     specialization = clamp(max(skill_levels) - min(skill_levels))
     return clamp(
-        (0.50 * collective_memory)
-        + (0.30 * specialization)
-        + (0.20 * skills_knowledge_coordination)
+        (0.45 * collective_memory)
+        + (0.25 * specialization)
+        + (0.30 * skills_knowledge_coordination)
+    )
+
+
+def shared_attention_score(
+    collective_attention: float,
+    effort_management: float,
+    participation_balance: float,
+    coordination_need: float,
+) -> float:
+    """
+    Collective attention reflects shared focus and sustained effort allocation.
+
+    Riedl et al. (2021) treat effort and collaboration process as predictors of
+    CI; Kommol et al. (2025) frames attention as one of the three core CI systems.
+    """
+
+    return clamp(
+        (0.50 * collective_attention)
+        + (0.20 * effort_management)
+        + (0.20 * participation_balance)
+        + (0.10 * coordination_need)
+    )
+
+
+def shared_reasoning_score(
+    collective_reasoning: float,
+    task_strategy: float,
+    social_sensitivity: float,
+    skills_knowledge_coordination: float,
+) -> float:
+    """
+    Collective reasoning reflects how the team interprets information together.
+
+    Strategy and skill/knowledge coordination operationalize Hackman's and
+    Riedl et al.'s criteria for effective collaborative task performance.
+    """
+
+    return clamp(
+        (0.50 * collective_reasoning)
+        + (0.25 * task_strategy)
+        + (0.15 * social_sensitivity)
+        + (0.10 * skills_knowledge_coordination)
     )
 
 
@@ -113,7 +173,9 @@ def compute_collective_intelligence_components(
     collective_attention: float,
     collective_reasoning: float,
     coordination_need: float,
+    effort_management: float,
     skills_knowledge_coordination: float,
+    task_strategy: float,
     team_engagement: float,
     team_members: List[TeamMember],
 ) -> CollectiveIntelligenceComponents:
@@ -127,8 +189,18 @@ def compute_collective_intelligence_components(
             team_members,
             skills_knowledge_coordination,
         ),
-        shared_attention=clamp(collective_attention),
-        shared_reasoning=clamp(collective_reasoning),
+        shared_attention=shared_attention_score(
+            collective_attention=collective_attention,
+            effort_management=effort_management,
+            participation_balance=participation_balance,
+            coordination_need=coordination_need,
+        ),
+        shared_reasoning=shared_reasoning_score(
+            collective_reasoning=collective_reasoning,
+            task_strategy=task_strategy,
+            social_sensitivity=social_sensitivity,
+            skills_knowledge_coordination=skills_knowledge_coordination,
+        ),
         social_sensitivity=social_sensitivity,
         participation_balance=participation_balance,
         transactive_coordination=transactive_coordination_score(
@@ -150,14 +222,14 @@ def collective_intelligence_score(components: CollectiveIntelligenceComponents) 
     """
 
     return clamp(
-        (0.18 * components.transactive_memory)
-        + (0.16 * components.shared_attention)
-        + (0.16 * components.shared_reasoning)
-        + (0.16 * components.social_sensitivity)
-        + (0.10 * components.participation_balance)
-        + (0.10 * components.transactive_coordination)
-        + (0.08 * components.team_engagement)
-        + (0.06 * components.skill_diversity)
+        (CI_COMPONENT_WEIGHTS["transactive_memory"] * components.transactive_memory)
+        + (CI_COMPONENT_WEIGHTS["shared_attention"] * components.shared_attention)
+        + (CI_COMPONENT_WEIGHTS["shared_reasoning"] * components.shared_reasoning)
+        + (CI_COMPONENT_WEIGHTS["social_sensitivity"] * components.social_sensitivity)
+        + (CI_COMPONENT_WEIGHTS["participation_balance"] * components.participation_balance)
+        + (CI_COMPONENT_WEIGHTS["transactive_coordination"] * components.transactive_coordination)
+        + (CI_COMPONENT_WEIGHTS["team_engagement"] * components.team_engagement)
+        + (CI_COMPONENT_WEIGHTS["skill_diversity"] * components.skill_diversity)
     )
 
 
@@ -207,15 +279,33 @@ def team_effectiveness_score(
     defect_rate: float,
     decision_quality: float,
     collective_intelligence: float,
+    team_viability: float | None = None,
+    member_sustainability: float | None = None,
 ) -> float:
+    """
+    Hackman-informed team effectiveness.
+
+    The composite keeps the original delivery/quality metrics visible while
+    adding proxies for future viability and member sustainability.
+    """
+
     quality_component = 1.0 - defect_rate
+    task_output = clamp(
+        (0.40 * velocity_ratio)
+        + (0.35 * completion_rate)
+        + (0.25 * quality_component)
+    )
+    viability = (
+        clamp(team_viability)
+        if team_viability is not None
+        else clamp((0.60 * collective_intelligence) + (0.40 * decision_quality))
+    )
+    sustainability = clamp(member_sustainability) if member_sustainability is not None else completion_rate
 
     return clamp(
-        (0.30 * velocity_ratio)
-        + (0.25 * completion_rate)
-        + (0.15 * quality_component)
-        + (0.15 * decision_quality)
-        + (0.15 * collective_intelligence)
+        (TEAM_EFFECTIVENESS_WEIGHTS["task_output"] * task_output)
+        + (TEAM_EFFECTIVENESS_WEIGHTS["team_viability"] * viability)
+        + (TEAM_EFFECTIVENESS_WEIGHTS["member_sustainability"] * sustainability)
     ) * 100.0
 
 

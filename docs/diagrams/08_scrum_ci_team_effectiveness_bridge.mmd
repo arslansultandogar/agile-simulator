@@ -1,0 +1,76 @@
+%% Agile AI Simulator — Scrum, Collective Intelligence, and Team Effectiveness Bridge
+%% Copy into Mermaid Live Editor or draw.io Mermaid import.
+
+flowchart LR
+    subgraph scrumRefs["Agile and Scrum effectiveness"]
+        verwijs["Verwijs2023: responsiveness, stakeholder concern, continuous improvement, autonomy, management support"]
+        strode["Strode2022 ATEM: shared mental models, communication, trust"]
+    end
+
+    subgraph processPredictors["Collaboration process predictors"]
+        effort["effort_management"]
+        skills["skills_knowledge_coordination"]
+        strategy["task_strategy"]
+        engagement["team_engagement"]
+        social["social_sensitivity and participation_balance"]
+    end
+
+    subgraph ciSystems["Kommol2025 CI systems"]
+        memory["Collective/shared memory to transactive memory"]
+        attention["Collective focus of attention"]
+        reasoning["Collective reasoning"]
+    end
+
+    subgraph ciScore["Collective Intelligence"]
+        ci["Aggregate CI score"]
+        decision["Decision quality"]
+    end
+
+    subgraph agileOutcomes["Agile performance outcomes"]
+        velocity["Velocity"]
+        completion["Completion rate"]
+        defects["Defect rate"]
+    end
+
+    subgraph hackman["Hackman team effectiveness"]
+        output["Task output"]
+        viability["Team viability"]
+        sustainability["Member sustainability"]
+        effectiveness["Team effectiveness score"]
+    end
+
+    verwijs --> agileOutcomes
+    strode --> ciSystems
+    effort --> attention
+    skills --> memory
+    skills --> reasoning
+    strategy --> reasoning
+    engagement --> ci
+    social --> ci
+    social --> decision
+
+    memory --> ci
+    attention --> ci
+    reasoning --> ci
+    attention --> decision
+    reasoning --> decision
+
+    ci --> completion
+    decision --> completion
+    decision --> defects
+    completion --> velocity
+    completion --> output
+    velocity --> output
+    defects --> output
+    ci --> viability
+    engagement --> viability
+    effort --> sustainability
+    output --> effectiveness
+    viability --> effectiveness
+    sustainability --> effectiveness
+
+    agileOutcomes --> learning["Sprint learning feedback"]
+    learning --> memory
+    learning --> attention
+    learning --> reasoning
+    learning --> engagement

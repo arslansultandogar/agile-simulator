@@ -1,0 +1,104 @@
+classDiagram
+    class SimulationConfig {
+        +team_size
+        +number_of_sprints
+        +number_of_tasks
+        +task_type
+        +ai_support_level
+        +trust_in_ai
+        +ai_reliability
+        +effort_management
+        +skills_knowledge_coordination
+        +task_strategy
+        +female_proportion
+        +team_engagement_baseline
+        +task_complexity
+        +dashboard_quality
+        +collective_memory
+        +collective_attention
+        +collective_reasoning
+        +random_seed
+    }
+
+    class TeamMember {
+        +member_id
+        +name
+        +gender
+        +skill_level
+        +availability
+        +communication_level
+        +social_sensitivity
+        +trust_in_ai
+        +perceived_ai_reliability
+        +work_speed
+        +error_tendency
+    }
+
+    class Task {
+        +task_id
+        +task_type
+        +difficulty
+        +effort_points
+        +priority
+        +uncertainty
+        +required_skill_level
+    }
+
+    class TaskTypeProfile {
+        +coordination_need
+        +defect_risk
+        +uncertainty_modifier
+        +skill_demand
+        +completion_bonus
+    }
+
+    class CollectiveIntelligenceComponents {
+        +transactive_memory
+        +shared_attention
+        +shared_reasoning
+        +social_sensitivity
+        +participation_balance
+        +transactive_coordination
+        +team_engagement
+        +skill_diversity
+    }
+
+    class SprintResult {
+        +velocity
+        +completion_rate
+        +defect_rate
+        +decision_quality
+        +collective_intelligence
+        +team_effectiveness
+        +ai_benefit
+        +trust_calibration
+        +team_viability
+        +member_sustainability
+        +overload_pressure
+    }
+
+    class AISupport {
+        <<module>>
+        allocate_tasks_with_ai()
+        shared_cognition_assistant()
+        update_team_trust_after_sprint()
+    }
+
+    class MetricsEngine {
+        <<module>>
+        compute_collective_intelligence_components()
+        decision_quality_score()
+        team_effectiveness_score()
+        trust_calibration_score()
+    }
+
+    SimulationConfig "1" --> "1..*" TeamMember : generates
+    SimulationConfig "1" --> "1..*" Task : generates
+    Task "n" --> "1" TaskTypeProfile : uses
+    TeamMember "1..*" --> "0..*" Task : assigned_to
+    TeamMember "1..*" --> "1" CollectiveIntelligenceComponents : contributes_to
+    CollectiveIntelligenceComponents "1" --> "1" SprintResult : influences
+    AISupport ..> TeamMember : updates trust
+    AISupport ..> Task : allocates
+    MetricsEngine ..> CollectiveIntelligenceComponents : computes
+    MetricsEngine ..> SprintResult : computes

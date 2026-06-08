@@ -1,0 +1,33 @@
+flowchart LR
+    CM[collective_memory] --> TM[transactive_memory]
+    SKC[skills_knowledge_coordination] --> TM
+    TMskills[member skill spread] --> TM
+
+    CA[collective_attention] --> SA[shared_attention]
+    EM[effort_management] --> SA
+    PB --> SA
+    CN[coordination_need from task type] --> SA
+
+    CR[collective_reasoning] --> SR[shared_reasoning]
+    TS[task_strategy] --> SR
+    SKC --> SR
+
+    TMmembers[TeamMember.social_sensitivity] --> SS[social_sensitivity]
+    FP[female_proportion] --> TMmembers
+
+    TMcomm[TeamMember.communication_level] --> PB[participation_balance]
+    CM --> TC[transactive_coordination]
+    CN --> TC
+    PB --> TC
+
+    TEB[team_engagement] --> TE[team_engagement in CI]
+    SD[skill_diversity from team] --> SDout[skill_diversity in CI]
+
+    TM --> CI["Collective Intelligence Score<br/>(weighted sum)"]
+    SA --> CI
+    SR --> CI
+    SS --> CI
+    PB --> CI
+    TC --> CI
+    TE --> CI
+    SDout --> CI

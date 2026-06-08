@@ -1,0 +1,24 @@
+flowchart TB
+    TR[trust_in_ai] --> UPTAKE[AI advice uptake]
+    AR[ai_reliability] --> ACTUAL[Actual AI quality]
+    PR[perceived_ai_reliability] --> TC[trust_calibration]
+    AR --> TC
+
+    AI[ai_support_level] --> ALLOC[AI Task Allocation]
+    DQ[dashboard_quality] --> DASH[Shared Cognition Dashboard]
+    TC --> ALLOC
+    TC --> DASH
+    AR --> ALLOC
+
+    ALLOC --> AQ[allocation_quality]
+    DASH --> CG[coordination_gain]
+    DASH --> DG[decision_gain]
+
+    AQ --> AIB["AI Benefit Score<br/>(× ai_support × trust_calibration)"]
+    CG --> AIB
+    DG --> AIB
+    TC --> AIB
+
+    ALLOC --> COMP[Completion probability]
+    DASH --> DQout[Decision quality]
+    TC --> DEF[Defect probability]

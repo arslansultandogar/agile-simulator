@@ -1,0 +1,88 @@
+flowchart TB
+    subgraph inputs [Inputs — SimulationConfig]
+        TS[team_size]
+        NS[number_of_sprints]
+        NT[number_of_tasks]
+        TT[task_type]
+        TC[task_complexity]
+        AI[ai_support_level]
+        TR[trust_in_ai]
+        AR[ai_reliability]
+        DQ[dashboard_quality]
+        EM[effort_management]
+        SK[skills_knowledge_coordination]
+        TS2[task_strategy]
+        FP[female_proportion]
+        TEB[team_engagement_baseline]
+        CM[collective_memory]
+        CA[collective_attention]
+        CR[collective_reasoning]
+    end
+
+    subgraph agents [Agents]
+        TM[TeamMember attributes]
+        TK[Task attributes]
+        TTP[TaskTypeProfile]
+    end
+
+    subgraph processes [Team Processes per Sprint]
+        CAP[Capacity planning]
+        ALLOC[Task allocation]
+        EXEC[Task execution]
+        REV[Outcome evaluation]
+        TRUST[Trust learning]
+    end
+
+    subgraph emergent [Emergent States]
+        TE[team_engagement]
+        CI[CollectiveIntelligenceComponents]
+        TC2[trust_calibration]
+        DQ2[decision_quality]
+    end
+
+    subgraph outcomes [Outcomes]
+        VEL[velocity]
+        COMP[completion_rate]
+        DEF[defect_rate]
+        EFF[team_effectiveness]
+        TV[team_viability]
+        MS[member_sustainability]
+        OP[overload_pressure]
+        AIB[ai_benefit]
+    end
+
+    inputs --> agents
+    FP --> TM
+    TT --> TTP
+    TTP --> TK
+
+    agents --> processes
+    EM --> CAP
+    TS2 --> ALLOC
+    SK --> EXEC
+    AI --> ALLOC
+    AR --> ALLOC
+
+    processes --> emergent
+    CM --> CI
+    CA --> CI
+    CR --> CI
+    TM --> CI
+    TEB --> TE
+    REV --> TE
+    AR --> TC2
+    TM --> TC2
+
+    emergent --> outcomes
+    CI --> EFF
+    DQ2 --> EFF
+    CI --> TV
+    TE --> TV
+    TE --> MS
+    CAP --> OP
+    OP --> MS
+    TV --> EFF
+    MS --> EFF
+    TE --> COMP
+    SK --> DEF
+    AI --> AIB

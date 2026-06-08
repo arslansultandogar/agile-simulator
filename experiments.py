@@ -18,6 +18,8 @@ SUMMARY_METRICS = [
     "ai_benefit",
     "trust_calibration",
     "transactive_memory",
+    "shared_attention",
+    "shared_reasoning",
     "social_sensitivity",
     "participation_balance",
     "team_engagement",
@@ -25,6 +27,9 @@ SUMMARY_METRICS = [
     "effort_management",
     "skills_knowledge_coordination",
     "task_strategy",
+    "overload_pressure",
+    "team_viability",
+    "member_sustainability",
 ]
 
 SENSITIVITY_PARAMETERS = {
@@ -37,7 +42,7 @@ SENSITIVITY_PARAMETERS = {
     "female_proportion": "Female proportion",
     "team_engagement_baseline": "Initial team engagement",
     "dashboard_quality": "Dashboard quality",
-    "collective_memory": "Collective memory",
+    "collective_memory": "Collective / shared memory",
     "collective_attention": "Collective focus of attention",
     "collective_reasoning": "Collective reasoning",
     "task_complexity": "Task complexity",
@@ -172,7 +177,14 @@ def run_sensitivity_analysis(
             "value_percent": round(value * 100, 1),
         }
 
-        for metric in ("team_effectiveness", "collective_intelligence", "defect_rate", "trust_calibration"):
+        for metric in (
+            "team_effectiveness",
+            "collective_intelligence",
+            "team_viability",
+            "member_sustainability",
+            "defect_rate",
+            "trust_calibration",
+        ):
             if metric in stats.index:
                 row[f"{metric}_mean"] = float(stats.loc[metric, "Mean"])
 

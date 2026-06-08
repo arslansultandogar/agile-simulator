@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant Config as SimulationConfig
+    participant Team as TeamMember[]
+    participant Backlog as Task[]
+    participant AI as AISupport
+    participant Metrics as MetricsEngine
+    participant State as CI + Engagement
+
+    Config->>Team: generate_team()
+    Config->>Backlog: generate_backlog()
+
+    loop Each Sprint
+        Backlog->>Backlog: select_sprint_tasks()
+        AI->>Team: allocate tasks
+        AI->>Metrics: shared_cognition_assistant()
+        Metrics->>State: compute CI components
+        Metrics->>Metrics: decision_quality
+
+        loop Each Task
+            Metrics->>Metrics: completion_probability
+            Metrics->>Metrics: defect_probability
+        end
+
+        Metrics->>State: update collective_memory/attention/reasoning
+        Metrics->>State: update team_engagement
+        AI->>Team: update trust_in_ai
+        Metrics->>Metrics: team_effectiveness, ai_benefit
+    end

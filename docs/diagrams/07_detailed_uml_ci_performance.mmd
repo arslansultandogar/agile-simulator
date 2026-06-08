@@ -1,0 +1,387 @@
+%% =============================================================================
+%% Agile AI Simulator — Detailed UML + CI → Performance Impact
+%% Copy into https://mermaid.live (one diagram at a time, or use --- separator)
+%% =============================================================================
+
+
+%% ─────────────────────────────────────────────────────────────────────────────
+%% DIAGRAM 1 — Detailed UML Class Diagram
+%% ─────────────────────────────────────────────────────────────────────────────
+
+classDiagram
+    direction TB
+
+    class SimulationConfig {
+        <<dataclass>>
+        +int team_size
+        +int number_of_sprints
+        +int number_of_tasks
+        +str task_type
+        +float ai_support_level
+        +float trust_in_ai
+        +float ai_reliability
+        +float effort_management
+        +float skills_knowledge_coordination
+        +float task_strategy
+        +float female_proportion
+        +float team_engagement_baseline
+        +float task_complexity
+        +float dashboard_quality
+        +float collective_memory
+        +float collective_attention
+        +float collective_reasoning
+        +int random_seed
+    }
+
+    class TeamMember {
+        <<dataclass>>
+        +int member_id
+        +str name
+        +str gender
+        +float skill_level
+        +float availability
+        +float communication_level
+        +float social_sensitivity
+        +float trust_in_ai
+        +float perceived_ai_reliability
+        +float work_speed
+        +float error_tendency
+    }
+
+    class Task {
+        <<dataclass>>
+        +int task_id
+        +str task_type
+        +float difficulty
+        +int effort_points
+        +int priority
+        +float uncertainty
+        +float required_skill_level
+    }
+
+    class TaskTypeProfile {
+        <<lookup>>
+        +float coordination_need
+        +float defect_risk
+        +float uncertainty_modifier
+        +float skill_demand
+        +float completion_bonus
+    }
+
+    class CollectiveIntelligenceComponents {
+        <<dataclass>>
+        +float transactive_memory
+        +float shared_attention
+        +float shared_reasoning
+        +float social_sensitivity
+        +float participation_balance
+        +float transactive_coordination
+        +float team_engagement
+        +float skill_diversity
+        +as_dict() dict
+    }
+
+    class SprintMetrics {
+        <<record>>
+        +int sprint_number
+        +int planned_points
+        +int completed_points
+        +float velocity_ratio
+        +float completion_rate
+        +float defect_rate
+        +float decision_quality
+        +float collective_intelligence
+        +float team_effectiveness
+        +float ai_benefit
+        +float trust_calibration
+        +float team_viability
+        +float member_sustainability
+        +float overload_pressure
+    }
+
+    class SimulationEngine {
+        <<module simulation.py>>
+        +run_simulation(config, use_ai) Dict
+        -_planned_capacity_points()
+        -_task_completion_probability()
+        -_task_defect_probability()
+        -_update_collective_dimension()
+        -_update_team_engagement()
+    }
+
+    class MetricsEngine {
+        <<module metrics.py>>
+        +compute_collective_intelligence_components()
+        +collective_intelligence_score()
+        +decision_quality_score()
+        +team_effectiveness_score()
+        +trust_calibration_score()
+        +ai_benefit_score()
+        +participation_balance_score()
+        +skill_diversity_score()
+        +transactive_memory_score()
+        +transactive_coordination_score()
+    }
+
+    class AISupport {
+        <<module ai_support.py>>
+        +allocate_tasks_with_ai()
+        +allocate_tasks_without_ai()
+        +shared_cognition_assistant()
+        +update_team_trust_after_sprint()
+        +average_perceived_ai_reliability()
+    }
+
+    class TeamGenerator {
+        <<module team.py>>
+        +generate_team()
+    }
+
+    class TaskGenerator {
+        <<module tasks.py>>
+        +generate_backlog()
+        +select_sprint_tasks()
+        +get_task_type_profile()
+        +average_coordination_need()
+    }
+
+    SimulationConfig "1" --> "1" SimulationEngine : configures
+    SimulationConfig "1" ..> "1..*" TeamMember : inputs to
+    SimulationConfig "1" ..> "1..*" Task : inputs to
+    TeamGenerator ..> TeamMember : creates
+    TaskGenerator ..> Task : creates
+    Task "n" --> "1" TaskTypeProfile : profile_of
+
+    SimulationEngine "1" --> "1..*" TeamMember : manages
+    SimulationEngine "1" --> "0..*" Task : backlog
+    SimulationEngine "1" --> "1..*" SprintMetrics : records
+    SimulationEngine ..> MetricsEngine : computes scores
+    SimulationEngine ..> AISupport : allocates and assists
+
+    TeamMember "1..*" --> "0..*" Task : assigned_to
+    TeamMember "1..*" --> CollectiveIntelligenceComponents : contributes
+
+    MetricsEngine ..> CollectiveIntelligenceComponents : builds
+    CollectiveIntelligenceComponents ..> SprintMetrics : influences
+
+    note for CollectiveIntelligenceComponents "CI subconstructs are computed each sprint.\nRiedl2021 process predictors feed memory, attention, and reasoning.\nAggregate CI feeds task completion (+10%).\nSee Diagram 2 for per-component paths."
+
+    note for SprintMetrics "Agile outcomes per sprint:\nvelocity, completion_rate, defect_rate.\nHackman-style effectiveness combines task output,\nteam viability, and member sustainability."
+
+    note for SimulationEngine "Sprint loop:\n1 allocate tasks\n2 compute CI + decision quality\n3 draw completion/defects\n4 update CI baselines + engagement\n5 record metrics"
+
+
+%% ─────────────────────────────────────────────────────────────────────────────
+%% DIAGRAM 2 — CI Components → Agile Performance Impact (copy separately)
+%% ─────────────────────────────────────────────────────────────────────────────
+
+---
+%% CI COMPONENTS → PERFORMANCE IMPACT MAP
+
+flowchart TB
+    subgraph BUILD["How CI components are built"]
+        direction TB
+        CM["collective_memory<br/>(config, evolves)"]
+        CA["collective_attention<br/>(config, evolves)"]
+        CR["collective_reasoning<br/>(config, evolves)"]
+        SKC["skills_knowledge_coordination<br/>(config)"]
+        TEB["team_engagement<br/>(baseline + emergent)"]
+        TMskill["member skill spread"]
+        TMcomm["member communication_level"]
+        TMss["member social_sensitivity"]
+        FP["female_proportion → social_sensitivity"]
+        CN["coordination_need<br/>(from task type)"]
+
+        CM --> TMcomp["transactive_memory<br/>wt 18% of CI"]
+        SKC --> TMcomp
+        TMskill --> TMcomp
+
+        CA --> SA["shared_attention<br/>wt 16% of CI"]
+        CR --> SR["shared_reasoning<br/>wt 16% of CI"]
+
+        FP --> TMss
+        TMss --> SS["social_sensitivity<br/>wt 16% of CI"]
+        TMcomm --> PB["participation_balance<br/>wt 10% of CI"]
+
+        CM --> TC["transactive_coordination<br/>wt 10% of CI"]
+        CN --> TC
+        PB --> TC
+
+        TEB --> TE["team_engagement<br/>wt 8% of CI"]
+        TMskill --> SD["skill_diversity<br/>wt 6% of CI"]
+    end
+
+    subgraph AGG["Aggregate CI score"]
+        CI["collective_intelligence_score()<br/>= weighted sum of 8 components"]
+        TMcomp --> CI
+        SA --> CI
+        SR --> CI
+        SS --> CI
+        PB --> CI
+        TC --> CI
+        TE --> CI
+        SD --> CI
+    end
+
+    subgraph MEDIATE["Mediating score"]
+        DQ["decision_quality_score()"]
+        CR -->|"24%"| DQ
+        CA -->|"16%"| DQ
+        CN -->|"14%"| DQ
+        SS -->|"12%"| DQ
+        SKC -->|"6%"| DQ
+    end
+
+    subgraph TASK["Per-task stochastic outcomes"]
+        COMP["completion_probability<br/>_task_completion_probability()"]
+        DEF["defect_probability<br/>_task_defect_probability()"]
+    end
+
+    subgraph PERF["Agile performance metrics"]
+        VEL["velocity<br/>(completed story points)"]
+        CRATE["completion_rate<br/>(tasks done / planned)"]
+        DRATE["defect_rate<br/>(defects / completed)"]
+        EFF["team_effectiveness_score()"]
+    end
+
+    subgraph FEEDBACK["Feedback loop (next sprint)"]
+        OS["outcome_signal<br/>45% completion + 35% velocity<br/>+ 20% quality"]
+        CM2["↑ collective_memory"]
+        CA2["↑ collective_attention"]
+        CR2["↑ collective_reasoning"]
+        TE2["↑ team_engagement"]
+    end
+
+    CI -->|"direct +10%"| COMP
+    DQ -->|"direct +8%"| COMP
+    TE -->|"direct +5%"| COMP
+
+    DQ -->|"direct −10%"| DEF
+
+    COMP --> VEL
+    COMP --> CRATE
+    DEF --> DRATE
+
+    CI -->|"direct +15%"| EFF
+    DQ -->|"direct +15%"| EFF
+    VEL -->|"via velocity_ratio +30%"| EFF
+    CRATE -->|"via completion_rate +25%"| EFF
+    DRATE -->|"via 1−defect_rate +15%"| EFF
+
+    VEL --> OS
+    CRATE --> OS
+    DRATE --> OS
+    OS --> CM2
+    OS --> CA2
+    OS --> CR2
+    OS --> TE2
+    CM2 -.-> CM
+    CA2 -.-> CA
+    CR2 -.-> CR
+    TE2 -.-> TEB
+
+    style CI fill:#fff3cd,stroke:#856404
+    style EFF fill:#d4edda,stroke:#155724
+    style FEEDBACK fill:#e8f4fc,stroke:#1a73e8
+
+
+---
+%% DIAGRAM 3 — CI component impact summary table (as flowchart for slides)
+
+flowchart LR
+    subgraph IMPACT["CI Component → Performance Path"]
+        direction TB
+
+        R1["transactive_memory<br/>→ aggregate CI (+10% completion)<br/>→ team effectiveness (+15%)"]
+        R2["shared_attention<br/>→ aggregate CI + decision quality (+16%)<br/>→ completion (+8%) · defects (−10%) · effectiveness (+15%)"]
+        R3["shared_reasoning<br/>→ aggregate CI + decision quality (+24%)<br/>→ completion · defects · effectiveness"]
+        R4["social_sensitivity<br/>→ aggregate CI + decision quality (+12%)<br/>→ completion · defects · effectiveness"]
+        R5["participation_balance<br/>→ aggregate CI only<br/>→ completion (+10%) · effectiveness (+15%)"]
+        R6["transactive_coordination<br/>→ aggregate CI only<br/>→ completion · effectiveness"]
+        R7["team_engagement<br/>→ aggregate CI (+8%) AND direct completion (+5%)<br/>→ velocity · completion_rate · effectiveness"]
+        R8["skill_diversity<br/>→ aggregate CI (+6% weight, smallest)<br/>→ completion · effectiveness"]
+
+        R9["FEEDBACK: good sprint outcomes<br/>raise memory, attention, reasoning, engagement<br/>→ higher CI next sprint"]
+    end
+
+    style R7 fill:#fff3cd,stroke:#856404
+    style R3 fill:#fff3cd,stroke:#856404
+    style R9 fill:#e8f4fc,stroke:#1a73e8
+
+
+---
+%% DIAGRAM 4 — Scrum, CI systems, and Hackman team effectiveness bridge
+
+flowchart LR
+    subgraph scrumRefs["Agile and Scrum effectiveness"]
+        verwijs["Verwijs2023: Scrum effectiveness"]
+        strode["Strode2022 ATEM: shared mental models, communication, trust"]
+    end
+
+    subgraph processPredictors["Collaboration process predictors"]
+        effort["effort_management"]
+        skills["skills_knowledge_coordination"]
+        strategy["task_strategy"]
+        engagement["team_engagement"]
+        social["social_sensitivity and participation_balance"]
+    end
+
+    subgraph ciSystems["Kommol2025 CI systems"]
+        memory["Collective/shared memory to transactive memory"]
+        attention["Collective focus of attention"]
+        reasoning["Collective reasoning"]
+    end
+
+    subgraph ciScore["Collective Intelligence"]
+        ci["Aggregate CI score"]
+        decision["Decision quality"]
+    end
+
+    subgraph agileOutcomes["Agile performance outcomes"]
+        velocity["Velocity"]
+        completion["Completion rate"]
+        defects["Defect rate"]
+    end
+
+    subgraph hackman["Hackman team effectiveness"]
+        output["Task output"]
+        viability["Team viability"]
+        sustainability["Member sustainability"]
+        effectiveness["Team effectiveness score"]
+    end
+
+    verwijs --> agileOutcomes
+    strode --> ciSystems
+    effort --> attention
+    skills --> memory
+    skills --> reasoning
+    strategy --> reasoning
+    engagement --> ci
+    social --> ci
+    social --> decision
+
+    memory --> ci
+    attention --> ci
+    reasoning --> ci
+    attention --> decision
+    reasoning --> decision
+
+    ci --> completion
+    decision --> completion
+    decision --> defects
+    completion --> velocity
+    completion --> output
+    velocity --> output
+    defects --> output
+    ci --> viability
+    engagement --> viability
+    effort --> sustainability
+    output --> effectiveness
+    viability --> effectiveness
+    sustainability --> effectiveness
+
+    agileOutcomes --> learning["Sprint learning feedback"]
+    learning --> memory
+    learning --> attention
+    learning --> reasoning
+    learning --> engagement

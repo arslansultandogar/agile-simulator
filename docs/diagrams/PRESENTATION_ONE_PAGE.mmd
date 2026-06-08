@@ -1,0 +1,73 @@
+%% Agile AI Simulator — One-Page Conceptual Model
+%% Use in Mermaid Live Editor, VS Code, or draw.io (import Mermaid)
+%% Optimised for a single presentation slide (16:9)
+
+flowchart LR
+    subgraph IN["① INPUTS & AGENTS"]
+        direction TB
+
+        subgraph CFG["SimulationConfig"]
+            direction TB
+            S1["Structural: team_size, sprints, tasks, task_type, complexity"]
+            S2["Process (Marks 2001): effort_management, skills_knowledge_coordination, task_strategy"]
+            S3["Diversity: female_proportion"]
+            S4["CI baselines: collective_memory, collective_attention, collective_reasoning"]
+            S5["AI: ai_support_level, trust_in_ai, ai_reliability, dashboard_quality"]
+            S6["Engagement: team_engagement_baseline"]
+        end
+
+        subgraph AGENTS["Generated Agents"]
+            direction TB
+            TM["TeamMember × N<br/>skill · gender · social_sensitivity · trust_in_ai · work_speed"]
+            TK["Task × M<br/>effort · difficulty · uncertainty · priority"]
+            TTP["TaskTypeProfile<br/>feature · bug · refactor · spike"]
+        end
+
+        CFG --> TM
+        CFG --> TK
+        TK --> TTP
+    end
+
+    subgraph MID["② PROCESSES & EMERGENT STATES"]
+        direction TB
+
+        subgraph PROC["Per-Sprint Processes"]
+            direction TB
+            P1["Capacity planning ← effort_management"]
+            P2["Task allocation ← task_strategy, AI level, trust"]
+            P3["Shared cognition dashboard ← dashboard_quality"]
+            P4["Task execution ← skills_knowledge_coordination"]
+            P5["Trust learning ← ai_reliability vs perceived"]
+            P1 --> P2 --> P3 --> P4 --> P5
+        end
+
+        subgraph EMERGE["Emergent Team State"]
+            direction TB
+            E1["Collective Intelligence (8 subconstructs)"]
+            E2["team_engagement"]
+            E3["trust_calibration"]
+            E4["decision_quality"]
+            E5["team_viability"]
+            E1 --- E2 --- E3 --- E4
+            E1 --- E5
+        end
+
+        PROC --> EMERGE
+    end
+
+    subgraph OUT["③ OUTCOMES"]
+        direction TB
+        O1["velocity"]
+        O2["completion_rate"]
+        O3["defect_rate"]
+        O4["team_effectiveness"]
+        O5["ai_benefit"]
+        O6["CI trajectory over sprints"]
+        O7["member_sustainability"]
+    end
+
+    IN ==>|config drives| MID ==>|metrics recorded| OUT
+
+    style IN fill:#e8f4fc,stroke:#1a73e8
+    style MID fill:#fef7e0,stroke:#f9ab00
+    style OUT fill:#e6f4ea,stroke:#34a853

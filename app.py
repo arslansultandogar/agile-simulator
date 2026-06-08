@@ -126,6 +126,30 @@ def render_summary_metrics(with_ai: dict, without_ai: dict) -> None:
         f"{with_ai['summary']['ai_benefit']:.2f}",
     )
 
+    metric_columns = st.columns(3)
+    metric_columns[0].metric(
+        "Team Viability (%)",
+        f"{with_ai['summary']['team_viability']:.2f}",
+        comparison_delta(with_ai["summary"]["team_viability"], without_ai["summary"]["team_viability"]),
+    )
+    metric_columns[1].metric(
+        "Member Sustainability (%)",
+        f"{with_ai['summary']['member_sustainability']:.2f}",
+        comparison_delta(
+            with_ai["summary"]["member_sustainability"],
+            without_ai["summary"]["member_sustainability"],
+        ),
+    )
+    metric_columns[2].metric(
+        "Overload Pressure (%)",
+        f"{with_ai['summary']['overload_pressure']:.2f}",
+        comparison_delta(
+            with_ai["summary"]["overload_pressure"],
+            without_ai["summary"]["overload_pressure"],
+            inverse=True,
+        ),
+    )
+
 
 def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
     ai_results = with_ai["results"]
@@ -137,15 +161,20 @@ def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
     st.subheader("Collective Intelligence Subcomponents")
     ci_columns = st.columns(4)
     ci_columns[0].metric("Transactive Memory", f"{with_ai['summary']['transactive_memory']:.2f}")
-    ci_columns[1].metric("Social Sensitivity", f"{with_ai['summary']['social_sensitivity']:.2f}")
-    ci_columns[2].metric("Participation Balance", f"{with_ai['summary']['participation_balance']:.2f}")
-    ci_columns[3].metric("Skill Diversity", f"{with_ai['summary']['skill_diversity']:.2f}")
+    ci_columns[1].metric("Shared Attention", f"{with_ai['summary']['shared_attention']:.2f}")
+    ci_columns[2].metric("Shared Reasoning", f"{with_ai['summary']['shared_reasoning']:.2f}")
+    ci_columns[3].metric("Social Sensitivity", f"{with_ai['summary']['social_sensitivity']:.2f}")
 
     process_columns = st.columns(4)
-    process_columns[0].metric("Team Engagement", f"{with_ai['summary']['team_engagement']:.2f}")
-    process_columns[1].metric("Effort Management", f"{with_ai['summary']['effort_management']:.2f}")
-    process_columns[2].metric("Skills / Knowledge", f"{with_ai['summary']['skills_knowledge_coordination']:.2f}")
-    process_columns[3].metric("Task Strategy", f"{with_ai['summary']['task_strategy']:.2f}")
+    process_columns[0].metric("Participation Balance", f"{with_ai['summary']['participation_balance']:.2f}")
+    process_columns[1].metric("Team Engagement", f"{with_ai['summary']['team_engagement']:.2f}")
+    process_columns[2].metric("Skill Diversity", f"{with_ai['summary']['skill_diversity']:.2f}")
+    process_columns[3].metric("Skills / Knowledge", f"{with_ai['summary']['skills_knowledge_coordination']:.2f}")
+
+    predictor_columns = st.columns(3)
+    predictor_columns[0].metric("Effort Management", f"{with_ai['summary']['effort_management']:.2f}")
+    predictor_columns[1].metric("Task Strategy", f"{with_ai['summary']['task_strategy']:.2f}")
+    predictor_columns[2].metric("Overload Pressure", f"{with_ai['summary']['overload_pressure']:.2f}")
 
     ci_chart = with_ai["ci_components"].pivot(
         index="Sprint",
@@ -210,6 +239,21 @@ def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
                 "With AI support": round(with_ai["summary"]["team_engagement"], 2),
                 "Without AI support": round(without_ai["summary"]["team_engagement"], 2),
                 "Difference": round(with_ai["summary"]["team_engagement"] - without_ai["summary"]["team_engagement"], 2),
+            },
+            {
+                "Metric": "Team Viability",
+                "With AI support": round(with_ai["summary"]["team_viability"], 2),
+                "Without AI support": round(without_ai["summary"]["team_viability"], 2),
+                "Difference": round(with_ai["summary"]["team_viability"] - without_ai["summary"]["team_viability"], 2),
+            },
+            {
+                "Metric": "Member Sustainability",
+                "With AI support": round(with_ai["summary"]["member_sustainability"], 2),
+                "Without AI support": round(without_ai["summary"]["member_sustainability"], 2),
+                "Difference": round(
+                    with_ai["summary"]["member_sustainability"] - without_ai["summary"]["member_sustainability"],
+                    2,
+                ),
             },
         ]
     )
@@ -294,9 +338,15 @@ def render_sensitivity_tab(config: SimulationConfig) -> None:
     )
     st.dataframe(sensitivity_df, width="stretch")
 
-    chart_df = sensitivity_df.set_index("value_percent")[
-        ["team_effectiveness_mean", "collective_intelligence_mean", "defect_rate_mean", "trust_calibration_mean"]
+    chart_columns = [
+        "team_effectiveness_mean",
+        "collective_intelligence_mean",
+        "team_viability_mean",
+        "member_sustainability_mean",
+        "defect_rate_mean",
+        "trust_calibration_mean",
     ]
+    chart_df = sensitivity_df.set_index("value_percent")[[column for column in chart_columns if column in sensitivity_df]]
     st.write("Average outcomes across parameter values")
     st.line_chart(chart_df)
 
@@ -308,8 +358,8 @@ st.write(
     """
     This academic prototype simulates an agile team working across multiple sprints
     and compares outcomes with and without AI support. Collective Intelligence is
-    modeled through transactive memory, shared attention, shared reasoning, social
-    sensitivity, participation balance, team engagement, diversity, and trust calibration.
+    modeled through collective/shared memory, shared attention, shared reasoning,
+    social sensitivity, participation balance, team engagement, diversity, and trust calibration.
     """
 )
 
@@ -381,18 +431,34 @@ with st.sidebar:
             100,
             st.session_state["team_engagement_baseline"],
         )
-        st.session_state["collective_memory"] = st.slider("Collective memory", 0, 100, st.session_state["collective_memory"])
+        st.caption(
+            "CI systems follow the memory-attention-reasoning framing. "
+            "Collective/shared memory is the baseline store of team knowledge; "
+            "transactive memory is the computed mechanism for who knows what."
+        )
+        st.session_state["collective_memory"] = st.slider(
+            "Collective / shared memory",
+            0,
+            100,
+            st.session_state["collective_memory"],
+            help=(
+                "Baseline retained team knowledge. In the model it is operationalized "
+                "through transactive memory: who knows what, specialization, and skills/knowledge coordination."
+            ),
+        )
         st.session_state["collective_attention"] = st.slider(
             "Collective focus of attention",
             0,
             100,
             st.session_state["collective_attention"],
+            help="Shared focus on sprint goals, effort allocation, and visible coordination demands.",
         )
         st.session_state["collective_reasoning"] = st.slider(
             "Collective reasoning",
             0,
             100,
             st.session_state["collective_reasoning"],
+            help="Joint interpretation, task strategy, problem solving, and decision quality.",
         )
     st.session_state["random_seed"] = st.number_input(
         "Random seed",
