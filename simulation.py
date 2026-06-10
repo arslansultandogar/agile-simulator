@@ -47,6 +47,7 @@ class SimulationConfig:
     task_strategy: float = 0.65
     female_proportion: float = 0.50
     team_engagement_baseline: float = 0.65
+    consequentiality: float = 0.65
     task_complexity: float = 0.58
     dashboard_quality: float = 0.70
     collective_memory: float = 0.62
@@ -185,11 +186,13 @@ def _update_team_engagement(
     outcome_signal: float,
     decision_quality: float,
     trust_calibration: float,
+    consequentiality: float,
 ) -> float:
     change = (
         0.04 * (outcome_signal - 0.5)
         + 0.03 * (decision_quality - 0.5)
         + 0.02 * (trust_calibration - 0.5)
+        + 0.03 * (consequentiality - 0.5)
     )
     return clamp(current_value + change, 0.0, 1.0)
 
@@ -214,7 +217,10 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
     collective_memory = config.collective_memory
     collective_attention = config.collective_attention
     collective_reasoning = config.collective_reasoning
-    team_engagement = config.team_engagement_baseline
+    team_engagement = clamp(
+        (0.75 * config.team_engagement_baseline)
+        + (0.25 * config.consequentiality)
+    )
 
     sprint_records: List[Dict[str, float]] = []
     ci_component_history: List[Dict[str, float]] = []
@@ -283,6 +289,7 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             effort_management=config.effort_management,
             skills_knowledge_coordination=config.skills_knowledge_coordination,
             task_strategy=config.task_strategy,
+            consequentiality=config.consequentiality,
             team_engagement=team_engagement,
             team_members=team_members,
         )
@@ -371,6 +378,7 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             outcome_signal=outcome_signal,
             decision_quality=decision_quality,
             trust_calibration=trust_calibration,
+            consequentiality=config.consequentiality,
         )
 
         collective_memory = _update_collective_dimension(
@@ -412,20 +420,23 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             effort_management=config.effort_management,
             skills_knowledge_coordination=config.skills_knowledge_coordination,
             task_strategy=config.task_strategy,
+            consequentiality=config.consequentiality,
             team_engagement=team_engagement,
             team_members=team_members,
         )
         collective_intelligence_after_update = collective_intelligence_score(ci_components_after_update)
         team_viability = clamp(
-            (0.45 * collective_intelligence_after_update)
-            + (0.25 * team_engagement)
-            + (0.20 * trust_calibration)
-            + (0.10 * decision_quality)
+            (0.40 * collective_intelligence_after_update)
+            + (0.20 * team_engagement)
+            + (0.20 * config.consequentiality)
+            + (0.15 * trust_calibration)
+            + (0.05 * decision_quality)
         )
         member_sustainability = clamp(
-            (0.45 * team_engagement)
-            + (0.35 * config.effort_management)
-            + (0.20 * (1.0 - overload_pressure))
+            (0.35 * team_engagement)
+            + (0.25 * config.consequentiality)
+            + (0.25 * config.effort_management)
+            + (0.15 * (1.0 - overload_pressure))
         )
 
         team_effectiveness = team_effectiveness_score(
@@ -477,9 +488,11 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
                 "Participation Balance": round(ci_components_after_update.participation_balance * 100, 2),
                 "Team Engagement": round(ci_components_after_update.team_engagement * 100, 2),
                 "Skill Diversity": round(ci_components_after_update.skill_diversity * 100, 2),
-                "Effort Management": round(config.effort_management * 100, 2),
-                "Skills Knowledge": round(config.skills_knowledge_coordination * 100, 2),
-                "Task Strategy": round(config.task_strategy * 100, 2),
+                "Age Diversity": round(ci_components_after_update.age_diversity * 100, 2),
+                "Effort Process": round(config.effort_management * 100, 2),
+                "Knowledge Skills Process": round(config.skills_knowledge_coordination * 100, 2),
+                "Strategy Process": round(config.task_strategy * 100, 2),
+                "Consequentiality": round(config.consequentiality * 100, 2),
                 "Overload Pressure": round(overload_pressure * 100, 2),
                 "Trust Calibration": round(trust_calibration * 100, 2),
                 "Team Viability": round(team_viability * 100, 2),
@@ -510,9 +523,11 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             "participation_balance": 0.0,
             "team_engagement": 0.0,
             "skill_diversity": 0.0,
+            "age_diversity": 0.0,
             "effort_management": 0.0,
             "skills_knowledge_coordination": 0.0,
             "task_strategy": 0.0,
+            "consequentiality": 0.0,
             "overload_pressure": 0.0,
             "team_viability": 0.0,
             "member_sustainability": 0.0,
@@ -534,9 +549,11 @@ def run_simulation(config: SimulationConfig, use_ai: bool = True) -> Dict[str, o
             "participation_balance": float(results_df["Participation Balance"].mean()),
             "team_engagement": float(results_df["Team Engagement"].mean()),
             "skill_diversity": float(results_df["Skill Diversity"].mean()),
-            "effort_management": float(results_df["Effort Management"].mean()),
-            "skills_knowledge_coordination": float(results_df["Skills Knowledge"].mean()),
-            "task_strategy": float(results_df["Task Strategy"].mean()),
+            "age_diversity": float(results_df["Age Diversity"].mean()),
+            "effort_management": float(results_df["Effort Process"].mean()),
+            "skills_knowledge_coordination": float(results_df["Knowledge Skills Process"].mean()),
+            "task_strategy": float(results_df["Strategy Process"].mean()),
+            "consequentiality": float(results_df["Consequentiality"].mean()),
             "overload_pressure": float(results_df["Overload Pressure"].mean()),
             "team_viability": float(results_df["Team Viability"].mean()),
             "member_sustainability": float(results_df["Member Sustainability"].mean()),

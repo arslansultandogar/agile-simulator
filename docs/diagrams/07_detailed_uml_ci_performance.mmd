@@ -25,6 +25,7 @@ classDiagram
         +float task_strategy
         +float female_proportion
         +float team_engagement_baseline
+        +float consequentiality
         +float task_complexity
         +float dashboard_quality
         +float collective_memory
@@ -38,6 +39,7 @@ classDiagram
         +int member_id
         +str name
         +str gender
+        +int age
         +float skill_level
         +float availability
         +float communication_level
@@ -78,6 +80,7 @@ classDiagram
         +float transactive_coordination
         +float team_engagement
         +float skill_diversity
+        +float age_diversity
         +as_dict() dict
     }
 
@@ -97,6 +100,8 @@ classDiagram
         +float team_viability
         +float member_sustainability
         +float overload_pressure
+        +float consequentiality
+        +float age_diversity
     }
 
     class SimulationEngine {
@@ -164,7 +169,7 @@ classDiagram
     MetricsEngine ..> CollectiveIntelligenceComponents : builds
     CollectiveIntelligenceComponents ..> SprintMetrics : influences
 
-    note for CollectiveIntelligenceComponents "CI subconstructs are computed each sprint.\nRiedl2021 process predictors feed memory, attention, and reasoning.\nAggregate CI feeds task completion (+10%).\nSee Diagram 2 for per-component paths."
+    note for CollectiveIntelligenceComponents "CI subconstructs are computed each sprint.\nRiedl2021 predictor items feed Kommol2025 systems:\nmemory, attention, and reasoning.\nAge diversity is modeled as a negative CI predictor."
 
     note for SprintMetrics "Agile outcomes per sprint:\nvelocity, completion_rate, defect_rate.\nHackman-style effectiveness combines task output,\nteam viability, and member sustainability."
 
@@ -184,20 +189,30 @@ flowchart TB
         CM["collective_memory<br/>(config, evolves)"]
         CA["collective_attention<br/>(config, evolves)"]
         CR["collective_reasoning<br/>(config, evolves)"]
-        SKC["skills_knowledge_coordination<br/>(config)"]
-        TEB["team_engagement<br/>(baseline + emergent)"]
+        SKC["knowledge_skills_process<br/>(config)"]
+        EM["effort_related_process<br/>(config)"]
+        TS["strategy_updating_process<br/>(config)"]
+        Conseq["consequentiality_shared_purpose<br/>(config)"]
+        TEB["team_engagement<br/>(team-level baseline + emergent)"]
         TMskill["member skill spread"]
+        IndividualSkill["individual skill level"]
+        AgeDiv["age_diversity<br/>(negative CI predictor)"]
         TMcomm["member communication_level"]
         TMss["member social_sensitivity"]
-        FP["female_proportion → social_sensitivity"]
+        FP["female_proportion proxy → social_sensitivity"]
         CN["coordination_need<br/>(from task type)"]
 
         CM --> TMcomp["transactive_memory<br/>wt 18% of CI"]
         SKC --> TMcomp
         TMskill --> TMcomp
+        IndividualSkill --> TMcomp
 
         CA --> SA["shared_attention<br/>wt 16% of CI"]
+        EM --> SA
+        Conseq --> SA
         CR --> SR["shared_reasoning<br/>wt 16% of CI"]
+        TS --> SR
+        SKC --> SR
 
         FP --> TMss
         TMss --> SS["social_sensitivity<br/>wt 16% of CI"]
@@ -209,6 +224,7 @@ flowchart TB
 
         TEB --> TE["team_engagement<br/>wt 8% of CI"]
         TMskill --> SD["skill_diversity<br/>wt 6% of CI"]
+        AgeDiv --> AgePenalty["age diversity penalty"]
     end
 
     subgraph AGG["Aggregate CI score"]
@@ -221,6 +237,7 @@ flowchart TB
         TC --> CI
         TE --> CI
         SD --> CI
+        AgePenalty --> CI
     end
 
     subgraph MEDIATE["Mediating score"]
@@ -262,11 +279,11 @@ flowchart TB
     COMP --> CRATE
     DEF --> DRATE
 
-    CI -->|"direct +15%"| EFF
-    DQ -->|"direct +15%"| EFF
-    VEL -->|"via velocity_ratio +30%"| EFF
-    CRATE -->|"via completion_rate +25%"| EFF
-    DRATE -->|"via 1−defect_rate +15%"| EFF
+    CI -->|"team viability input"| EFF
+    DQ -->|"team viability input"| EFF
+    VEL -->|"task output input"| EFF
+    CRATE -->|"task output input"| EFF
+    DRATE -->|"quality input"| EFF
 
     VEL --> OS
     CRATE --> OS
@@ -292,14 +309,15 @@ flowchart LR
     subgraph IMPACT["CI Component → Performance Path"]
         direction TB
 
-        R1["transactive_memory<br/>→ aggregate CI (+10% completion)<br/>→ team effectiveness (+15%)"]
-        R2["shared_attention<br/>→ aggregate CI + decision quality (+16%)<br/>→ completion (+8%) · defects (−10%) · effectiveness (+15%)"]
+        R1["transactive_memory<br/>→ aggregate CI (+10% completion)<br/>→ task output and viability"]
+        R2["shared_attention<br/>→ aggregate CI + decision quality<br/>→ completion (+8%) · defects (−10%) · effectiveness"]
         R3["shared_reasoning<br/>→ aggregate CI + decision quality (+24%)<br/>→ completion · defects · effectiveness"]
         R4["social_sensitivity<br/>→ aggregate CI + decision quality (+12%)<br/>→ completion · defects · effectiveness"]
-        R5["participation_balance<br/>→ aggregate CI only<br/>→ completion (+10%) · effectiveness (+15%)"]
+        R5["participation_balance<br/>→ aggregate CI only<br/>→ completion (+10%) · effectiveness"]
         R6["transactive_coordination<br/>→ aggregate CI only<br/>→ completion · effectiveness"]
         R7["team_engagement<br/>→ aggregate CI (+8%) AND direct completion (+5%)<br/>→ velocity · completion_rate · effectiveness"]
         R8["skill_diversity<br/>→ aggregate CI (+6% weight, smallest)<br/>→ completion · effectiveness"]
+        R10["age_diversity<br/>→ negative CI predictor"]
 
         R9["FEEDBACK: good sprint outcomes<br/>raise memory, attention, reasoning, engagement<br/>→ higher CI next sprint"]
     end
@@ -318,12 +336,23 @@ flowchart LR
         strode["Strode2022 ATEM: shared mental models, communication, trust"]
     end
 
-    subgraph processPredictors["Collaboration process predictors"]
-        effort["effort_management"]
-        skills["skills_knowledge_coordination"]
-        strategy["task_strategy"]
+    subgraph processPredictors["Riedl2021 process predictors"]
+        effort["effort_related_process"]
+        skillsProcess["knowledge_skills_process"]
+        strategyProcess["strategy_updating_process"]
+    end
+
+    subgraph attributes["Team attributes and diversity"]
+        individualSkill["individual_skill_level"]
+        skillDiversity["skill_diversity"]
+        ageDiversity["age_diversity_negative"]
+        femaleProxy["female_proportion_proxy"]
+        social["social_perceptiveness"]
+    end
+
+    subgraph engagementDrivers["Engagement and purpose"]
+        consequentiality["consequentiality_shared_purpose"]
         engagement["team_engagement"]
-        social["social_sensitivity and participation_balance"]
     end
 
     subgraph ciSystems["Kommol2025 CI systems"]
@@ -353,9 +382,15 @@ flowchart LR
     verwijs --> agileOutcomes
     strode --> ciSystems
     effort --> attention
-    skills --> memory
-    skills --> reasoning
-    strategy --> reasoning
+    skillsProcess --> memory
+    skillsProcess --> reasoning
+    strategyProcess --> reasoning
+    individualSkill --> memory
+    skillDiversity --> memory
+    ageDiversity --> ci
+    femaleProxy --> social
+    consequentiality --> attention
+    consequentiality --> engagement
     engagement --> ci
     social --> ci
     social --> decision
@@ -376,6 +411,8 @@ flowchart LR
     ci --> viability
     engagement --> viability
     effort --> sustainability
+    consequentiality --> viability
+    consequentiality --> sustainability
     output --> effectiveness
     viability --> effectiveness
     sustainability --> effectiveness

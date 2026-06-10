@@ -107,16 +107,16 @@ flowchart LR
         subgraph CFG["SimulationConfig"]
             direction TB
             S1["Structural: team_size, sprints, tasks, task_type, complexity"]
-            S2["Process (Marks 2001): effort_management, skills_knowledge_coordination, task_strategy"]
-            S3["Diversity: female_proportion"]
+            S2["Process (Riedl/Hackman): effort, knowledge/skills, strategy updating"]
+            S3["Diversity: skill, age, female proportion via social perceptiveness"]
             S4["CI baselines: collective_memory, collective_attention, collective_reasoning"]
             S5["AI: ai_support_level, trust_in_ai, ai_reliability, dashboard_quality"]
-            S6["Engagement: team_engagement_baseline"]
+            S6["Engagement: team_engagement_baseline, consequentiality/shared purpose"]
         end
 
         subgraph AGENTS["Generated Agents"]
             direction TB
-            TM["TeamMember × N<br/>skill · gender · social_sensitivity · trust_in_ai · work_speed"]
+            TM["TeamMember × N<br/>skill · age · gender · social_sensitivity · trust_in_ai · work_speed"]
             TK["Task × M<br/>effort · difficulty · uncertainty · priority"]
             TTP["TaskTypeProfile<br/>feature · bug · refactor · spike"]
         end
@@ -131,23 +131,25 @@ flowchart LR
 
         subgraph PROC["Per-Sprint Processes"]
             direction TB
-            P1["Capacity planning ← effort_management"]
-            P2["Task allocation ← task_strategy, AI level, trust"]
+            P1["Capacity planning ← effort-related process"]
+            P2["Task allocation ← strategy updating process, AI level, trust"]
             P3["Shared cognition dashboard ← dashboard_quality"]
-            P4["Task execution ← skills_knowledge_coordination"]
+            P4["Task execution ← knowledge/skills process"]
             P5["Trust learning ← ai_reliability vs perceived"]
             P1 --> P2 --> P3 --> P4 --> P5
         end
 
         subgraph EMERGE["Emergent Team State"]
             direction TB
-            E1["Collective Intelligence (8 subconstructs)"]
+            E1["Collective Intelligence (8 subconstructs + age-diversity penalty)"]
             E2["team_engagement"]
             E3["trust_calibration"]
             E4["decision_quality"]
             E5["team_viability"]
+            E6["age_diversity penalty"]
             E1 --- E2 --- E3 --- E4
             E1 --- E5
+            E6 --- E1
         end
 
         PROC --> EMERGE

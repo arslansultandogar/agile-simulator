@@ -13,6 +13,7 @@ class TeamMember:
     member_id: int
     name: str
     gender: str
+    age: int
     skill_level: float
     availability: float
     communication_level: float
@@ -47,6 +48,7 @@ def generate_team(
 
     for member_id in range(1, team_size + 1):
         gender = "F" if member_id <= female_count else "M"
+        age = int(round(_clamp(rng.normal(36, 8), 22, 60)))
         skill_level = _clamp(rng.normal(0.68, 0.12))
         availability = _clamp(rng.normal(0.88, 0.08), 0.55, 1.0)
         communication_level = _clamp(rng.normal(0.72, 0.10))
@@ -72,6 +74,7 @@ def generate_team(
                 member_id=member_id,
                 name=f"Member {member_id}",
                 gender=gender,
+                age=age,
                 skill_level=skill_level,
                 availability=availability,
                 communication_level=communication_level,

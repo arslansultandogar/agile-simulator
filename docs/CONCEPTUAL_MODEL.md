@@ -31,7 +31,7 @@ flowchart LR
     subgraph IN["Inputs & Agents"]
         direction TB
         CFG["SimulationConfig<br/>(19 parameters)"]
-        TM["TeamMember × N<br/>skill, gender, trust, sensitivity"]
+        TM["TeamMember × N<br/>skill, age, gender, trust, sensitivity"]
         TK["Task × M<br/>effort, difficulty, type"]
         TTP["TaskTypeProfile<br/>feature | bug | refactor | spike"]
         CFG --> TM
@@ -41,10 +41,10 @@ flowchart LR
 
     subgraph MID["Processes & Emergent States"]
         direction TB
-        CAP["Capacity planning<br/>← effort_management"]
-        ALLOC["Task allocation<br/>← task_strategy, AI"]
-        EXEC["Task execution<br/>← skills_knowledge_coordination"]
-        CI["Collective Intelligence<br/>(8 subconstructs)"]
+        CAP["Capacity planning<br/>← effort-related process"]
+        ALLOC["Task allocation<br/>← strategy updating process, AI"]
+        EXEC["Task execution<br/>← knowledge/skills process"]
+        CI["Collective Intelligence<br/>(8 subconstructs + age-diversity penalty)"]
         TE["team_engagement"]
         TC["trust_calibration"]
         DQ["decision_quality"]
@@ -88,6 +88,7 @@ classDiagram
         +task_strategy
         +female_proportion
         +team_engagement_baseline
+        +consequentiality
         +task_complexity
         +dashboard_quality
         +collective_memory
@@ -100,6 +101,7 @@ classDiagram
         +member_id
         +name
         +gender
+        +age
         +skill_level
         +availability
         +communication_level
@@ -137,6 +139,7 @@ classDiagram
         +transactive_coordination
         +team_engagement
         +skill_diversity
+        +age_diversity
     }
 
     class SprintResult {
@@ -151,6 +154,8 @@ classDiagram
         +team_viability
         +member_sustainability
         +overload_pressure
+        +consequentiality
+        +age_diversity
     }
 
     class AISupport {
@@ -208,11 +213,12 @@ flowchart TB
         TR[trust_in_ai]
         AR[ai_reliability]
         DQ[dashboard_quality]
-        EM[effort_management]
-        SK[skills_knowledge_coordination]
-        TS2[task_strategy]
+        EM[effort_related_process]
+        SK[knowledge_skills_process]
+        TS2[strategy_updating_process]
         FP[female_proportion]
         TEB[team_engagement_baseline]
+        CON[consequentiality_shared_purpose]
         CM[collective_memory]
         CA[collective_attention]
         CR[collective_reasoning]
@@ -257,6 +263,8 @@ flowchart TB
 
     agents --> processes
     EM --> CAP
+    CON --> TE
+    CON --> MS
     TS2 --> ALLOC
     SK --> EXEC
     AI --> ALLOC
@@ -397,16 +405,18 @@ See: [`diagrams/04_collective_intelligence.mmd`](diagrams/04_collective_intellig
 ```mermaid
 flowchart LR
     CM[collective_memory] --> TM[transactive_memory]
-    SKC[skills_knowledge_coordination] --> TM
-    TMskills[member skill spread] --> TM
+    SKC[knowledge_skills_process] --> TM
+    TMskills[TeamMember.skill_level] --> TM
+    SD[skill_diversity] --> TM
 
     CA[collective_attention] --> SA[shared_attention]
-    EM[effort_management] --> SA
+    EM[effort_related_process] --> SA
+    CON[consequentiality_shared_purpose] --> SA
     PB --> SA
     CN[coordination_need from task type] --> SA
 
     CR[collective_reasoning] --> SR[shared_reasoning]
-    TS[task_strategy] --> SR
+    TS[strategy_updating_process] --> SR
     SKC --> SR
 
     TMmembers[TeamMember.social_sensitivity] --> SS[social_sensitivity]
@@ -418,7 +428,8 @@ flowchart LR
     PB --> TC
 
     TEB[team_engagement] --> TE[team_engagement in CI]
-    SD[skill_diversity from team] --> SDout[skill_diversity in CI]
+    SD --> SDout[skill_diversity in CI]
+    AD[age_diversity] --> ADP[negative CI predictor]
 
     TM --> CI[Collective Intelligence Score]
     SA --> CI
@@ -428,6 +439,7 @@ flowchart LR
     TC --> CI
     TE --> CI
     SDout --> CI
+    ADP --> CI
 ```
 
 **CI component weights** (from `metrics.py`)
@@ -533,22 +545,27 @@ This bridge explains how the simulator connects the agile/Scrum literature to Co
 
 - **Verwijs & Russo (2023)** ground Scrum team effectiveness in responsiveness, stakeholder concern, continuous improvement, autonomy, and management support.
 - **Strode, Dingsøyr & Lindsjørn (2022)** connect agile teamwork effectiveness to shared mental models, communication, and trust.
-- **Riedl et al. (2021)** identify collaboration-process predictors of CI, especially skill congruence, strategy, and effort.
-- **Kommol, Riedl & Woolley (2025)** structure CI around collective memory, attention, and reasoning.
+- **Riedl et al. (2021)** identify predictor items, especially effort-related process, strategy updating process, knowledge/skills process, individual skill, diversity, social perceptiveness, and female proportion as a proxy when social perceptiveness is not directly measured.
+- **Kommol, Riedl & Woolley (2025)** assign these predictors to collective/shared memory, attention, and reasoning.
 - **Hackman (1987)** and **Wageman, Hackman & Lehman (2005)** broaden team effectiveness beyond output to include future viability and member sustainability.
+- **Consequentiality/shared purpose** is modeled as an upstream driver of team engagement, shared attention, team viability, and sustainability.
 
 ```mermaid
 flowchart LR
-    scrum["Scrum effectiveness"] --> processes["Team processes"]
-    processes --> systems["Memory, attention, reasoning"]
+    riedl["Riedl2021 predictor items"] --> systems["Kommol2025 memory, attention, reasoning"]
+    hackman["Hackman/Wageman process criteria"] --> systems
     systems --> ci["Collective Intelligence"]
-    ci --> performance["Agile performance"]
+    ci --> performance["Agile/Scrum performance"]
     performance --> effectiveness["Task output, viability, sustainability"]
     performance --> learning["Sprint learning feedback"]
     learning --> systems
 ```
 
 **Memory terminology:** `collective_memory` is the shared-memory baseline controlled by the user. `transactive_memory` is the computed CI component that operationalizes how that shared memory is accessed: who knows what, how differentiated the skills are, and how well the team coordinates knowledge.
+
+**Process terminology:** `effort_management`, `skills_knowledge_coordination`, and `task_strategy` are displayed as effort-related process, knowledge/skills process, and strategy updating process. They are process measures, not individual attributes.
+
+**Female proportion note:** because the simulator generates social sensitivity directly, female proportion should be read as a proxy pathway through social perceptiveness, not as a direct causal or biological claim.
 
 **Percentage note:** The weights in the simulator are transparent modeling assumptions for explanation and sensitivity analysis. They are not empirical coefficients estimated from the papers.
 
@@ -559,14 +576,15 @@ flowchart LR
 | Role | Variables |
 |---|---|
 | **Structural inputs** | `team_size`, `number_of_sprints`, `number_of_tasks`, `task_type`, `task_complexity` |
-| **Process criteria** (Marks 2001) | `effort_management`, `skills_knowledge_coordination`, `task_strategy` |
-| **Diversity** (Woolley / Hong & Page) | `female_proportion`, `gender`, `skill_diversity` |
+| **Process measures** (Riedl / Hackman / Wageman) | `effort_management` as effort-related process, `skills_knowledge_coordination` as knowledge/skills process, `task_strategy` as strategy updating process |
+| **Purpose and engagement** | `consequentiality`, `team_engagement_baseline`, emergent `team_engagement` |
+| **Diversity** (Woolley / Hong & Page / professor feedback) | `female_proportion` through social sensitivity, `gender`, `skill_diversity`, `age`, `age_diversity` |
 | **CI system baseline inputs** | `collective_memory` / shared memory, `collective_attention`, `collective_reasoning` |
 | **AI inputs** | `ai_support_level`, `trust_in_ai`, `ai_reliability`, `dashboard_quality` |
-| **Individual agent state** | `skill_level`, `availability`, `communication_level`, `social_sensitivity`, `trust_in_ai`, `perceived_ai_reliability`, `work_speed`, `error_tendency` |
+| **Individual agent state** | `skill_level`, `age`, `availability`, `communication_level`, `social_sensitivity`, `trust_in_ai`, `perceived_ai_reliability`, `work_speed`, `error_tendency` |
 | **Task state** | `difficulty`, `effort_points`, `priority`, `uncertainty`, `required_skill_level` |
 | **Emergent team state** | `team_engagement`, CI subcomponents, `trust_calibration`, `decision_quality` |
-| **Outcomes** | `velocity`, `completion_rate`, `defect_rate`, `team_effectiveness`, `team_viability`, `member_sustainability`, `ai_benefit` |
+| **Outcomes** | `velocity`, `completion_rate`, `defect_rate`, `team_effectiveness`, `team_viability`, `member_sustainability`, `age_diversity`, `ai_benefit` |
 
 ---
 

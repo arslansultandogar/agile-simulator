@@ -34,6 +34,7 @@ Collective Intelligence is represented with team-level cognitive and process dim
 - participation balance
 - team engagement
 - skill diversity
+- age diversity
 - transactive coordination
 
 These values influence decision quality and are updated slightly from sprint to sprint based
@@ -132,19 +133,22 @@ agile-ai-simulator/
   Type of work in the backlog: feature, bug, refactor, or spike. Each type has different coordination need, defect risk, uncertainty, and skill demand.
 
 - `effort_management`
-  Team process criterion for sustaining and allocating effort. It affects capacity and overload tolerance.
+  Effort-related process measure for sustaining and allocating effort. It affects capacity and overload tolerance.
 
 - `skills_knowledge_coordination`
-  Team process criterion for using the right expertise at the right time. It improves transactive memory and reduces defects.
+  Knowledge / skills process measure for matching expertise to contributions. It is distinct from individual `skill_level`.
 
 - `task_strategy`
-  Team process criterion for selecting and adapting the work approach. It improves allocation quality, decision quality, and completion probability.
+  Strategy updating process measure for selecting and adapting the work approach. It is not a static strategy attribute.
 
 - `female_proportion`
-  Proportion of women in the simulated team. It is included because Woolley et al. (2010) found female proportion related to group collective intelligence, partly through social sensitivity.
+  Proportion of women in the simulated team. It is modeled as a proxy pathway through social sensitivity when social perceptiveness is not directly measured.
 
 - `team_engagement_baseline`
-  Initial team engagement level. Engagement then evolves from sprint outcomes, decision quality, and trust calibration.
+  Initial team-level engagement. Engagement then evolves from sprint outcomes, decision quality, trust calibration, and consequentiality.
+
+- `consequentiality`
+  Consequentiality / shared purpose. It strengthens team engagement, shared attention, viability, and sustainability.
 
 - `task_complexity`
   Baseline complexity of the work in the backlog.
@@ -169,6 +173,7 @@ agile-ai-simulator/
 Each simulated team member has:
 
 - `skill_level`
+- `age`
 - `gender`
 - `availability`
 - `communication_level`
@@ -225,15 +230,15 @@ This reflects the idea that AI can act as a shared cognition layer that helps te
 The current model includes three team process criteria inspired by Marks, Mathieu, and Zaccaro (2001) and aligned with Riedl et al. (2021):
 
 - `effort_management`
-  Represents how well the team sustains and distributes effort during the sprint.
+  Represents the effort-related process: how well the team sustains and distributes effort during the sprint.
 
 - `skills_knowledge_coordination`
-  Represents how well the team knows who has the relevant expertise and uses that knowledge.
+  Represents the knowledge / skills process: how well the team knows who has the relevant expertise and uses that knowledge. It is different from individual `skill_level`.
 
 - `task_strategy`
-  Represents how well the team selects and adapts its work approach.
+  Represents the strategy updating process: how well the team selects, monitors, and adapts its work approach.
 
-The model also includes `female_proportion` as a research variable following Woolley et al. (2010), and `skill_diversity` as a functional diversity proxy inspired by Hong and Page (2004). The CI system is explained through collective/shared memory, attention, and reasoning following Kommol, Riedl, and Woolley (2025). The simulator does not implement vocal synchrony or NLP-based audio analysis; instead, `social_sensitivity` represents the underlying social perceptiveness construct.
+The model also includes `female_proportion` as a proxy route through social sensitivity following Woolley et al. (2010), `skill_diversity` as a functional diversity proxy inspired by Hong and Page (2004), and `age_diversity` as a negative CI predictor following the supervisor feedback. The CI system is explained through collective/shared memory, attention, and reasoning following Kommol, Riedl, and Woolley (2025). The simulator does not implement vocal synchrony or NLP-based audio analysis; instead, `social_sensitivity` represents the underlying social perceptiveness construct.
 
 ## Output metrics
 
@@ -251,9 +256,11 @@ The app reports:
 - participation balance
 - team engagement
 - skill diversity
-- effort management
-- skills / knowledge coordination
-- task strategy
+- age diversity
+- effort-related process
+- knowledge / skills process
+- strategy updating process
+- consequentiality / shared purpose
 - trust calibration
 - team viability
 - member sustainability

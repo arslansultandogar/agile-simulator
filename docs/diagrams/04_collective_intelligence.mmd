@@ -1,15 +1,17 @@
 flowchart LR
     CM[collective_memory] --> TM[transactive_memory]
-    SKC[skills_knowledge_coordination] --> TM
-    TMskills[member skill spread] --> TM
+    SKC[knowledge_skills_process] --> TM
+    IndividualSkill[TeamMember.skill_level] --> TM
+    SkillDiversity[skill_diversity] --> TM
 
     CA[collective_attention] --> SA[shared_attention]
-    EM[effort_management] --> SA
+    EM[effort_related_process] --> SA
+    Conseq[consequentiality_shared_purpose] --> SA
     PB --> SA
     CN[coordination_need from task type] --> SA
 
     CR[collective_reasoning] --> SR[shared_reasoning]
-    TS[task_strategy] --> SR
+    TS[strategy_updating_process] --> SR
     SKC --> SR
 
     TMmembers[TeamMember.social_sensitivity] --> SS[social_sensitivity]
@@ -21,7 +23,8 @@ flowchart LR
     PB --> TC
 
     TEB[team_engagement] --> TE[team_engagement in CI]
-    SD[skill_diversity from team] --> SDout[skill_diversity in CI]
+    SkillDiversity --> SDout[skill_diversity in CI]
+    AgeDiversity[age_diversity] --> AgePenalty[negative CI predictor]
 
     TM --> CI["Collective Intelligence Score<br/>(weighted sum)"]
     SA --> CI
@@ -31,3 +34,4 @@ flowchart LR
     TC --> CI
     TE --> CI
     SDout --> CI
+    AgePenalty --> CI

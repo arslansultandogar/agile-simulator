@@ -19,6 +19,8 @@ CI_COMPONENT_WEIGHTS = {
     "skill_diversity": 0.06,
 }
 
+AGE_DIVERSITY_PENALTY_WEIGHT = 0.04
+
 TEAM_EFFECTIVENESS_WEIGHTS = {
     "task_output": 0.55,
     "team_viability": 0.25,
@@ -42,6 +44,7 @@ class CollectiveIntelligenceComponents:
     transactive_coordination: float
     team_engagement: float
     skill_diversity: float
+    age_diversity: float
 
     def as_dict(self) -> dict[str, float]:
         return {
@@ -53,6 +56,7 @@ class CollectiveIntelligenceComponents:
             "transactive_coordination": self.transactive_coordination,
             "team_engagement": self.team_engagement,
             "skill_diversity": self.skill_diversity,
+            "age_diversity": self.age_diversity,
         }
 
 
@@ -90,6 +94,18 @@ def skill_diversity_score(team_members: List[TeamMember]) -> float:
     return clamp(pstdev(skill_levels) * 3.0)
 
 
+def age_diversity_score(team_members: List[TeamMember]) -> float:
+    """
+    Age diversity is modeled as a normalized spread and used as a CI penalty.
+    """
+
+    if len(team_members) < 2:
+        return 0.0
+
+    ages = [member.age for member in team_members]
+    return clamp(pstdev(ages) / 12.0)
+
+
 def transactive_memory_score(
     collective_memory: float,
     team_members: List[TeamMember],
@@ -106,17 +122,20 @@ def transactive_memory_score(
         return collective_memory
 
     skill_levels = [member.skill_level for member in team_members]
-    specialization = clamp(max(skill_levels) - min(skill_levels))
+    average_individual_skill = clamp(sum(skill_levels) / len(skill_levels))
+    skill_diversity = skill_diversity_score(team_members)
     return clamp(
-        (0.45 * collective_memory)
-        + (0.25 * specialization)
-        + (0.30 * skills_knowledge_coordination)
+        (0.40 * collective_memory)
+        + (0.25 * skills_knowledge_coordination)
+        + (0.20 * skill_diversity)
+        + (0.15 * average_individual_skill)
     )
 
 
 def shared_attention_score(
     collective_attention: float,
     effort_management: float,
+    consequentiality: float,
     participation_balance: float,
     coordination_need: float,
 ) -> float:
@@ -128,10 +147,11 @@ def shared_attention_score(
     """
 
     return clamp(
-        (0.50 * collective_attention)
-        + (0.20 * effort_management)
-        + (0.20 * participation_balance)
-        + (0.10 * coordination_need)
+        (0.42 * collective_attention)
+        + (0.18 * effort_management)
+        + (0.15 * consequentiality)
+        + (0.16 * participation_balance)
+        + (0.09 * coordination_need)
     )
 
 
@@ -144,8 +164,8 @@ def shared_reasoning_score(
     """
     Collective reasoning reflects how the team interprets information together.
 
-    Strategy and skill/knowledge coordination operationalize Hackman's and
-    Riedl et al.'s criteria for effective collaborative task performance.
+    Strategy process and knowledge/skills process operationalize Hackman's and
+    Riedl et al.'s process criteria for collaborative task performance.
     """
 
     return clamp(
@@ -176,12 +196,14 @@ def compute_collective_intelligence_components(
     effort_management: float,
     skills_knowledge_coordination: float,
     task_strategy: float,
+    consequentiality: float,
     team_engagement: float,
     team_members: List[TeamMember],
 ) -> CollectiveIntelligenceComponents:
     participation_balance = participation_balance_score(team_members)
     social_sensitivity = average_social_sensitivity(team_members)
     skill_diversity = skill_diversity_score(team_members)
+    age_diversity = age_diversity_score(team_members)
 
     return CollectiveIntelligenceComponents(
         transactive_memory=transactive_memory_score(
@@ -192,6 +214,7 @@ def compute_collective_intelligence_components(
         shared_attention=shared_attention_score(
             collective_attention=collective_attention,
             effort_management=effort_management,
+            consequentiality=consequentiality,
             participation_balance=participation_balance,
             coordination_need=coordination_need,
         ),
@@ -210,6 +233,7 @@ def compute_collective_intelligence_components(
         ),
         team_engagement=clamp(team_engagement),
         skill_diversity=skill_diversity,
+        age_diversity=age_diversity,
     )
 
 
@@ -221,7 +245,7 @@ def collective_intelligence_score(components: CollectiveIntelligenceComponents) 
     emergent from memory, attention, reasoning, social sensitivity, and balance.
     """
 
-    return clamp(
+    base_score = (
         (CI_COMPONENT_WEIGHTS["transactive_memory"] * components.transactive_memory)
         + (CI_COMPONENT_WEIGHTS["shared_attention"] * components.shared_attention)
         + (CI_COMPONENT_WEIGHTS["shared_reasoning"] * components.shared_reasoning)
@@ -231,6 +255,7 @@ def collective_intelligence_score(components: CollectiveIntelligenceComponents) 
         + (CI_COMPONENT_WEIGHTS["team_engagement"] * components.team_engagement)
         + (CI_COMPONENT_WEIGHTS["skill_diversity"] * components.skill_diversity)
     )
+    return clamp(base_score - (AGE_DIVERSITY_PENALTY_WEIGHT * components.age_diversity))
 
 
 def decision_quality_score(

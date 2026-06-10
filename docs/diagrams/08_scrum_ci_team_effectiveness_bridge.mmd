@@ -7,12 +7,23 @@ flowchart LR
         strode["Strode2022 ATEM: shared mental models, communication, trust"]
     end
 
-    subgraph processPredictors["Collaboration process predictors"]
-        effort["effort_management"]
-        skills["skills_knowledge_coordination"]
-        strategy["task_strategy"]
+    subgraph processPredictors["Riedl2021 process predictors"]
+        effort["effort_related_process"]
+        skillsProcess["knowledge_skills_process"]
+        strategyProcess["strategy_updating_process"]
+    end
+
+    subgraph attributes["Team attributes and diversity"]
+        individualSkill["individual_skill_level"]
+        skillDiversity["skill_diversity"]
+        ageDiversity["age_diversity_negative"]
+        femaleProxy["female_proportion_proxy"]
+        social["social_perceptiveness"]
+    end
+
+    subgraph engagementDrivers["Engagement and purpose"]
+        consequentiality["consequentiality_shared_purpose"]
         engagement["team_engagement"]
-        social["social_sensitivity and participation_balance"]
     end
 
     subgraph ciSystems["Kommol2025 CI systems"]
@@ -42,9 +53,16 @@ flowchart LR
     verwijs --> agileOutcomes
     strode --> ciSystems
     effort --> attention
-    skills --> memory
-    skills --> reasoning
-    strategy --> reasoning
+    skillsProcess --> memory
+    skillsProcess --> reasoning
+    strategyProcess --> reasoning
+    individualSkill --> memory
+    skillDiversity --> memory
+    ageDiversity --> ci
+    femaleProxy --> social
+    consequentiality --> attention
+    consequentiality --> engagement
+    engagement --> attention
     engagement --> ci
     social --> ci
     social --> decision
@@ -65,6 +83,8 @@ flowchart LR
     ci --> viability
     engagement --> viability
     effort --> sustainability
+    consequentiality --> viability
+    consequentiality --> sustainability
     output --> effectiveness
     viability --> effectiveness
     sustainability --> effectiveness

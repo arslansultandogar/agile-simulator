@@ -135,11 +135,12 @@ These are the parameters you set before running the simulation.
 | **AI support level** | Slider (0–100%) | 70% | Intensity of AI involvement in allocation and shared cognition. Higher = stronger AI influence. | Show that AI only helps when other conditions (reliability, trust) are reasonable. |
 | **Trust in AI** | Slider (0–100%) | 65% | Baseline willingness of team members to follow AI recommendations. | Compare low trust (under-use) vs high trust with low reliability (misuse). |
 | **AI reliability** | Slider (0–100%) | 78% | **Actual** correctness of AI recommendations. Low reliability = wrong task assignments sometimes. | **Best demo parameter:** drop to 40% and show defects / lower benefit. |
-| **Effort management** | Slider (0–100%) | 65% | Team process criterion for sustaining effort, distributing workload, and tolerating overload. | Raise/lower it to show how team process affects capacity and completion. |
-| **Skills / knowledge coordination** | Slider (0–100%) | 65% | Team process criterion for using the right expertise at the right time. It strengthens transactive memory and reduces defects. | Use it to explain “who knows what” in agile teams. |
-| **Task strategy** | Slider (0–100%) | 65% | Team process criterion for selecting and adapting the work approach. It affects allocation quality, decision quality, and completion probability. | Show how good strategy can improve results even with the same team. |
-| **Female proportion** | Slider (0–100%) | 50% | Proportion of women in the simulated team, included because Woolley et al. (2010) link female proportion to CI partly through social sensitivity. | Explain carefully as a research variable, not a biological claim. |
-| **Initial team engagement** | Slider (0–100%) | 65% | Initial motivation/commitment level. It then evolves from sprint outcomes, decision quality, and trust calibration. | Show engagement as an emergent state, not just a fixed input. |
+| **Effort-related process** | Slider (0–100%) | 65% | Riedl/Hackman process measure for sustaining effort, distributing workload, and tolerating overload. | Raise/lower it to show how process quality affects capacity and completion. |
+| **Knowledge / skills process** | Slider (0–100%) | 65% | Riedl/Hackman process measure for matching expertise to task contributions. This is distinct from individual skill. | Use it to explain “who knows what” in agile teams. |
+| **Strategy updating process** | Slider (0–100%) | 65% | Riedl/Hackman process measure for selecting, monitoring, and adapting the work approach. | Show how process quality can improve results even with the same team. |
+| **Female proportion** | Slider (0–100%) | 50% | Proxy pathway through social perceptiveness when social perceptiveness is not directly measured. | Explain carefully as a proxy, not a biological causal claim. |
+| **Initial team engagement** | Slider (0–100%) | 65% | Initial team-level motivation/commitment level. It then evolves from sprint outcomes, decision quality, trust calibration, and consequentiality. | Show engagement as a team emergent state, not individual engagement. |
+| **Consequentiality / shared purpose** | Slider (0–100%) | 65% | Hackman/Wageman-style driver: the work feels consequential and gives the team shared purpose. | Show how stronger purpose improves shared attention, engagement, viability, and sustainability. |
 | **Task complexity** | Slider (0–100%) | 58% | Baseline difficulty/uncertainty of generated tasks. | Use to simulate an easy vs hard backlog. |
 | **Dashboard quality** | Slider (0–100%) | 70% | Quality of the AI-supported shared dashboard / coordination view. | Explain shared cognition: visibility, coordination, decision support. |
 | **Collective memory** | Slider (0–100%) | 62% | Team’s ability to retain and reuse shared knowledge across sprints. | Link to transactive memory literature (Wegner, Lewis). |
@@ -169,17 +170,19 @@ In agile work, coordination demand depends strongly on **what kind of work** the
 
 | Construct | Implementation | Research basis | How it is used |
 |---|---|---|---|
-| **Effort management process criterion** | Sidebar slider `effort_management` | Marks, Mathieu & Zaccaro (2001) action-phase processes | Increases planned capacity and reduces overload penalty |
-| **Skills and knowledge process criterion** | Sidebar slider `skills_knowledge_coordination` | Wegner (1987), Lewis (2003), Marks et al. (2001) | Strengthens transactive memory and reduces defect probability |
-| **Task strategy process criterion** | Sidebar slider `task_strategy` | Marks et al. (2001) strategy formulation and planning | Improves allocation quality, decision quality, and completion probability |
-| **Riedl collaboration-process predictors** | Existing process sliders | Riedl et al. (2021) | Effort, skill congruence / skills-knowledge coordination, and strategy now feed CI systems directly |
+| **Effort-related process** | Sidebar slider `effort_management` | Riedl et al. (2021), Hackman/Wageman process measures | Feeds shared attention, capacity, overload tolerance, and sustainability |
+| **Knowledge / skills process** | Sidebar slider `skills_knowledge_coordination` | Riedl et al. (2021), Wegner (1987), Lewis (2003) | Feeds transactive memory, shared reasoning, and defect reduction |
+| **Strategy updating process** | Sidebar slider `task_strategy` | Riedl et al. (2021), Hackman/Wageman process measures | Feeds shared reasoning, allocation quality, decision quality, and completion |
+| **Riedl predictor items** | Process sliders + team attributes | Riedl et al. (2021), especially Fig. 2-D | Identifies effort process, knowledge/skills process, strategy process, individual skill, diversity, and social perceptiveness |
 | **Scrum team effectiveness context** | Conceptual mapping, not extra sliders | Verwijs & Russo (2023), Strode et al. (2022) | Grounds agile performance in responsiveness, shared mental models, communication, trust, and teamwork effectiveness |
 | **Hackman effectiveness criteria** | New summary metrics | Hackman (1987), Wageman et al. (2005) | Team effectiveness includes task output, team viability, and member sustainability |
 | **Collective memory, attention, reasoning systems** | CI baseline sliders and computed components | Kommol, Riedl & Woolley (2025), Woolley & Mayo (2025) | Clarifies that CI is structured around memory, attention, and reasoning |
 | **Social perceptiveness / social cognition** | Internal `social_sensitivity` per member | Woolley et al. (2010), Engel et al. (2014) | Feeds CI and decision quality |
-| **Female proportion** | Sidebar slider `female_proportion` | Woolley et al. (2010) | Shapes generated team gender labels and social sensitivity baseline |
-| **Skill diversity** | Computed from team skill spread | Hong & Page (2004) | Adds functional diversity to CI |
-| **Team engagement** | Initial slider + sprint-by-sprint update | Kozlowski & Ilgen (2006) emergent states | Improves completion probability and contributes to CI |
+| **Female proportion** | Sidebar slider `female_proportion` | Woolley et al. (2010), Riedl et al. (2021) | Proxy pathway through social sensitivity when social perceptiveness is not directly measured |
+| **Skill diversity** | Computed from team skill spread | Hong & Page (2004) | Adds functional diversity to CI; distinct from individual `skill_level` |
+| **Age diversity** | Computed from generated member ages | Supervisor feedback / diversity interpretation | Negative CI predictor |
+| **Team engagement** | Initial slider + sprint-by-sprint update | Kozlowski & Ilgen (2006), Riedl et al. (2021) | Team-level engagement improves completion and contributes to CI |
+| **Consequentiality / shared purpose** | Sidebar slider `consequentiality` | Hackman (2002), Wageman et al. (2005), supervisor feedback | Upstream driver of team engagement, shared attention, viability, and sustainability |
 | **Collective focus of attention** | Sidebar slider `collective_attention` with clearer label | Shared mental model literature | Feeds decision quality and CI |
 
 **NLP / vocal synchrony note:**  
@@ -194,6 +197,7 @@ Each team member is created with random variation:
 | Variable | Meaning | Used for |
 |---|---|---|
 | `skill_level` | Technical capability (0–1) | Task fit, completion probability, error reduction |
+| `age` | Generated member age | Age diversity calculation |
 | `gender` | F/M label derived from the female proportion slider | Social sensitivity baseline and team diversity reporting |
 | `availability` | How much capacity the member has this period | Workload capacity, allocation |
 | `communication_level` | Individual communication/coordination skill | Completion probability, participation balance |
@@ -239,9 +243,11 @@ These are **not** set manually in the UI; they emerge from team generation and e
 | **Participation balance** | CI subcomponent: even contribution across members | Yes |
 | **Team engagement** | Emergent motivational state updated from sprint outcomes | Yes |
 | **Skill diversity** | Functional diversity proxy based on skill spread | Context-dependent |
-| **Effort management** | Process criterion input reflected in results | Yes |
-| **Skills / knowledge coordination** | Process criterion input reflected in results | Yes |
-| **Task strategy** | Process criterion input reflected in results | Yes |
+| **Age diversity** | Normalized spread in generated member ages; negative CI predictor | No |
+| **Effort-related process** | Process measure input reflected in results | Yes |
+| **Knowledge / skills process** | Process measure input reflected in results | Yes |
+| **Strategy updating process** | Process measure input reflected in results | Yes |
+| **Consequentiality / shared purpose** | Team purpose driver reflected in engagement, viability, and sustainability | Yes |
 | **Trust calibration (%)** | Alignment between perceived and actual AI reliability | Yes |
 | **Team viability (%)** | Future capacity to keep working well together; based on CI, engagement, trust calibration, and decision quality | Yes |
 | **Member sustainability (%)** | Well-being/sustainability proxy based on engagement, effort management, and low overload | Yes |
@@ -255,8 +261,8 @@ These are **not** set manually in the UI; they emerge from team generation and e
 Team effectiveness is now based on Hackman's broader view that effective teams must produce good work, remain viable for future work, and avoid damaging member sustainability. The simulator computes:
 
 - **Task output** = velocity, completion, and quality (low defect rate)
-- **Team viability** = collective intelligence, engagement, trust calibration, and decision quality
-- **Member sustainability** = engagement, effort management, and low overload pressure
+- **Team viability** = collective intelligence, team engagement, consequentiality/shared purpose, trust calibration, and decision quality
+- **Member sustainability** = team engagement, consequentiality/shared purpose, effort-related process, and low overload pressure
 
 The final team effectiveness score uses simulation weights:
 
@@ -268,7 +274,7 @@ These are transparent model assumptions for simulation and sensitivity analysis,
 
 #### Collective Intelligence formula
 
-CI is computed from eight subconstructs:
+CI is computed from eight positively weighted subconstructs plus an age-diversity penalty:
 
 - 18% transactive memory
 - 16% shared attention
@@ -278,13 +284,15 @@ CI is computed from eight subconstructs:
 - 10% transactive coordination
 - 8% team engagement
 - 6% skill diversity
+- 4% negative adjustment for age diversity
 
 The CI subconstructs are now organized around Kommol, Riedl & Woolley's memory-attention-reasoning structure:
 
 - **Collective/shared memory** is the baseline retained knowledge across sprints.
-- **Transactive memory** operationalizes that memory as who knows what, specialization, and skills/knowledge coordination.
-- **Shared attention** combines collective focus, effort management, participation balance, and coordination need.
-- **Shared reasoning** combines collective reasoning, task strategy, social sensitivity, and skills/knowledge coordination.
+- **Transactive memory** operationalizes that memory as who knows what, individual skill, skill diversity, and knowledge/skills process.
+- **Shared attention** combines collective focus, effort-related process, consequentiality/shared purpose, participation balance, and coordination need.
+- **Shared reasoning** combines collective reasoning, strategy updating process, social sensitivity, and knowledge/skills process.
+- **Female proportion** is only a proxy pathway through social perceptiveness when social perceptiveness is not measured directly.
 
 As above, these percentages are simulation weights for interpretability, not direct empirical percentages from the papers.
 
@@ -372,7 +380,7 @@ Open browser → sidebar parameters → three tabs: **Single Run**, **Monte Carl
 #### Demo 2b — Team process criteria matter (1 min)
 
 1. Open the **Team & Process** sidebar section.
-2. Raise **Effort management**, **Skills / knowledge coordination**, and **Task strategy** from 65% to 85%.
+2. Raise **Effort-related process**, **Knowledge / skills process**, **Strategy updating process**, and optionally **Consequentiality / shared purpose** from 65% to 85%.
 3. Show the changes in completion, decision quality, and CI subcomponents.
 4. Say: *“This demonstrates that the model does not treat AI as the only intervention; agile process quality also changes outcomes.”*
 
@@ -781,9 +789,9 @@ Below is the full paper set reviewed for this project. For each paper: **citatio
 
 | Research theme | Papers | Implemented now | Planned future |
 |---|---|---|---|
-| Collective Intelligence | 1–4, 6–10 | CI score + 8 subconstructs, female proportion, skill diversity | Turn-taking, groupthink |
+| Collective Intelligence | 1–4, 6–10 | CI score + memory, attention, reasoning, social perceptiveness, female proxy pathway, skill diversity, age diversity penalty | Turn-taking, groupthink |
 | Transactive memory | 7–8 | Transactive memory/coordination | Knowledge matrix |
-| Team process & teamwork | 11–13 | Sprint loop, effort management, skills/knowledge coordination, task strategy, engagement | Sprint phases, Big Five |
+| Team process & teamwork | 11–13 | Sprint loop, effort-related process, knowledge/skills process, strategy updating process, consequentiality, team engagement | Sprint phases, Big Five |
 | Agile software teams | 14–18 | Task types, CI, trust | Roles, planning poker |
 | Effort & estimation | 18–19 | AI-assisted allocation | Estimation rounds |
 | Human–AI trust | 20–24 | Trust, reliability, calibration | Review gates, explainability |

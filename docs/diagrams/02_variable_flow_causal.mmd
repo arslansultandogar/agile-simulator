@@ -9,11 +9,12 @@ flowchart TB
         TR[trust_in_ai]
         AR[ai_reliability]
         DQ[dashboard_quality]
-        EM[effort_management]
-        SK[skills_knowledge_coordination]
-        TS2[task_strategy]
+        EM[effort_related_process]
+        SK[knowledge_skills_process]
+        TS2[strategy_updating_process]
         FP[female_proportion]
         TEB[team_engagement_baseline]
+        CON[consequentiality_shared_purpose]
         CM[collective_memory]
         CA[collective_attention]
         CR[collective_reasoning]
@@ -48,6 +49,7 @@ flowchart TB
         TV[team_viability]
         MS[member_sustainability]
         OP[overload_pressure]
+        AD[age_diversity]
         AIB[ai_benefit]
     end
 
@@ -69,6 +71,8 @@ flowchart TB
     CR --> CI
     TM --> CI
     TEB --> TE
+    CON --> TE
+    CON --> CI
     REV --> TE
     AR --> TC2
     TM --> TC2
@@ -78,9 +82,13 @@ flowchart TB
     DQ2 --> EFF
     CI --> TV
     TE --> TV
+    CON --> TV
     TE --> MS
+    CON --> MS
     CAP --> OP
     OP --> MS
+    TM --> AD
+    AD --> CI
     TV --> EFF
     MS --> EFF
     TE --> COMP

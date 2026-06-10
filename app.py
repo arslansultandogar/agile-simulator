@@ -41,6 +41,7 @@ def build_config_from_sidebar() -> SimulationConfig:
         task_strategy=normalize_percent(st.session_state["task_strategy"]),
         female_proportion=normalize_percent(st.session_state["female_proportion"]),
         team_engagement_baseline=normalize_percent(st.session_state["team_engagement_baseline"]),
+        consequentiality=normalize_percent(st.session_state["consequentiality"]),
         task_complexity=normalize_percent(st.session_state["task_complexity"]),
         dashboard_quality=normalize_percent(st.session_state["dashboard_quality"]),
         collective_memory=normalize_percent(st.session_state["collective_memory"]),
@@ -126,7 +127,7 @@ def render_summary_metrics(with_ai: dict, without_ai: dict) -> None:
         f"{with_ai['summary']['ai_benefit']:.2f}",
     )
 
-    metric_columns = st.columns(3)
+    metric_columns = st.columns(4)
     metric_columns[0].metric(
         "Team Viability (%)",
         f"{with_ai['summary']['team_viability']:.2f}",
@@ -141,6 +142,11 @@ def render_summary_metrics(with_ai: dict, without_ai: dict) -> None:
         ),
     )
     metric_columns[2].metric(
+        "Consequentiality (%)",
+        f"{with_ai['summary']['consequentiality']:.2f}",
+        comparison_delta(with_ai["summary"]["consequentiality"], without_ai["summary"]["consequentiality"]),
+    )
+    metric_columns[3].metric(
         "Overload Pressure (%)",
         f"{with_ai['summary']['overload_pressure']:.2f}",
         comparison_delta(
@@ -169,12 +175,12 @@ def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
     process_columns[0].metric("Participation Balance", f"{with_ai['summary']['participation_balance']:.2f}")
     process_columns[1].metric("Team Engagement", f"{with_ai['summary']['team_engagement']:.2f}")
     process_columns[2].metric("Skill Diversity", f"{with_ai['summary']['skill_diversity']:.2f}")
-    process_columns[3].metric("Skills / Knowledge", f"{with_ai['summary']['skills_knowledge_coordination']:.2f}")
+    process_columns[3].metric("Age Diversity", f"{with_ai['summary']['age_diversity']:.2f}")
 
     predictor_columns = st.columns(3)
-    predictor_columns[0].metric("Effort Management", f"{with_ai['summary']['effort_management']:.2f}")
-    predictor_columns[1].metric("Task Strategy", f"{with_ai['summary']['task_strategy']:.2f}")
-    predictor_columns[2].metric("Overload Pressure", f"{with_ai['summary']['overload_pressure']:.2f}")
+    predictor_columns[0].metric("Effort-Related Process", f"{with_ai['summary']['effort_management']:.2f}")
+    predictor_columns[1].metric("Knowledge / Skills Process", f"{with_ai['summary']['skills_knowledge_coordination']:.2f}")
+    predictor_columns[2].metric("Strategy Updating Process", f"{with_ai['summary']['task_strategy']:.2f}")
 
     ci_chart = with_ai["ci_components"].pivot(
         index="Sprint",
@@ -239,6 +245,18 @@ def render_single_run_tab(with_ai: dict, without_ai: dict) -> None:
                 "With AI support": round(with_ai["summary"]["team_engagement"], 2),
                 "Without AI support": round(without_ai["summary"]["team_engagement"], 2),
                 "Difference": round(with_ai["summary"]["team_engagement"] - without_ai["summary"]["team_engagement"], 2),
+            },
+            {
+                "Metric": "Consequentiality / Shared Purpose",
+                "With AI support": round(with_ai["summary"]["consequentiality"], 2),
+                "Without AI support": round(without_ai["summary"]["consequentiality"], 2),
+                "Difference": round(with_ai["summary"]["consequentiality"] - without_ai["summary"]["consequentiality"], 2),
+            },
+            {
+                "Metric": "Age Diversity",
+                "With AI support": round(with_ai["summary"]["age_diversity"], 2),
+                "Without AI support": round(without_ai["summary"]["age_diversity"], 2),
+                "Difference": round(with_ai["summary"]["age_diversity"] - without_ai["summary"]["age_diversity"], 2),
             },
             {
                 "Metric": "Team Viability",
@@ -376,6 +394,7 @@ defaults = {
     "task_strategy": 65,
     "female_proportion": 50,
     "team_engagement_baseline": 65,
+    "consequentiality": 65,
     "task_complexity": 58,
     "dashboard_quality": 70,
     "collective_memory": 62,
@@ -407,29 +426,52 @@ with st.sidebar:
     st.session_state["dashboard_quality"] = st.slider("Dashboard quality", 0, 100, st.session_state["dashboard_quality"])
     with st.expander("Team & Process", expanded=False):
         st.session_state["effort_management"] = st.slider(
-            "Effort management",
+            "Effort-related process",
             0,
             100,
             st.session_state["effort_management"],
+            help="Riedl/Hackman process measure: how the team sustains and allocates effort during work.",
         )
         st.session_state["skills_knowledge_coordination"] = st.slider(
-            "Skills / knowledge coordination",
+            "Knowledge / skills process",
             0,
             100,
             st.session_state["skills_knowledge_coordination"],
+            help=(
+                "Team process for matching knowledge and skills to task contributions. "
+                "This is distinct from individual member skill levels."
+            ),
         )
-        st.session_state["task_strategy"] = st.slider("Task strategy", 0, 100, st.session_state["task_strategy"])
+        st.session_state["task_strategy"] = st.slider(
+            "Strategy updating process",
+            0,
+            100,
+            st.session_state["task_strategy"],
+            help="Team process for managing and updating the work strategy, not a static strategy attribute.",
+        )
         st.session_state["female_proportion"] = st.slider(
             "Female proportion",
             0,
             100,
             st.session_state["female_proportion"],
+            help=(
+                "Modeled as a proxy pathway through social perceptiveness when social perceptiveness "
+                "is not directly measured; not a biological causal claim."
+            ),
         )
         st.session_state["team_engagement_baseline"] = st.slider(
             "Initial team engagement",
             0,
             100,
             st.session_state["team_engagement_baseline"],
+            help="Team-level engagement, not individual engagement.",
+        )
+        st.session_state["consequentiality"] = st.slider(
+            "Consequentiality / shared purpose",
+            0,
+            100,
+            st.session_state["consequentiality"],
+            help="Hackman/Wageman-style driver: the work feels consequential and creates shared purpose.",
         )
         st.caption(
             "CI systems follow the memory-attention-reasoning framing. "
