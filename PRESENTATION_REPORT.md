@@ -920,4 +920,66 @@ streamlit run app.py
 
 ---
 
+## 17. Model v2.0 — Implemented Improvements
+
+This section documents the balanced set of improvements added after the initial
+prototype (model version `2.0.0`, surfaced in every run summary and stored in
+`config/weights.yaml`). The goal was to make the model easier to study and tune,
+more realistic in its backlog and workflow behavior, slightly deeper in
+team-structure terms, and better validated.
+
+### 17.1 Tooling, usability, and a config-driven model
+
+- **Externalized weights.** `CI_COMPONENT_WEIGHTS`, `AGE_DIVERSITY_PENALTY_WEIGHT`,
+  and `TEAM_EFFECTIVENESS_WEIGHTS` now load from `config/weights.yaml` via
+  `config_loader.py`, with documented defaults as a fallback. The positive CI
+  weights still sum to 1.0.
+- **Preset scenarios.** Four presets (high-trust/high-reliability,
+  over-trust/low-reliability, strong-process/weak-AI, weak-process/strong-AI)
+  let a reader reproduce contrasting situations in one click.
+- **Exports.** Single-run, Monte Carlo, and sensitivity results export to CSV
+  and JSON for thesis analysis.
+- **Charts.** Viability, sustainability, overload pressure, and CI subcomponents
+  are plotted over time, alongside a planned-vs-completed/carry-over chart.
+- **Assumptions panel.** A dedicated tab separates process assumptions from
+  attribute assumptions and restates the female-proportion proxy framing.
+
+### 17.2 Backlog realism — mixed backlogs and carry-over
+
+- A **mixed backlog generator** produces a configurable mix of features, bugs,
+  refactors, and spikes (proportions are normalized to 100%).
+- The engine tracks **planned versus completed** work each sprint and reports
+  **carry-over** (committed-but-unfinished work) as a first-class metric.
+- `task_mix` is part of `SimulationConfig` and every run record.
+
+### 17.3 Workflow realism — dependencies and sprint phases
+
+- **Task dependencies** (`depends_on`) introduce blocker propagation: a task
+  cannot start until its upstream dependencies complete. Blocked tasks are
+  reported separately from carry-over.
+- **Defect rework spillover**: a shipped defect creates a follow-up fix task that
+  becomes available in a later sprint, so quality problems cost future capacity.
+- **Sprint-phase modifiers** layer on top of the existing update functions:
+  planning strengthens the work strategy, review catches a share of defects
+  before they ship, and the retrospective scales how quickly the team learns
+  (collective memory/attention/reasoning and engagement).
+
+### 17.4 Model depth, validation, and documentation
+
+- **Roles** (Product Owner, Scrum Master, Developer, Tester) act as small
+  behavioral modifiers: the Product Owner sharpens strategy and shared purpose,
+  the Scrum Master improves coordination/participation and relieves blockers,
+  Testers raise in-review defect detection, and Developers add a small delivery
+  nudge.
+- **Broadened sensitivity coverage** now includes consequentiality, the CI
+  baselines, and dependency density, plus a **sensitivity-stability summary**
+  that reports how much each outcome swings across a parameter sweep.
+- A **pytest suite** covers the metrics formulas, monotonic behavior checks, and
+  a deterministic smoke test.
+- Documentation was refreshed: this report, the README, `docs/diagrams/`
+  (updated UML class diagram and a new backlog/workflow diagram), and a new
+  `docs/PARAMETER_DICTIONARY.md`.
+
+---
+
 *End of report.*

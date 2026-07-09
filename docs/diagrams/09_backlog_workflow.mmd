@@ -1,0 +1,26 @@
+flowchart TD
+    mix["Task-type mix<br/>(feature / bug / refactor / spike)"] --> backlog["Mixed backlog generator"]
+    deps["Dependency density"] --> backlog
+    sm["Scrum Master<br/>blocker relief"] -.reduces.-> deps
+
+    backlog --> select{"Select sprint tasks<br/>(unblocked + available)"}
+    select -->|blocked by depends_on| blocked["Blocked tasks<br/>(carry to next sprint)"]
+    select -->|committed| planned["Planned points"]
+
+    subgraph sprint["Sprint phases"]
+        planning["Planning<br/>-> strategy"] --> exec["Execution<br/>completion draws"]
+        exec --> review["Review<br/>-> defect detection"]
+        review --> retro["Retrospective<br/>-> learning multiplier"]
+    end
+
+    planned --> sprint
+    exec --> completed["Completed points"]
+    completed --> carry["Carry-over points<br/>= planned - completed"]
+    review -->|defect caught| caught["Defects caught in review"]
+    review -->|defect shipped| defect["Shipped defect"]
+    defect --> rework["Rework fix task<br/>(available next sprint)"]
+    rework --> backlog
+    blocked --> backlog
+    carry --> backlog
+
+    retro --> learn["Update CI + engagement<br/>(scaled by retro quality)"]

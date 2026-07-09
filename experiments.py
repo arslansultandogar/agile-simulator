@@ -32,6 +32,12 @@ SUMMARY_METRICS = [
     "overload_pressure",
     "team_viability",
     "member_sustainability",
+    "carry_over_points",
+    "carry_over_rate",
+    "blocked_tasks",
+    "rework_created",
+    "rework_completed",
+    "defects_caught_in_review",
 ]
 
 SENSITIVITY_PARAMETERS = {
@@ -45,11 +51,24 @@ SENSITIVITY_PARAMETERS = {
     "female_proportion": "Female proportion",
     "team_engagement_baseline": "Initial team engagement",
     "dashboard_quality": "Dashboard quality",
-    "collective_memory": "Collective / shared memory",
-    "collective_attention": "Collective focus of attention",
-    "collective_reasoning": "Collective reasoning",
+    "collective_memory": "Collective / shared memory (CI baseline)",
+    "collective_attention": "Collective focus of attention (CI baseline)",
+    "collective_reasoning": "Collective reasoning (CI baseline)",
     "task_complexity": "Task complexity",
+    "dependency_density": "Dependency density (blockers)",
 }
+
+# Outcome metrics tracked across a sensitivity sweep.
+SENSITIVITY_OUTPUT_METRICS = (
+    "team_effectiveness",
+    "collective_intelligence",
+    "team_viability",
+    "member_sustainability",
+    "defect_rate",
+    "trust_calibration",
+    "carry_over_rate",
+    "rework_created",
+)
 
 
 def _confidence_interval(values: pd.Series, confidence: float = 0.95) -> Tuple[float, float]:
@@ -180,17 +199,51 @@ def run_sensitivity_analysis(
             "value_percent": round(value * 100, 1),
         }
 
-        for metric in (
-            "team_effectiveness",
-            "collective_intelligence",
-            "team_viability",
-            "member_sustainability",
-            "defect_rate",
-            "trust_calibration",
-        ):
+        for metric in SENSITIVITY_OUTPUT_METRICS:
             if metric in stats.index:
                 row[f"{metric}_mean"] = float(stats.loc[metric, "Mean"])
 
         rows.append(row)
+
+    return pd.DataFrame(rows)
+
+
+def sensitivity_stability_summary(sensitivity_df: pd.DataFrame) -> pd.DataFrame:
+    """Summarize how stable each outcome is across a sensitivity sweep (Week 4).
+
+    For every tracked outcome metric this reports the swing (max - min), the
+    standard deviation, and a normalized stability score in [0, 1] where higher
+    means the outcome is less sensitive to the swept parameter.
+    """
+
+    if sensitivity_df.empty:
+        return pd.DataFrame(
+            columns=["Outcome", "Min", "Max", "Range", "Std Dev", "Stability"]
+        )
+
+    rows: List[Dict[str, float | str]] = []
+    for metric in SENSITIVITY_OUTPUT_METRICS:
+        column = f"{metric}_mean"
+        if column not in sensitivity_df.columns:
+            continue
+
+        series = sensitivity_df[column].astype(float)
+        minimum = float(series.min())
+        maximum = float(series.max())
+        value_range = maximum - minimum
+        std_dev = float(series.std(ddof=0))
+        scale = max(abs(maximum), abs(minimum), 1e-9)
+        stability = round(1.0 - min(1.0, value_range / scale), 3)
+
+        rows.append(
+            {
+                "Outcome": metric,
+                "Min": round(minimum, 3),
+                "Max": round(maximum, 3),
+                "Range": round(value_range, 3),
+                "Std Dev": round(std_dev, 3),
+                "Stability": stability,
+            }
+        )
 
     return pd.DataFrame(rows)

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>UML_CI_PERFORMANCE_ANALYSIS</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+</script>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.5;
+    max-width: none;
+    margin: 0 auto;
+    padding: 0;
+    font-size: 11px;
+  }
+  h1 { font-size: 24px; border-bottom: 2px solid #333; padding-bottom: 6px; }
+  h2 { font-size: 19px; margin-top: 28px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  h3 { font-size: 15px; margin-top: 20px; }
+  h4 { font-size: 13px; margin-top: 16px; color: #333; }
+  code { background: #f3f3f3; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
+  pre { background: #f6f8fa; padding: 10px; border-radius: 6px; overflow-x: auto; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+    font-size: 9.5px;
+    table-layout: fixed;
+    page-break-inside: auto;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 5px 6px;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  th { background: #f2f2f2; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+  blockquote {
+    border-left: 4px solid #5b8def; background: #f3f7ff; margin: 12px 0;
+    padding: 8px 14px; color: #2a3b5f;
+  }
+  .mermaid { text-align: center; margin: 16px 0; page-break-inside: avoid; }
+  h2, h3 { page-break-after: avoid; }
+</style>
+</head>
+<body>
+<h1>Detailed UML + CI → Agile Performance Analysis</h1>
+<blockquote>
+<p><strong>Model version 2.0.</strong> This revision documents the improved simulator:
+externalized weights (<code>config/weights.yaml</code>), mixed backlogs with carry-over,
+task dependencies and defect rework, sprint-phase modifiers, and Scrum roles.
+See <a href="#7-model-v20-additions">§7 Model v2.0 additions</a>.</p>
+</blockquote>
+<p>This document gives a <strong>detailed UML model</strong> of the Agile AI Simulator, an <strong>annotated map of how Collective Intelligence (CI) connects to agile team performance</strong>, and a <strong>research-paper analysis</strong> showing which paper justifies each link. The fine-tuned framing uses <strong>Riedl et al. (2021)</strong> to identify predictor items and <strong>Kommol, Riedl &amp; Woolley (2025)</strong> to assign those items to CI systems: collective/shared memory, collective attention, and collective reasoning. The percentages shown here are <strong>model weights used for transparent simulation</strong>, not coefficients estimated from empirical Scrum datasets. In model v2.0 these weights are loaded from <code>config/weights.yaml</code> and the active set is stamped with a <code>model_version</code> in every run summary.</p>
+<p>All Mermaid blocks can be pasted into <a href="https://mermaid.live">mermaid.live</a>. Standalone copies live in <a href="diagrams/"><code>diagrams/</code></a>.</p>
+<hr />
+<h2>Table of contents</h2>
+<ol>
+<li><a href="#1-detailed-uml-class-diagram">Detailed UML class diagram</a></li>
+<li><a href="#2-how-ci-connects-to-agile-team-performance">How CI connects to agile team performance</a></li>
+<li><a href="#3-ci--performance-impact-map-with-paper-citations">CI → performance impact map (with paper citations)</a></li>
+<li><a href="#4-per-component-impact-table">Per-component impact table</a></li>
+<li><a href="#5-where-agile-variables-and-weights-come-from">Where agile variables and weights come from</a></li>
+<li><a href="#6-research-paper-analysis">Research-paper analysis</a></li>
+<li><a href="#7-model-v20-additions">Model v2.0 additions</a></li>
+</ol>
+<hr />
+<h2>1. Detailed UML class diagram</h2>
+<p>The class diagram below reflects the v2.0 structure, including externalized
+weights (<code>WeightsConfig</code>), Scrum roles and their modifiers, task dependencies
+and rework on <code>Task</code>, the sprint-phase modifiers, and the expanded per-sprint
+result record.</p>
+<div class="mermaid">classDiagram
+    class SimulationConfig {
+        +team_size
+        +number_of_sprints
+        +number_of_tasks
+        +task_type
+        +task_mix
+        +ai_support_level
+        +trust_in_ai
+        +ai_reliability
+        +effort_management
+        +skills_knowledge_coordination
+        +task_strategy
+        +female_proportion
+        +team_engagement_baseline
+        +consequentiality
+        +task_complexity
+        +dashboard_quality
+        +collective_memory
+        +collective_attention
+        +collective_reasoning
+        +dependency_density
+        +enable_rework
+        +enable_sprint_phases
+        +random_seed
+    }
+    class WeightsConfig {
+        &lt;&lt;config/weights.yaml&gt;&gt;
+        +model_version
+        +ci_component_weights
+        +age_diversity_penalty_weight
+        +team_effectiveness_weights
+    }
+    class TeamMember {
+        +member_id
+        +gender
+        +age
+        +role
+        +skill_level
+        +availability
+        +communication_level
+        +social_sensitivity
+        +trust_in_ai
+        +perceived_ai_reliability
+        +work_speed
+        +error_tendency
+    }
+    class RoleModifiers {
+        &lt;&lt;team.py&gt;&gt;
+        +strategy
+        +consequentiality
+        +participation
+        +coordination
+        +blocker_relief
+        +delivery
+        +defect_detection
+    }
+    class Task {
+        +task_id
+        +task_type
+        +difficulty
+        +effort_points
+        +priority
+        +uncertainty
+        +required_skill_level
+        +depends_on
+        +is_rework
+        +origin_task_id
+        +available_from_sprint
+    }
+    class SprintPhases {
+        &lt;&lt;simulation.py&gt;&gt;
+        +planning_quality
+        +review_quality
+        +retro_quality
+    }
+    class CollectiveIntelligenceComponents {
+        +transactive_memory
+        +shared_attention
+        +shared_reasoning
+        +social_sensitivity
+        +participation_balance
+        +transactive_coordination
+        +team_engagement
+        +skill_diversity
+        +age_diversity
+    }
+    class SprintResult {
+        +planned_points
+        +completed_points
+        +carry_over_points
+        +blocked_tasks
+        +rework_created
+        +defects_caught_in_review
+        +velocity
+        +completion_rate
+        +defect_rate
+        +decision_quality
+        +collective_intelligence
+        +team_effectiveness
+        +team_viability
+        +member_sustainability
+    }
+    WeightsConfig ..&gt; CollectiveIntelligenceComponents : weights
+    SimulationConfig --&gt; TeamMember : generates
+    SimulationConfig --&gt; Task : generates mixed backlog
+    TeamMember --&gt; RoleModifiers : aggregates to
+    Task --&gt; Task : depends_on / creates rework
+    SprintPhases ..&gt; SprintResult : modifies
+    RoleModifiers ..&gt; SprintResult : modifies
+    CollectiveIntelligenceComponents --&gt; SprintResult : influences</div>
+<p>The end-to-end backlog and workflow loop (mixed backlog → dependency blocking →
+sprint phases → carry-over and rework feedback) is shown below.</p>
+<div class="mermaid">flowchart TD
+    mix[&quot;Task-type mix&quot;] --&gt; backlog[&quot;Mixed backlog&quot;]
+    deps[&quot;Dependency density&quot;] --&gt; backlog
+    sm[&quot;Scrum Master blocker relief&quot;] -.reduces.-&gt; deps
+    backlog --&gt; select{&quot;Select unblocked, available tasks&quot;}
+    select --&gt;|blocked| blocked[&quot;Blocked tasks&quot;]
+    select --&gt;|committed| planned[&quot;Planned points&quot;]
+    planned --&gt; planning[&quot;Planning -&gt; strategy&quot;]
+    planning --&gt; exec[&quot;Execution&quot;]
+    exec --&gt; review[&quot;Review -&gt; defect detection&quot;]
+    review --&gt; retro[&quot;Retro -&gt; learning rate&quot;]
+    exec --&gt; completed[&quot;Completed points&quot;]
+    completed --&gt; carry[&quot;Carry-over = planned - completed&quot;]
+    review --&gt;|caught| caught[&quot;Defects caught in review&quot;]
+    review --&gt;|shipped| defect[&quot;Shipped defect&quot;]
+    defect --&gt; rework[&quot;Rework task (next sprint)&quot;]
+    rework --&gt; backlog
+    blocked --&gt; backlog
+    carry --&gt; backlog
+    retro --&gt; learn[&quot;Update CI + engagement&quot;]</div>
+<hr />
+<h2>2. How CI connects to agile team performance</h2>
+<p><strong>Core idea:</strong> an agile team is a time-boxed collective that must coordinate, decide, and learn each sprint. CI is the team's capacity to do this well. In the simulator, CI is <strong>both a driver and an outcome</strong> of agile performance. Riedl et al. (2021) are used mainly to identify CI/performance predictor items; Kommol et al. (2025) are used to organize those predictors into CI systems.</p>
+<p><strong>Memory terminology:</strong> <code>collective_memory</code> is the user-controlled/shared-memory baseline: what the team can retain and reuse across sprints. <code>transactive_memory</code> is the computed mechanism: who knows what, whether expertise is recognized, and whether skills/knowledge coordination lets the team access that knowledge. In other words, shared memory is the state; transactive memory is how that state becomes useful in teamwork.</p>
+<table>
+<thead>
+<tr>
+<th>Agile team reality</th>
+<th>CI construct in the model</th>
+<th>Agile variable(s) in simulator</th>
+<th>Paper</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shared retained knowledge across sprints</td>
+<td><code>collective_memory</code> input</td>
+<td>Sidebar input; evolves each sprint; feeds <code>Transactive Memory</code> in results</td>
+<td>Kommol, Riedl &amp; Woolley (2025); Woolley &amp; Mayo (2025)</td>
+</tr>
+<tr>
+<td>Who knows what on the team</td>
+<td><code>transactive_memory</code>; fed by individual skill, skill diversity, and knowledge/skills process</td>
+<td>Computed CI subcomponent; sprint column <code>Transactive Memory</code></td>
+<td>Wegner (1987); Lewis (2003); Riedl et al. (2021)</td>
+</tr>
+<tr>
+<td>Everyone focused on the sprint goal</td>
+<td><code>shared_attention</code>; fed by effort-related process, consequentiality, participation balance, and coordination demand</td>
+<td>Computed subcomponent <code>Shared Attention</code>; also feeds <code>Decision Quality</code></td>
+<td>Mathieu et al. (2000); Kommol et al. (2025); Riedl et al. (2021)</td>
+</tr>
+<tr>
+<td>Good joint planning / technical decisions</td>
+<td><code>shared_reasoning</code>; fed by strategy updating process, social perceptiveness, and knowledge/skills process</td>
+<td>Computed subcomponent <code>Shared Reasoning</code>; feeds <code>Decision Quality</code></td>
+<td>Bahrami et al. (2010); Kommol et al. (2025); Riedl et al. (2021)</td>
+</tr>
+<tr>
+<td>Members read and adapt to each other</td>
+<td><code>social_sensitivity</code></td>
+<td>Per-member attribute -&gt; team average; <code>Social Sensitivity</code>; feeds CI and decision quality</td>
+<td>Woolley et al. (2010); Engel et al. (2014)</td>
+</tr>
+<tr>
+<td>No single person dominates</td>
+<td><code>participation_balance</code></td>
+<td>Computed from <code>communication_level</code> spread; <code>Participation Balance</code></td>
+<td>Woolley et al. (2010)</td>
+</tr>
+<tr>
+<td>Coordinating who does what</td>
+<td><code>transactive_coordination</code></td>
+<td><code>Transactive Coordination</code>; uses memory, coordination need, and participation balance</td>
+<td>Strode et al. (2012); Strode, Dingsøyr &amp; Lindsjørn (2022)</td>
+</tr>
+<tr>
+<td>Consequential shared purpose</td>
+<td><code>consequentiality</code> upstream of team engagement, shared attention, viability, and sustainability</td>
+<td>Sidebar <code>Consequentiality / shared purpose</code>; drives engagement, attention, viability, and sustainability</td>
+<td>Hackman (2002); Wageman et al. (2005); professor feedback</td>
+</tr>
+<tr>
+<td>Team motivation / involvement</td>
+<td><code>team_engagement</code>, explicitly team-level rather than individual engagement</td>
+<td><code>Team Engagement</code>; +5% direct completion effect; contributes to viability and sustainability</td>
+<td>Kozlowski &amp; Ilgen (2006); Riedl et al. (2021)</td>
+</tr>
+<tr>
+<td>Complementary skills</td>
+<td><code>skill_diversity</code>, distinct from individual <code>skill_level</code> and knowledge/skills process</td>
+<td>Computed from <code>skill_level</code> spread; <code>Skill Diversity</code></td>
+<td>Hong &amp; Page (2004)</td>
+</tr>
+<tr>
+<td>Age spread</td>
+<td><code>age_diversity</code>, modeled as a negative CI predictor</td>
+<td>Computed from generated age; <code>Age Diversity</code>; negative CI penalty</td>
+<td>Professor feedback; diversity discussion</td>
+</tr>
+<tr>
+<td>Female proportion</td>
+<td>Proxy pathway through <code>social_sensitivity</code> when social perceptiveness is not directly measured</td>
+<td>Sidebar <code>Female proportion</code> -&gt; generated member social sensitivity baseline</td>
+<td>Woolley et al. (2010); Riedl et al. (2021)</td>
+</tr>
+<tr>
+<td>Scrum-specific effectiveness context</td>
+<td>delivery, responsiveness, improvement, autonomy</td>
+<td><code>Sprint Velocity</code>, <code>Task Completion Rate</code>, <code>Defect Rate</code>, <code>Team Effectiveness</code>, <code>Team Viability</code></td>
+<td>Verwijs &amp; Russo (2023)</td>
+</tr>
+<tr>
+<td>Effort allocation / overload</td>
+<td>effort-related process</td>
+<td><code>Effort Process</code>, planned capacity, overload penalty, <code>Overload Pressure</code></td>
+<td>Riedl et al. (2021); Hackman/Wageman</td>
+</tr>
+<tr>
+<td>Matching skills to work</td>
+<td>knowledge/skills process</td>
+<td><code>Knowledge Skills Process</code>; transactive memory, defect probability, decision quality</td>
+<td>Riedl et al. (2021); Wegner/Lewis</td>
+</tr>
+<tr>
+<td>Updating work approach</td>
+<td>strategy updating process</td>
+<td><code>Strategy Process</code>; allocation quality, shared reasoning, decision quality, completion probability</td>
+<td>Riedl et al. (2021); Marks et al.</td>
+</tr>
+<tr>
+<td>Task coordination demand</td>
+<td>coordination need</td>
+<td>Derived from task type profile in <code>tasks.py</code>; affects attention, coordination, completion, and decision quality</td>
+<td>Strode et al. (2012); Moe et al. (2010)</td>
+</tr>
+<tr>
+<td>Sprint delivery</td>
+<td>velocity and completion</td>
+<td><code>Planned Points</code>, <code>Completed Points</code>, <code>Sprint Velocity</code>, <code>Task Completion Rate</code></td>
+<td>Agile/Scrum practice</td>
+</tr>
+<tr>
+<td>Quality</td>
+<td>defects</td>
+<td><code>Defects</code>, <code>Defect Rate</code></td>
+<td>Agile quality metrics</td>
+</tr>
+<tr>
+<td>Future team capacity</td>
+<td>viability</td>
+<td><code>Team Viability (%)</code></td>
+<td>Hackman (1987); Wageman et al. (2005)</td>
+</tr>
+<tr>
+<td>Member load / burnout risk</td>
+<td>sustainability</td>
+<td><code>Member Sustainability (%)</code>, <code>Overload Pressure</code></td>
+<td>Hackman/Wageman</td>
+</tr>
+<tr>
+<td>AI support effect</td>
+<td>AI benefit</td>
+<td><code>AI Benefit Score</code>, <code>Trust Calibration</code>, allocation and dashboard gains</td>
+<td>Human-AI trust literature</td>
+</tr>
+<tr>
+<td>Mixed work and unfinished commitments</td>
+<td><code>task_mix</code> and <code>carry_over</code></td>
+<td>Sidebar task-mix sliders; <code>Task Mix</code>, <code>Carry-Over Points</code>, <code>Carry-Over Tasks</code>, <code>Carry-Over Rate</code></td>
+<td>Agile/Scrum practice; Marks et al. (2001)</td>
+</tr>
+<tr>
+<td>Task blockers / waiting on upstream work</td>
+<td><code>depends_on</code> blocker propagation</td>
+<td><code>Blocked Tasks</code>; unavailable work skipped until dependencies complete</td>
+<td>Strode et al. (2012); Moe, Dingsøyr &amp; Dybå (2010)</td>
+</tr>
+<tr>
+<td>Quality debt creating future work</td>
+<td>defect <code>rework</code> spillover</td>
+<td><code>Rework Created</code>, <code>Rework Completed</code>; fix tasks appear in later sprints</td>
+<td>Agile quality practice; Hackman process criteria</td>
+</tr>
+<tr>
+<td>Sprint rhythm</td>
+<td>sprint-phase modifiers</td>
+<td><code>Planning Quality</code>, <code>Review Quality</code>, <code>Retro Learning Multiplier</code></td>
+<td>Marks, Mathieu &amp; Zaccaro (2001); Kozlowski &amp; Ilgen (2006)</td>
+</tr>
+<tr>
+<td>Scrum roles as behavioral modifiers</td>
+<td><code>role</code> field on <code>TeamMember</code></td>
+<td>Product Owner, Scrum Master, Developer, Tester modifiers in <code>team.py</code></td>
+<td>Hoda, Noble &amp; Marshall (2013)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. CI → performance impact map (with paper citations)</h2>
+<p><strong>Three pathways CI affects agile performance:</strong></p>
+<ol>
+<li><strong>Direct via aggregate CI</strong> — the combined CI score raises task completion probability (+10% in the task-completion formula).</li>
+<li><strong>Indirect via decision quality</strong> — reasoning, attention, social perceptiveness, strategy updating process, and knowledge/skills process raise <code>decision_quality</code>, which increases completion (+8%) and reduces defects (-10%).</li>
+<li><strong>Direct engagement boost</strong> — team-level <code>team_engagement</code> adds +5% to completion on top of its CI contribution.</li>
+<li><strong>Hackman effectiveness layer</strong> — team effectiveness now combines task output, team viability, and member sustainability instead of treating velocity as the only success criterion.</li>
+<li><strong>Consequentiality/shared purpose</strong> — consequential work strengthens shared attention, team engagement, viability, and sustainability.</li>
+</ol>
+<p>Plus a <strong>feedback loop</strong>: good sprint outcomes raise memory, attention, reasoning, and engagement for the next sprint, so CI and agile performance co-evolve.</p>
+<hr />
+<h2>4. Per-component impact table</h2>
+<table>
+<thead>
+<tr>
+<th>CI component</th>
+<th style="text-align: right;">CI weight</th>
+<th>Why this weight</th>
+<th>Agile variable(s) affected</th>
+<th>Path to agile performance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transactive memory</td>
+<td style="text-align: right;">18%</td>
+<td>Highest positive CI weight because memory is a core Kommol CI system and central to "who knows what" in agile work</td>
+<td><code>Collective Intelligence Score</code>, <code>Transactive Memory</code>, indirect <code>Decision Quality</code></td>
+<td>-&gt; aggregate CI -&gt; completion -&gt; velocity/completion -&gt; task output and viability</td>
+</tr>
+<tr>
+<td>Shared attention</td>
+<td style="text-align: right;">16%</td>
+<td>Same high tier as reasoning/social sensitivity: attention is one of Kommol's three systems and captures sprint focus</td>
+<td><code>Shared Attention</code>, <code>Decision Quality</code> (+16% input)</td>
+<td>-&gt; CI and decision quality -&gt; completion and fewer defects</td>
+</tr>
+<tr>
+<td>Shared reasoning</td>
+<td style="text-align: right;">16%</td>
+<td>Same high tier: joint planning and technical decisions are central to agile performance and are the largest input to decision quality</td>
+<td><code>Shared Reasoning</code>, <code>Decision Quality</code> (+24% input)</td>
+<td>-&gt; CI and decision quality -&gt; completion, defects, effectiveness</td>
+</tr>
+<tr>
+<td>Social sensitivity</td>
+<td style="text-align: right;">16%</td>
+<td>Same high tier because Woolley/Riedl identify social perceptiveness as a major CI predictor</td>
+<td><code>Social Sensitivity</code>, <code>Decision Quality</code> (+12% input)</td>
+<td>-&gt; CI and decision quality -&gt; completion and defects</td>
+</tr>
+<tr>
+<td>Participation balance</td>
+<td style="text-align: right;">10%</td>
+<td>Supporting Woolley factor; important for CI but not one of Kommol's three core systems</td>
+<td><code>Participation Balance</code>, <code>Transactive Coordination</code></td>
+<td>-&gt; aggregate CI and transactive coordination</td>
+</tr>
+<tr>
+<td>Transactive coordination</td>
+<td style="text-align: right;">10%</td>
+<td>Agile coordination support; important but partly overlaps with attention/reasoning processes</td>
+<td><code>Transactive Coordination</code>, completion via CI</td>
+<td>-&gt; aggregate CI -&gt; completion and viability</td>
+</tr>
+<tr>
+<td>Team engagement</td>
+<td style="text-align: right;">8%</td>
+<td>Emergent team state; smaller CI weight because it also has a separate direct +5% effect on completion</td>
+<td><code>Team Engagement</code>, completion, viability, sustainability</td>
+<td>-&gt; CI and direct +5% completion; also viability/sustainability</td>
+</tr>
+<tr>
+<td>Skill diversity</td>
+<td style="text-align: right;">6%</td>
+<td>Smallest positive CI weight because diversity helps, but the model gives more influence to process and social-cognitive systems</td>
+<td><code>Skill Diversity</code>, <code>Collective Intelligence Score</code></td>
+<td>-&gt; aggregate CI; complementary expertise for complex agile work</td>
+</tr>
+<tr>
+<td>Age diversity</td>
+<td style="text-align: right;">-4% penalty</td>
+<td>Negative modifier rather than a positive CI component; kept smaller than the main positive weights so it does not dominate the model</td>
+<td><code>Age Diversity</code>, reduced <code>Collective Intelligence Score</code></td>
+<td>-&gt; negative CI adjustment</td>
+</tr>
+</tbody>
+</table>
+<p>Again, the percentages are <strong>simulation weights</strong> chosen for transparency and sensitivity analysis. They should be presented as model assumptions, not as empirical effect sizes from the cited papers.</p>
+<p>The positive CI weights sum to 100%: 18 + 16 + 16 + 16 + 10 + 10 + 8 + 6. This makes the CI score easy to explain as a weighted average of subconstructs, while age diversity is applied separately as a small penalty.</p>
+<hr />
+<h2>5. Where agile variables and weights come from</h2>
+<p><strong>Where agile variables come from:</strong> Agile outcomes (<code>velocity</code>, <code>completion_rate</code>, <code>defect_rate</code>, <code>team_effectiveness</code>, <code>team_viability</code>, <code>member_sustainability</code>, <code>overload_pressure</code>) are computed each sprint in <code>simulation.py</code> from task completion/defect draws, planned capacity, workload, trust calibration, and backlog state. CI constructs are computed in <code>metrics.py</code> from team members, process sliders, task coordination need, and evolving memory/attention/reasoning baselines. Process measures (<code>effort_management</code>, <code>skills_knowledge_coordination</code>, <code>task_strategy</code>) are internal variable names displayed as effort-related process, knowledge/skills process, and strategy updating process.</p>
+<p><strong>Why specific percentages:</strong> The weights prioritize Kommol's memory/attention/reasoning systems and Woolley/Riedl's social perceptiveness in the 16-18% tier. Balance, coordination, engagement, and diversity receive smaller weights because they support CI but are not treated as the main CI systems. Separate direct effects on completion (+10% CI, +8% decision quality, +5% team engagement) let CI influence agile performance both through the aggregate CI score and through decision quality and engagement.</p>
+<h3>5.1 CI aggregate weights</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Weight</th>
+<th>Implemented in code</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">18%</td>
+<td><code>transactive_memory</code> in <code>CI_COMPONENT_WEIGHTS</code></td>
+<td>Highest positive CI weight because memory/who-knows-what is the main way collective/shared memory becomes useful in sprint work.</td>
+</tr>
+<tr>
+<td style="text-align: right;">16%</td>
+<td><code>shared_attention</code></td>
+<td>High tier because shared attention is a core Kommol CI system and directly supports decision quality.</td>
+</tr>
+<tr>
+<td style="text-align: right;">16%</td>
+<td><code>shared_reasoning</code></td>
+<td>High tier because reasoning is a core Kommol CI system and the largest driver of decision quality.</td>
+</tr>
+<tr>
+<td style="text-align: right;">16%</td>
+<td><code>social_sensitivity</code></td>
+<td>High tier because Woolley/Riedl emphasize social perceptiveness as a major CI predictor.</td>
+</tr>
+<tr>
+<td style="text-align: right;">10%</td>
+<td><code>participation_balance</code></td>
+<td>Medium support weight: important for CI, but mostly a participation condition rather than a full memory/attention/reasoning system.</td>
+</tr>
+<tr>
+<td style="text-align: right;">10%</td>
+<td><code>transactive_coordination</code></td>
+<td>Medium support weight: captures agile coordination, partly overlapping with attention and memory.</td>
+</tr>
+<tr>
+<td style="text-align: right;">8%</td>
+<td><code>team_engagement</code></td>
+<td>Lower CI weight because engagement also affects completion, viability, and sustainability outside the CI aggregate.</td>
+</tr>
+<tr>
+<td style="text-align: right;">6%</td>
+<td><code>skill_diversity</code></td>
+<td>Smallest positive weight because diversity helps but is treated as a supporting composition factor.</td>
+</tr>
+<tr>
+<td style="text-align: right;">-4%</td>
+<td><code>AGE_DIVERSITY_PENALTY_WEIGHT</code></td>
+<td>Small negative adjustment, reflecting the professor's note without making age spread dominate the model.</td>
+</tr>
+</tbody>
+</table>
+<h3>5.2 Internal CI subcomponent formulas</h3>
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>Weights</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transactive memory</td>
+<td>40% collective memory, 25% knowledge/skills process, 20% skill diversity, 15% average individual skill</td>
+<td>Memory baseline dominates; process and diversity operationalize who knows what.</td>
+</tr>
+<tr>
+<td>Shared attention</td>
+<td>42% collective attention, 18% effort-related process, 15% consequentiality, 16% participation balance, 9% coordination need</td>
+<td>Baseline focus is largest; effort, purpose, participation, and coordination demand refine shared sprint attention.</td>
+</tr>
+<tr>
+<td>Shared reasoning</td>
+<td>50% collective reasoning, 25% strategy updating process, 15% social sensitivity, 10% knowledge/skills process</td>
+<td>Reasoning baseline is primary; strategy process is the main Riedl/Hackman predictor for adapting the work approach.</td>
+</tr>
+<tr>
+<td>Transactive coordination</td>
+<td>40% memory, 35% coordination need, 25% participation balance</td>
+<td>Coordination depends on knowing where expertise is, task coordination demand, and balanced participation.</td>
+</tr>
+</tbody>
+</table>
+<h3>5.3 Direct performance weights in <code>simulation.py</code></h3>
+<table>
+<thead>
+<tr>
+<th>Model area</th>
+<th>Implemented weights</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task completion probability</td>
+<td>+10% collective intelligence, +8% decision quality, +5% task strategy, +5% team engagement, +8% AI bonus</td>
+<td>CI has a direct performance effect, but individual skill, task difficulty, fit, and AI still matter. This avoids making CI the only driver.</td>
+</tr>
+<tr>
+<td>Defect probability</td>
+<td>-10% decision quality, -5% knowledge/skills process, -8% AI quality bonus</td>
+<td>Better decisions, better expertise matching, and reliable AI support reduce defects.</td>
+</tr>
+<tr>
+<td>Decision quality</td>
+<td>24% reasoning, 16% attention, 14% coordination need, 12% social sensitivity, 10% dashboard quality, 10% AI bonus, 8% strategy process, 6% knowledge/skills process</td>
+<td>Reasoning receives the largest share because decision quality is mainly a reasoning task; attention and social sensitivity support it.</td>
+</tr>
+<tr>
+<td>Outcome signal</td>
+<td>45% completion rate, 35% velocity ratio, 20% quality</td>
+<td>Sprint learning is driven mainly by finishing planned work, then velocity, then low defects.</td>
+</tr>
+<tr>
+<td>Team engagement update</td>
+<td>4% outcome signal, 3% decision quality, 2% trust calibration, 3% consequentiality</td>
+<td>Engagement improves after good outcomes, good decisions, calibrated trust, and meaningful shared purpose.</td>
+</tr>
+</tbody>
+</table>
+<h3>5.4 Hackman-style effectiveness weights</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th style="text-align: right;">Weight</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task output</td>
+<td style="text-align: right;">55%</td>
+<td>Delivery still matters most in agile sprints. Internally this combines 40% velocity ratio, 35% completion rate, and 25% quality (<code>1 - defect_rate</code>).</td>
+</tr>
+<tr>
+<td>Team viability</td>
+<td style="text-align: right;">25%</td>
+<td>Future capacity to continue working well together. It is computed from 40% CI, 20% team engagement, 20% consequentiality, 15% trust calibration, and 5% decision quality.</td>
+</tr>
+<tr>
+<td>Member sustainability</td>
+<td style="text-align: right;">20%</td>
+<td>Captures overload and burnout risk. It is computed from 35% engagement, 25% consequentiality, 25% effort-related process, and 15% low overload pressure.</td>
+</tr>
+</tbody>
+</table>
+<h3>5.5 Model v2.0 workflow additions</h3>
+<table>
+<thead>
+<tr>
+<th>Model area</th>
+<th>Implemented variables</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mixed backlog</td>
+<td><code>task_mix</code>, <code>Task Mix</code></td>
+<td>Configurable proportions for features, bugs, refactors, and spikes. The app normalizes the selected mix to 100%.</td>
+</tr>
+<tr>
+<td>Carry-over</td>
+<td><code>Carry-Over Points</code>, <code>Carry-Over Tasks</code>, <code>carry_over_rate</code></td>
+<td>Planned work not finished in the sprint is reported explicitly instead of disappearing from the model.</td>
+</tr>
+<tr>
+<td>Dependencies</td>
+<td><code>depends_on</code>, <code>Blocked Tasks</code>, <code>dependency_density</code></td>
+<td>Blocked tasks are skipped until dependencies complete, making blocker pressure visible across sprints.</td>
+</tr>
+<tr>
+<td>Rework</td>
+<td><code>is_rework</code>, <code>origin_task_id</code>, <code>available_from_sprint</code>, <code>Rework Created</code>, <code>Rework Completed</code></td>
+<td>Shipped defects create later fix tasks, so quality issues consume future sprint capacity.</td>
+</tr>
+<tr>
+<td>Sprint phases</td>
+<td><code>Planning Quality</code>, <code>Review Quality</code>, <code>Retro Learning Multiplier</code></td>
+<td>Planning affects strategy, review catches defects, and retrospective quality scales CI/engagement learning.</td>
+</tr>
+<tr>
+<td>Roles</td>
+<td><code>role</code>, <code>role_effects()</code></td>
+<td>Product Owner, Scrum Master, Developer, and Tester roles add small behavioral modifiers.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>6. Research-paper analysis</h2>
+<h3>A. Papers linking CI to team performance (general groups)</h3>
+<table>
+<thead>
+<tr>
+<th>Paper</th>
+<th>Main finding</th>
+<th>Use in simulator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Woolley et al. (2010)</strong> <em>Science</em></td>
+<td>A general CI factor (c) predicts group performance; driven by social sensitivity and equal participation, not average IQ</td>
+<td>Aggregate CI, social sensitivity, participation balance, female proportion</td>
+</tr>
+<tr>
+<td><strong>Riedl et al. (2021)</strong> <em>PNAS</em></td>
+<td>CI predicts performance; Fig. 2-D highlights collaboration-process measures: effort, strategy, skill congruence / knowledge-skills use</td>
+<td>Main source for predictor items</td>
+</tr>
+<tr>
+<td><strong>Kommol, Riedl &amp; Woolley (2025)</strong> <em>OSF Preprints</em></td>
+<td>CI structure is best explained through collective memory, attention, and reasoning</td>
+<td>Assigns Riedl items to CI systems</td>
+</tr>
+<tr>
+<td><strong>Engel et al. (2014)</strong> <em>PLOS ONE</em></td>
+<td>Theory of mind predicts CI online and face-to-face</td>
+<td><code>social_sensitivity</code> in distributed agile teams</td>
+</tr>
+<tr>
+<td><strong>DeChurch &amp; Mesmer-Magnus (2010)</strong> <em>JAP</em></td>
+<td>Meta-analysis: team cognition predicts performance</td>
+<td>CI reported separately from delivery metrics</td>
+</tr>
+<tr>
+<td><strong>Kozlowski &amp; Ilgen (2006)</strong> <em>PSPI</em></td>
+<td>Effectiveness = inputs → processes → emergent states → outcomes</td>
+<td>The whole input→process→state→outcome architecture + feedback</td>
+</tr>
+<tr>
+<td><strong>Mathieu et al. (2000)</strong> <em>JAP</em></td>
+<td>Shared mental models improve process and performance</td>
+<td><code>shared_attention</code>, <code>shared_reasoning</code>, dashboard</td>
+</tr>
+<tr>
+<td><strong>Bahrami et al. (2010)</strong> <em>Science</em></td>
+<td>Joint decisions beat individuals when confidence is shared</td>
+<td><code>decision_quality</code> as team-level</td>
+</tr>
+<tr>
+<td><strong>Hong &amp; Page (2004)</strong> <em>PNAS</em></td>
+<td>Diverse solvers beat uniformly high-ability ones</td>
+<td><code>skill_diversity</code> in CI</td>
+</tr>
+<tr>
+<td><strong>Wegner (1987); Lewis (2003)</strong></td>
+<td>Transactive memory: who knows what + coordination</td>
+<td><code>collective_memory</code>, transactive memory subconstruct</td>
+</tr>
+<tr>
+<td><strong>Hackman (1987, 2002); Wageman et al. (2005)</strong></td>
+<td>Process criteria and effectiveness conditions distinguish effort, strategy, knowledge/skills process, output, viability, and member sustainability</td>
+<td>Process-measure labels, consequentiality/shared purpose, team effectiveness</td>
+</tr>
+</tbody>
+</table>
+<h3>B. Papers linking team cognition to <strong>agile</strong> performance (closest to your question)</h3>
+<table>
+<thead>
+<tr>
+<th>Paper</th>
+<th>Main finding</th>
+<th>Use in simulator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Moe, Dingsøyr &amp; Dybå (2010)</strong> <em>IST</em></td>
+<td>Agile effectiveness depends on trust, shared mental models, coordination</td>
+<td>Coordination by task type, trust, CI</td>
+</tr>
+<tr>
+<td><strong>Lindsjørn et al. (2016)</strong> <em>JSS</em></td>
+<td>Teamwork quality predicts agile project success</td>
+<td><code>team_effectiveness</code> as multi-dimensional KPI</td>
+</tr>
+<tr>
+<td><strong>Strode et al. (2012)</strong> <em>JSS</em></td>
+<td>Agile coordination via synchronization, structure, boundary spanning</td>
+<td><code>transactive_coordination</code>, dashboard</td>
+</tr>
+<tr>
+<td><strong>Marks, Mathieu &amp; Zaccaro (2001)</strong> <em>AMR</em></td>
+<td>Team processes: transition, action, interpersonal</td>
+<td>Additional support for effort-related, knowledge/skills, and strategy updating processes</td>
+</tr>
+<tr>
+<td><strong>Hoda et al. (2013)</strong> <em>IEEE TSE</em></td>
+<td>Informal self-organizing roles in agile teams</td>
+<td>Role modifiers for Product Owner, Scrum Master, Developer, and Tester</td>
+</tr>
+</tbody>
+</table>
+<h3>C. Strong extensions beyond the original 30-paper set</h3>
+<table>
+<thead>
+<tr>
+<th>Paper</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dingsøyr, Moe et al. (2022)</strong> — Agile Teamwork Effectiveness Model (ATEM), <em>Empirical Software Engineering</em></td>
+<td>Formal agile model: effectiveness via shared leadership, adaptability, redundancy, coordinated through shared mental models, communication, trust</td>
+</tr>
+<tr>
+<td><strong>Gupta (2022, CMU dissertation)</strong> — CI in open-source software teams</td>
+<td>Empirically tests transactive systems (memory, attention, reasoning) on 476 GitHub teams — direct CI + software team evidence</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>7. Model v2.0 additions</h2>
+<p>Model v2.0 keeps the CI → agile performance core intact and adds tooling,
+backlog/workflow realism, modest team-structure depth, and validation. Every
+addition is a <strong>transparent simulation assumption</strong>, consistent with the rest of
+the document.</p>
+<h3>7.1 Externalized, versioned weights</h3>
+<p>The aggregate CI weights, the age-diversity penalty, and the team-effectiveness
+layer are loaded from <code>config/weights.yaml</code> through <code>config_loader.py</code>. The file
+also carries a <code>model_version</code>, surfaced at
+<code>run_simulation(...)["summary"]["model_version"]</code>. This makes the weighting
+scheme tunable and citable without editing Python source; the positive CI
+weights still sum to 1.0.</p>
+<h3>7.2 Mixed backlogs and carry-over</h3>
+<p>The backlog is generated from a configurable <code>task_mix</code> (features, bugs,
+refactors, spikes; normalized to 100%). Each sprint records <strong>planned vs
+completed</strong> points, and <strong>carry-over</strong> (committed work that did not finish) is a
+first-class metric. This moves the model beyond one task type and one-shot
+sprint execution.</p>
+<h3>7.3 Dependencies, blockers, and rework</h3>
+<p>Tasks may carry a <code>depends_on</code> link to an upstream task. A task cannot start
+until its dependencies complete, so <strong>blocked tasks</strong> are reported separately
+from carry-over. When a completed task ships a defect, a <strong>rework</strong> fix task is
+created and becomes available in a later sprint, so quality problems consume
+future capacity. A Scrum Master reduces effective blocker density.</p>
+<h3>7.4 Sprint-phase modifiers</h3>
+<p>Three lightweight phase modifiers layer on top of the existing update functions:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Effect</th>
+<th>Implemented as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Planning</td>
+<td>Strengthens the work strategy used downstream</td>
+<td><code>planning_quality</code> raises the effective <code>task_strategy</code></td>
+</tr>
+<tr>
+<td>Review</td>
+<td>Catches a share of defects before they ship</td>
+<td><code>review_quality</code> can prevent a defect (and its rework)</td>
+</tr>
+<tr>
+<td>Retrospective</td>
+<td>Scales how fast the team learns</td>
+<td><code>retro_quality</code> multiplies CI and engagement updates</td>
+</tr>
+</tbody>
+</table>
+<h3>7.5 Roles as behavioral modifiers</h3>
+<p>A lightweight <code>role</code> field (Product Owner, Scrum Master, Developer, Tester)
+adds small, interpretable nudges: the Product Owner sharpens strategy and shared
+purpose; the Scrum Master improves coordination/participation and relieves
+blockers; Testers raise in-review defect detection; Developers add a small
+delivery effect. Roles do not replace the per-member attributes; they modulate
+them.</p>
+<h3>7.6 New output metrics</h3>
+<p>In addition to the original metrics, v2.0 reports <code>carry_over_points</code>,
+<code>carry_over_rate</code>, <code>blocked_tasks</code>, <code>rework_created</code>, <code>rework_completed</code>, and
+<code>defects_caught_in_review</code>. Sensitivity analysis was broadened to include
+consequentiality, the CI baselines, and dependency density, and now includes a
+<strong>sensitivity-stability summary</strong> that quantifies how much each outcome swings
+across a parameter sweep. A <code>pytest</code> suite validates the metrics formulas,
+monotonic behavior, and deterministic reproducibility.</p>
+<hr />
+<h2>Source files</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Classes / functions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>simulation.py</code></td>
+<td><code>SimulationConfig</code>, <code>run_simulation</code>, completion/defect/CI-update logic, sprint phases, carry-over, rework</td>
+</tr>
+<tr>
+<td><code>team.py</code></td>
+<td><code>TeamMember</code>, <code>generate_team</code>, <code>role_effects</code></td>
+</tr>
+<tr>
+<td><code>tasks.py</code></td>
+<td><code>Task</code>, <code>TASK_TYPE_PROFILES</code>, mixed backlog, dependencies, rework</td>
+</tr>
+<tr>
+<td><code>metrics.py</code></td>
+<td><code>CollectiveIntelligenceComponents</code>, scoring functions</td>
+</tr>
+<tr>
+<td><code>ai_support.py</code></td>
+<td>Allocation, shared cognition, trust updates</td>
+</tr>
+<tr>
+<td><code>config_loader.py</code> / <code>config/weights.yaml</code></td>
+<td>Externalized, versioned model weights</td>
+</tr>
+<tr>
+<td><code>experiments.py</code></td>
+<td>Monte Carlo, sensitivity sweep, sensitivity-stability summary</td>
+</tr>
+<tr>
+<td><code>tests/</code></td>
+<td>Metrics, monotonic, and deterministic smoke tests (<code>pytest</code>)</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

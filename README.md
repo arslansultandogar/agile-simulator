@@ -1,5 +1,10 @@
 # Agile AI Simulator
 
+> **Model version 2.0** — externalized weights, preset scenarios, exports, mixed
+> backlogs with carry-over, task dependencies and rework spillover, sprint-phase
+> modifiers, Scrum roles, broadened sensitivity analysis, and a pytest suite.
+> See [What's new in model v2.0](#whats-new-in-model-v20).
+
 ## What this simulator does
 
 `agile-ai-simulator` is a first-version academic prototype built with Python and Streamlit.
@@ -74,6 +79,17 @@ agile-ai-simulator/
 ├── tasks.py
 ├── ai_support.py
 ├── metrics.py
+├── config_loader.py
+├── config/
+│   └── weights.yaml
+├── tests/
+│   ├── test_metrics.py
+│   ├── test_monotonic.py
+│   └── test_simulation.py
+├── docs/
+│   ├── PARAMETER_DICTIONARY.md
+│   ├── UML_CI_PERFORMANCE_ANALYSIS.md
+│   └── diagrams/
 ├── requirements.txt
 └── README.md
 ```
@@ -81,7 +97,10 @@ agile-ai-simulator/
 ## What each file does
 
 - `app.py`
-  Streamlit user interface with three tabs: Single Run, Monte Carlo Experiments, and Sensitivity Analysis. Results are cached for faster reruns.
+  Streamlit user interface with four tabs: Single Run, Monte Carlo Experiments, Sensitivity Analysis, and Assumptions. Includes preset scenarios, task-mix sliders, and CSV/JSON exports. Results are cached for faster reruns.
+
+- `config_loader.py` and `config/weights.yaml`
+  Externalized model weights (CI component weights, age-diversity penalty, team-effectiveness layer, and `model_version`). Edit the YAML to tune the model without touching Python source.
 
 - `simulation.py`
   Main simulation engine. It runs the model sprint by sprint, calculates completions and defects, updates Collective Intelligence subcomponents, trust calibration, and returns the results.
@@ -268,7 +287,46 @@ The app reports:
 - team effectiveness score
 - AI benefit score
 
+Backlog-realism and workflow metrics (Weeks 2–3):
+
+- carry-over points and carry-over rate
+- blocked tasks (from dependencies)
+- rework created and rework completed
+- defects caught in review
+
 These metrics are intentionally simple and interpretable. They are meant for conceptual experimentation, not operational forecasting.
+
+## What's new in model v2.0
+
+The simulator was extended with a balanced set of tooling, realism, depth, and
+validation improvements (see `docs/PARAMETER_DICTIONARY.md` for full definitions):
+
+- **Config-driven weights** — CI weights, the age-diversity penalty, and the
+  team-effectiveness layer live in `config/weights.yaml` with a `model_version`.
+- **Preset scenarios** — high-trust/high-reliability, over-trust/low-reliability,
+  strong-process/weak-AI, and weak-process/strong-AI.
+- **Exports** — CSV and JSON downloads for single-run, Monte Carlo, and
+  sensitivity results.
+- **Charts** — viability, sustainability, overload pressure, CI subcomponents
+  over time, and a planned-vs-completed/carry-over backlog chart.
+- **Assumptions panel** — process vs attribute assumptions and the female-proportion
+  proxy framing.
+- **Mixed backlogs and carry-over** — configurable feature/bug/refactor/spike mix,
+  planned-vs-completed tracking, and carry-over as a first-class metric.
+- **Dependencies and rework** — `depends_on` blocker propagation and defect
+  rework spillover that appears in later sprints.
+- **Sprint phases** — planning (strategy), review (defect detection), and
+  retrospective (learning rate) modifiers layered on the update functions.
+- **Roles** — Product Owner, Scrum Master, Developer, and Tester behavioral modifiers.
+- **Validation** — broadened sensitivity coverage, a sensitivity-stability summary,
+  and a `pytest` suite (metrics formulas, monotonic checks, deterministic smoke test).
+
+## Running the tests
+
+```bash
+pip install -r requirements.txt
+pytest
+```
 
 ## Connection to agile team effectiveness
 
@@ -325,10 +383,12 @@ The app now supports:
 
 ## Suggested future extensions
 
-- add roles such as Scrum Master, Product Owner, and Developer
-- distinguish between planned and emergent work
-- simulate task dependencies
-- add sprint phases (planning, execution, review, retrospective)
+Several previously-suggested extensions are now implemented in model v2.0:
+roles (Scrum Master / Product Owner / Developer / Tester), planned-vs-emergent
+work via carry-over and rework, task dependencies, sprint phases, and result
+exports. Remaining directions include:
+
 - add different AI agent types
 - calibrate formulas with empirical data
-- export results for thesis analysis
+- richer dependency graphs (multiple upstream tasks, critical-path effects)
+- per-role capacity and specialization instead of behavioral modifiers only

@@ -4,28 +4,14 @@ from dataclasses import dataclass
 from statistics import pstdev
 from typing import List, TYPE_CHECKING
 
+from config_loader import (
+    AGE_DIVERSITY_PENALTY_WEIGHT,
+    CI_COMPONENT_WEIGHTS,
+    TEAM_EFFECTIVENESS_WEIGHTS,
+)
+
 if TYPE_CHECKING:
     from team import TeamMember
-
-
-CI_COMPONENT_WEIGHTS = {
-    "transactive_memory": 0.18,
-    "shared_attention": 0.16,
-    "shared_reasoning": 0.16,
-    "social_sensitivity": 0.16,
-    "participation_balance": 0.10,
-    "transactive_coordination": 0.10,
-    "team_engagement": 0.08,
-    "skill_diversity": 0.06,
-}
-
-AGE_DIVERSITY_PENALTY_WEIGHT = 0.04
-
-TEAM_EFFECTIVENESS_WEIGHTS = {
-    "task_output": 0.55,
-    "team_viability": 0.25,
-    "member_sustainability": 0.20,
-}
 
 
 def clamp(value: float, minimum: float = 0.0, maximum: float = 1.0) -> float:

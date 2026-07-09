@@ -4,6 +4,7 @@ classDiagram
         +number_of_sprints
         +number_of_tasks
         +task_type
+        +task_mix
         +ai_support_level
         +trust_in_ai
         +ai_reliability
@@ -18,7 +19,18 @@ classDiagram
         +collective_memory
         +collective_attention
         +collective_reasoning
+        +dependency_density
+        +enable_rework
+        +enable_sprint_phases
         +random_seed
+    }
+
+    class WeightsConfig {
+        <<config/weights.yaml>>
+        +model_version
+        +ci_component_weights
+        +age_diversity_penalty_weight
+        +team_effectiveness_weights
     }
 
     class TeamMember {
@@ -26,6 +38,7 @@ classDiagram
         +name
         +gender
         +age
+        +role
         +skill_level
         +availability
         +communication_level
@@ -36,6 +49,17 @@ classDiagram
         +error_tendency
     }
 
+    class RoleModifiers {
+        <<team.py>>
+        +strategy
+        +consequentiality
+        +participation
+        +coordination
+        +blocker_relief
+        +delivery
+        +defect_detection
+    }
+
     class Task {
         +task_id
         +task_type
@@ -44,6 +68,10 @@ classDiagram
         +priority
         +uncertainty
         +required_skill_level
+        +depends_on
+        +is_rework
+        +origin_task_id
+        +available_from_sprint
     }
 
     class TaskTypeProfile {
@@ -52,6 +80,13 @@ classDiagram
         +uncertainty_modifier
         +skill_demand
         +completion_bonus
+    }
+
+    class SprintPhases {
+        <<simulation.py>>
+        +planning_quality
+        +review_quality
+        +retro_quality
     }
 
     class CollectiveIntelligenceComponents {
@@ -67,6 +102,14 @@ classDiagram
     }
 
     class SprintResult {
+        +planned_points
+        +completed_points
+        +carry_over_points
+        +carry_over_tasks
+        +blocked_tasks
+        +rework_created
+        +rework_completed
+        +defects_caught_in_review
         +velocity
         +completion_rate
         +defect_rate
@@ -78,8 +121,8 @@ classDiagram
         +team_viability
         +member_sustainability
         +overload_pressure
-        +consequentiality
-        +age_diversity
+        +planning_quality
+        +review_quality
     }
 
     class AISupport {
@@ -97,11 +140,17 @@ classDiagram
         trust_calibration_score()
     }
 
+    WeightsConfig ..> MetricsEngine : configures weights
     SimulationConfig "1" --> "1..*" TeamMember : generates
-    SimulationConfig "1" --> "1..*" Task : generates
+    SimulationConfig "1" --> "1..*" Task : generates mixed backlog
+    TeamMember "1..*" --> "1" RoleModifiers : aggregates to
     Task "n" --> "1" TaskTypeProfile : uses
+    Task "0..*" --> "0..*" Task : depends_on
+    Task "1" ..> "0..1" Task : creates rework
     TeamMember "1..*" --> "0..*" Task : assigned_to
     TeamMember "1..*" --> "1" CollectiveIntelligenceComponents : contributes_to
+    SprintPhases ..> SprintResult : modifies
+    RoleModifiers ..> SprintResult : modifies
     CollectiveIntelligenceComponents "1" --> "1" SprintResult : influences
     AISupport ..> TeamMember : updates trust
     AISupport ..> Task : allocates

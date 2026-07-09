@@ -1,0 +1,33 @@
+# Agile AI Simulator - externalized model weights.
+#
+# These are transparent SIMULATION weights chosen for explainability and
+# sensitivity analysis. They are NOT empirical effect sizes estimated from
+# Scrum datasets. Editing this file changes model behavior without touching
+# Python source, which makes the model easier to tune and study.
+
+# Bumped whenever the weighting scheme or model structure changes. Surfaced in
+# run_simulation()["summary"]["model_version"] for reproducibility.
+model_version: "2.0.0"
+
+# Aggregate Collective Intelligence weights. The positive weights sum to 1.00
+# so the CI score reads as a weighted average of its subconstructs.
+ci_component_weights:
+  transactive_memory: 0.18
+  shared_attention: 0.16
+  shared_reasoning: 0.16
+  social_sensitivity: 0.16
+  participation_balance: 0.10
+  transactive_coordination: 0.10
+  team_engagement: 0.08
+  skill_diversity: 0.06
+
+# Age diversity is applied as a small negative adjustment rather than a
+# positive CI component, so it does not dominate the model.
+age_diversity_penalty_weight: 0.04
+
+# Hackman-style team effectiveness layer: delivery output, future viability,
+# and member sustainability.
+team_effectiveness_weights:
+  task_output: 0.55
+  team_viability: 0.25
+  member_sustainability: 0.20
