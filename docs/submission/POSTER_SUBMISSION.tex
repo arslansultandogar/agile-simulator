@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+
+\title{Collective Intelligence in Agile Teams:\\ A Transparent Simulation Testbed for Studying\\ Team Decisions Across Sprints}
+\author{Arslan Sultan\thanks{Corresponding author. Affiliation and email to confirm.} \and Juan Garbajosa}
+\date{July 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Agile software teams make repeated collective decisions across sprints---planning work, allocating it against expertise, coordinating dependencies, and adapting from outcomes. We argue that this is, first and foremost, a \emph{collective-intelligence} (CI) process: performance emerges from shared memory, shared attention, shared reasoning, and social sensitivity rather than from the sum of individual skills \citep{Woolley2010,Riedl2021,kommol2025structure}. Yet CI, agile team effectiveness, and human--AI teaming are usually studied separately. We present a transparent simulation testbed that models CI subconstructs as they drive team decisions across sprints and, secondarily, lets researchers compare outcomes with and without AI decision support under varying trust and reliability. Every formula and weight is inspectable, so the model is a shared object for interdisciplinary critique rather than a black box.
+
+\textbf{Topic affiliation:} Collective Intelligence (CI), with Human--AI Complementarity and Alignment (HCOMP) as a secondary angle.
+\end{abstract}
+
+\section{Motivation: agile teamwork \emph{is} a collective-intelligence process}
+
+Two decades ago the \emph{Agile Manifesto} reframed software development as a human, interaction-intensive activity, valuing ``individuals and interactions over processes and tools'' and ``customer collaboration over contract negotiation''---explicitly \emph{against} a document-driven world with infrequent human contact \citep{Beck2001}. This locates the sources of performance in interaction and shared understanding, which is precisely the territory of collective intelligence.
+
+Collective intelligence is the general capacity of a group to perform across many tasks, only weakly predicted by the average or maximum individual ability of members \citep{Woolley2010}. Recent work decomposes this capacity into measurable subconstructs---collective (transactive) memory, collective attention, and collective reasoning---with distinct structure and consequences \citep{kommol2025structure,Riedl2021}. Even at the dyad level, two minds outperform the better individual only when communication and confidence are well calibrated \citep{Bahrami2010}. Social perceptiveness and balanced participation are consistent correlates of higher collective performance \citep{Woolley2010,woolley2025teams}.
+
+An agile sprint exercises exactly these mechanisms, repeatedly and with measurable outcomes (velocity, defect rate, completion). This gives agile work an ecological validity abstract CI lab tasks lack, while retaining the emergent, group-level character CI research studies. \textbf{Our position: agile team effectiveness is best understood as an emergent collective-intelligence process, and simulation is a transparent way to study how CI, task structure, and AI support interact over time.}
+
+\section{From agile values to Scrum structure}
+
+Where the manifesto states values, \emph{Scrum} supplies structure. In its origins Scrum was a lightweight framework for \textbf{project planning and management}---roles, a backlog, and time-boxed iterations---and the now-familiar Scrum \emph{values} and \emph{principles} were articulated by the community later rather than present from the start \citep{Schwaber2020}. We therefore treat Scrum not as the theory but as the concrete apparatus through which agile teams enact collective decisions: Product Owner, Scrum Master, Developer, and Tester roles; planning, review, and retrospective events; and a mixed backlog. Empirical models of agile and Scrum effectiveness converge on the same emergent factors CI research emphasizes---shared mental models, communication, trust, responsiveness, and continuous improvement \citep{Verwijs2023,strode2022teamwork}. Scrum is where collective intelligence becomes observable at the cadence of a sprint.
+
+\section{A secondary lens: AI support and trust calibration}
+
+AI tools for planning, allocation, and shared dashboards are entering agile workflows. Whether they help is not settled by raw capability: human--AI teaming depends on \emph{calibrated trust}---alignment between perceived and actual reliability---so over-trust in an unreliable assistant can be worse than none. In our testbed AI is one input to collective decision quality, whose value is conditional on reliability and on how the team calibrates reliance across sprints.
+
+\section{Modeling approach and core hypothesis}
+
+The testbed runs the same team and backlog through multiple sprints. Each sprint computes CI subconstructs, converts them (with task structure and AI support) into a decision-quality score, simulates completion and defects, then updates learned trust and CI dimensions---so CI is a \emph{dynamic} construct that evolves with outcomes. Team-level outcomes use a three-part effectiveness view---task output, team viability, and member sustainability---following Hackman's account that success is not output alone \citep{Hackman1987,Wageman2005}.
+
+\begin{quote}
+\textbf{Core hypothesis.} Agile team effectiveness is a function of individual capability, \textbf{collective intelligence}, task characteristics, and human--AI coordination quality---not of AI alone.
+\end{quote}
+
+\section{Illustrative findings from simulation experiments}
+
+These are conceptual demonstrations of model behavior, not empirical estimates (see Section~\ref{sec:limits}).
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Configuration} & \textbf{Observed pattern in the model} \\
+\midrule
+High CI + calibrated trust + reliable AI & Higher velocity, lower defects, higher viability \\
+Over-trust + low AI reliability & More defects, negative AI benefit, miscalibration \\
+Spike- vs.\ feature-heavy backlog & Higher coordination need, different defect profile \\
+Strong process (effort, knowledge, strategy) & CI and decision quality improve without strong AI \\
+\bottomrule
+\end{tabular}
+\caption{Illustrative simulation results. Process quality lifts outcomes \emph{through} collective intelligence, independently of the AI assistant \citep{Riedl2021}.}
+\end{table}
+
+\section{Why this is interesting to the CI/HCOMP community}
+
+\begin{itemize}
+    \item It operationalizes CI subconstructs---memory, attention, reasoning, social sensitivity, participation balance---as levers that \emph{drive} decisions in an ecologically grounded agile setting \citep{Woolley2010,kommol2025structure}.
+    \item It models CI as \emph{dynamic}, evolving across sprints with coordination demand, dashboard quality, trust calibration, and outcomes.
+    \item It makes every assumption inspectable---a shared artifact reviewers can challenge, re-parameterize, and extend.
+\end{itemize}
+
+\section{Limitations}
+\label{sec:limits}
+
+The testbed is a conceptual prototype, not an empirically calibrated predictive model. Weights are transparent simulation assumptions, not coefficients estimated from Scrum datasets. Future work includes empirical validation against team data, richer coordination measurement, and modeling conformity and over-reliance when shared-cognition tools dominate decisions.
+
+\section{Interaction at the poster session}
+
+Attendees can run the live tool at the poster: adjust CI, trust, AI reliability, and task mix; run counterfactual scenarios; and discuss which assumptions they would challenge. An architecture figure and screenshots make the model concrete; the tool's design and operation are detailed in the companion demo paper.
+
+\bibliographystyle{plainnat}
+\bibliography{../../new-ref}
+
+\end{document}

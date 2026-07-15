@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 760" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1060" height="760" fill="#ffffff"/>
+
+  <!-- ===== Definitions ===== -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
+    </marker>
+    <marker id="arrowLight" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a8a8a"/>
+    </marker>
+  </defs>
+
+  <style>
+    .layerlbl { font-size: 12px; fill: #6b7280; letter-spacing: .08em; }
+    .title { font-size: 15px; font-weight: 700; fill: #111827; }
+    .mono  { font-size: 11.5px; fill: #6b7280; font-family: "SFMono-Regular", Consolas, monospace; }
+    .sub   { font-size: 12px; fill: #374151; }
+    .flow  { stroke: #555; stroke-width: 1.6; fill: none; }
+    .flowL { stroke: #8a8a8a; stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+  </style>
+
+  <!-- ===== Actor ===== -->
+  <rect x="430" y="18" width="200" height="42" rx="21" fill="#111827"/>
+  <text x="530" y="44" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">Researcher / Attendee</text>
+  <line x1="530" y1="60" x2="530" y2="92" class="flow" marker-end="url(#arrow)"/>
+  <text x="545" y="80" class="sub" fill="#6b7280">sets parameters, runs experiments</text>
+
+  <!-- ===== Layer 1: Presentation (app.py) ===== -->
+  <rect x="40" y="96" width="980" height="132" rx="10" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text x="58" y="118" class="layerlbl">PRESENTATION LAYER</text>
+  <text x="58" y="118" class="mono" text-anchor="end" transform="translate(962,0)">app.py · Streamlit</text>
+
+  <rect x="60" y="130" width="270" height="82" rx="8" fill="#ffffff" stroke="#a5b4fc"/>
+  <text x="76" y="152" class="title">Sidebar controls</text>
+  <text x="76" y="174" class="sub">Preset scenarios</text>
+  <text x="76" y="192" class="sub">~20 parameters: CI, trust,</text>
+  <text x="76" y="208" class="sub">AI reliability, task mix, process</text>
+
+  <rect x="350" y="130" width="650" height="82" rx="8" fill="#ffffff" stroke="#a5b4fc"/>
+  <text x="366" y="152" class="title">Result tabs</text>
+  <text x="366" y="176" class="sub">Single Run&#160;&#160;|&#160;&#160;Monte Carlo Experiments&#160;&#160;|&#160;&#160;Sensitivity Analysis&#160;&#160;|&#160;&#160;Assumptions</text>
+  <text x="366" y="198" class="sub" fill="#6b7280">metric cards, sprint-by-sprint charts, distributions, sweep curves, JSON export</text>
+
+  <line x1="530" y1="228" x2="530" y2="256" class="flow" marker-end="url(#arrow)"/>
+
+  <!-- ===== Layer 2: Orchestration (experiments.py) ===== -->
+  <rect x="40" y="258" width="980" height="86" rx="10" fill="#ecfeff" stroke="#a5f3fc"/>
+  <text x="58" y="280" class="layerlbl">EXPERIMENT ORCHESTRATION</text>
+  <text x="58" y="280" class="mono" text-anchor="end" transform="translate(962,0)">experiments.py</text>
+
+  <rect x="60" y="292" width="290" height="42" rx="8" fill="#ffffff" stroke="#67e8f9"/>
+  <text x="205" y="318" text-anchor="middle" class="sub">Single scenario (with vs. without AI)</text>
+  <rect x="380" y="292" width="270" height="42" rx="8" fill="#ffffff" stroke="#67e8f9"/>
+  <text x="515" y="318" text-anchor="middle" class="sub">Monte Carlo replication (N runs)</text>
+  <rect x="680" y="292" width="320" height="42" rx="8" fill="#ffffff" stroke="#67e8f9"/>
+  <text x="840" y="318" text-anchor="middle" class="sub">Sensitivity sweep (one parameter)</text>
+
+  <line x1="530" y1="344" x2="530" y2="372" class="flow" marker-end="url(#arrow)"/>
+  <text x="545" y="362" class="sub" fill="#6b7280">repeated calls to the engine</text>
+
+  <!-- ===== Layer 3: Simulation engine (simulation.py) ===== -->
+  <rect x="40" y="374" width="980" height="222" rx="10" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <text x="58" y="396" class="layerlbl">SIMULATION ENGINE — per-sprint loop</text>
+  <text x="58" y="396" class="mono" text-anchor="end" transform="translate(962,0)">simulation.py · run_simulation()</text>
+
+  <!-- central loop box -->
+  <rect x="330" y="410" width="400" height="170" rx="8" fill="#ffffff" stroke="#4ade80" stroke-width="1.6"/>
+  <text x="530" y="432" text-anchor="middle" class="title">Sprint cycle (repeat × N sprints)</text>
+  <text x="530" y="456" text-anchor="middle" class="sub">1. Select tasks from backlog (capacity, priority)</text>
+  <text x="530" y="476" text-anchor="middle" class="sub">2. Compute coordination need · allocate work</text>
+  <text x="530" y="496" text-anchor="middle" class="sub">3. Activate shared-cognition assistant (AI only)</text>
+  <text x="530" y="516" text-anchor="middle" class="sub">4. Aggregate CI · decision quality</text>
+  <text x="530" y="536" text-anchor="middle" class="sub">5. Simulate completion, defects, rework</text>
+  <text x="530" y="556" text-anchor="middle" class="sub">6. Update trust &amp; CI → next sprint (learning)</text>
+
+  <!-- feeder modules left -->
+  <rect x="60" y="416" width="250" height="36" rx="7" fill="#ffffff" stroke="#86efac"/>
+  <text x="76" y="433" class="sub" font-weight="700">Team &amp; roles</text>
+  <text x="76" y="447" class="mono">team.py — members, RoleModifiers</text>
+
+  <rect x="60" y="462" width="250" height="36" rx="7" fill="#ffffff" stroke="#86efac"/>
+  <text x="76" y="479" class="sub" font-weight="700">Backlog</text>
+  <text x="76" y="493" class="mono">tasks.py — Task, TaskTypeProfile</text>
+
+  <!-- feeder modules right -->
+  <rect x="750" y="416" width="250" height="36" rx="7" fill="#ffffff" stroke="#86efac"/>
+  <text x="766" y="433" class="sub" font-weight="700">Human–AI teaming</text>
+  <text x="766" y="447" class="mono">ai_support.py — alloc, trust</text>
+
+  <rect x="750" y="462" width="250" height="36" rx="7" fill="#ffffff" stroke="#86efac"/>
+  <text x="766" y="479" class="sub" font-weight="700">CI &amp; effectiveness metrics</text>
+  <text x="766" y="493" class="mono">metrics.py — CI, DQ, Hackman</text>
+
+  <line x1="310" y1="434" x2="330" y2="450" class="flowL" marker-end="url(#arrowLight)"/>
+  <line x1="310" y1="480" x2="330" y2="490" class="flowL" marker-end="url(#arrowLight)"/>
+  <line x1="750" y1="434" x2="730" y2="450" class="flowL" marker-end="url(#arrowLight)"/>
+  <line x1="750" y1="480" x2="730" y2="490" class="flowL" marker-end="url(#arrowLight)"/>
+
+  <!-- config feeding metrics -->
+  <line x1="530" y1="596" x2="530" y2="628" class="flow" marker-end="url(#arrow)"/>
+  <text x="545" y="618" class="sub" fill="#6b7280">per-sprint records → summary metrics</text>
+
+  <!-- ===== Layer 4: Configuration ===== -->
+  <rect x="40" y="630" width="980" height="66" rx="10" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="58" y="652" class="layerlbl">CONFIGURATION — externalized, versioned weights</text>
+  <text x="58" y="652" class="mono" text-anchor="end" transform="translate(962,0)">config_loader.py · config/weights.yaml</text>
+  <text x="58" y="678" class="sub">CI component weights&#160;&#160;·&#160;&#160;team-effectiveness weights&#160;&#160;·&#160;&#160;diversity penalties&#160;&#160;·&#160;&#160;model_version — every formula inspectable, no hidden coefficients</text>
+
+  <!-- config link into engine (dashed, on the side) -->
+  <path d="M 40 663 C 15 663 15 500 40 500" class="flowL" marker-end="url(#arrowLight)"/>
+
+  <!-- feedback loop arrow (outputs back to UI) right side -->
+  <path d="M 1020 640 C 1050 640 1050 162 1002 162" class="flowL" marker-end="url(#arrowLight)"/>
+  <text x="1012" y="410" class="sub" fill="#6b7280" transform="rotate(90 1012 410)">results rendered in UI</text>
+</svg>
