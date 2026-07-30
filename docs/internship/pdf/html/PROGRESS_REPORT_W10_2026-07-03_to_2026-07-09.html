@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PROGRESS REPORT W10 2026-07-03 to 2026-07-09</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 22mm 18mm;
+  }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 16pt;
+    page-break-after: avoid;
+    border-bottom: 1px solid #333;
+    padding-bottom: 4px;
+  }
+  h2 {
+    font-size: 14pt;
+    margin-top: 18pt;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 12pt;
+    margin-top: 14pt;
+    page-break-after: avoid;
+  }
+  p, li {
+    text-align: justify;
+  }
+  code {
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+    background: #f5f5f5;
+    padding: 1px 3px;
+  }
+  pre {
+    font-size: 10pt;
+    background: #f5f5f5;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10pt 0;
+    font-size: 11pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #333;
+    padding: 4pt 6pt;
+    vertical-align: top;
+  }
+  th {
+    background: #eee;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #999;
+    margin: 16pt 0;
+  }
+  .cover {
+    text-align: center;
+    margin-top: 60pt;
+    page-break-after: always;
+  }
+  .cover h1 {
+    font-size: 18pt;
+    border: none;
+    margin-bottom: 24pt;
+  }
+  .cover p {
+    text-align: center;
+    margin: 8pt 0;
+  }
+</style>
+</head>
+<body>
+<h1>Progress Report — Week 10</h1>
+<p><strong>Course:</strong> 814601S / 814311A | <strong>Student:</strong> Arslan Sultan | <strong>Student number:</strong> 1.2.246.562.24.35253236476 | <strong>Email:</strong> arslan.sultan@student.oulu.fi<br />
+<strong>Employer:</strong> Universidad Politécnica de Madrid (UPM) | <strong>Supervisor:</strong> Juan Garbajosa<br />
+<strong>Report return date:</strong> 10 July 2026</p>
+<hr />
+<h2>Reporting period</h2>
+<p><strong>3 July 2026 – 9 July 2026</strong></p>
+<hr />
+<h2>Hours worked</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Day</th>
+<th>Hours</th>
+<th>Activity summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3 Jul 2026</td>
+<td>Fri</td>
+<td>8</td>
+<td>Externalized weights to config/weights.yaml</td>
+</tr>
+<tr>
+<td>6 Jul 2026</td>
+<td>Mon</td>
+<td>8</td>
+<td>config_loader.py and model_version tracking</td>
+</tr>
+<tr>
+<td>7 Jul 2026</td>
+<td>Tue</td>
+<td>8</td>
+<td>Preset scenarios (high-trust, over-trust, low-CI, etc.)</td>
+</tr>
+<tr>
+<td>8 Jul 2026</td>
+<td>Wed</td>
+<td>8</td>
+<td>CSV/JSON export, extra UI charts (viability, sustainability, CI subcomponents)</td>
+</tr>
+<tr>
+<td>9 Jul 2026</td>
+<td>Thu</td>
+<td>8</td>
+<td>Assumptions panel in Streamlit; README v2.0 update</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>40</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Work completed</h2>
+<ul>
+<li>Released model v2.0 tooling: all CI and effectiveness weights moved to <code>config/weights.yaml</code>.</li>
+<li>Implemented <code>config_loader.py</code> for versioned, inspectable configuration.</li>
+<li>Added preset scenarios to Streamlit sidebar for common research demonstrations.</li>
+<li>Extended UI with charts for viability, sustainability, overload, and CI subcomponent breakdown.</li>
+<li>Added CSV/JSON export for single runs and experiment summaries.</li>
+<li>Created in-app Assumptions tab showing formulas and externalized weights.</li>
+</ul>
+<hr />
+<h2>Connection to learning objectives</h2>
+<ul>
+<li>Applied software configuration and UX design principles to improve research tool usability.</li>
+<li>Worked systematically toward milestone v2.0 with clear module boundaries.</li>
+<li>Produced employer-visible value: a more transparent and demonstrable prototype.</li>
+</ul>
+<hr />
+<h2>Challenges and how they were handled</h2>
+<p>Caching in Streamlit caused stale results after weight changes. I added cache invalidation on config reload and documented the behaviour in README.</p>
+<hr />
+<h2>Plan for next week (10–16 Jul 2026)</h2>
+<ul>
+<li>Mixed-backlog generator with task-type proportions and carry-over reporting.</li>
+<li>Task dependencies, blocker propagation, defect rework spillover.</li>
+<li>Sprint-phase modifiers and lightweight Scrum roles.</li>
+</ul>
+<hr />
+<p><strong>Student signature:</strong> Arslan Sultan — Date: 10 July 2026<br />
+<strong>Supervisor acknowledgment:</strong> Juan Garbajosa</p>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PROGRESS REPORT W09 2026-06-26 to 2026-07-02</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 22mm 18mm;
+  }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 16pt;
+    page-break-after: avoid;
+    border-bottom: 1px solid #333;
+    padding-bottom: 4px;
+  }
+  h2 {
+    font-size: 14pt;
+    margin-top: 18pt;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 12pt;
+    margin-top: 14pt;
+    page-break-after: avoid;
+  }
+  p, li {
+    text-align: justify;
+  }
+  code {
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+    background: #f5f5f5;
+    padding: 1px 3px;
+  }
+  pre {
+    font-size: 10pt;
+    background: #f5f5f5;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10pt 0;
+    font-size: 11pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #333;
+    padding: 4pt 6pt;
+    vertical-align: top;
+  }
+  th {
+    background: #eee;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #999;
+    margin: 16pt 0;
+  }
+  .cover {
+    text-align: center;
+    margin-top: 60pt;
+    page-break-after: always;
+  }
+  .cover h1 {
+    font-size: 18pt;
+    border: none;
+    margin-bottom: 24pt;
+  }
+  .cover p {
+    text-align: center;
+    margin: 8pt 0;
+  }
+</style>
+</head>
+<body>
+<h1>Progress Report — Week 9</h1>
+<p><strong>Course:</strong> 814601S / 814311A | <strong>Student:</strong> Arslan Sultan | <strong>Student number:</strong> 1.2.246.562.24.35253236476 | <strong>Email:</strong> arslan.sultan@student.oulu.fi<br />
+<strong>Employer:</strong> Universidad Politécnica de Madrid (UPM) | <strong>Supervisor:</strong> Juan Garbajosa<br />
+<strong>Report return date:</strong> 3 July 2026</p>
+<hr />
+<h2>Reporting period</h2>
+<p><strong>26 June 2026 – 2 July 2026</strong></p>
+<hr />
+<h2>Hours worked</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Day</th>
+<th>Hours</th>
+<th>Activity summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>26 Jun 2026</td>
+<td>Fri</td>
+<td>8</td>
+<td>Draft UML_CI_PERFORMANCE_ANALYSIS.md structure</td>
+</tr>
+<tr>
+<td>29 Jun 2026</td>
+<td>Mon</td>
+<td>8</td>
+<td>CI → performance impact map with paper citations</td>
+</tr>
+<tr>
+<td>30 Jun 2026</td>
+<td>Tue</td>
+<td>8</td>
+<td>Per-component impact table with weight rationale</td>
+</tr>
+<tr>
+<td>1 Jul 2026</td>
+<td>Wed</td>
+<td>8</td>
+<td>Section on where agile variables and weights come from</td>
+</tr>
+<tr>
+<td>2 Jul 2026</td>
+<td>Thu</td>
+<td>8</td>
+<td>HTML/PDF export via Chrome headless; review with supervisor</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>40</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Work completed</h2>
+<ul>
+<li>Wrote comprehensive <code>docs/UML_CI_PERFORMANCE_ANALYSIS.md</code> covering UML model, CI performance map, and research-paper analysis.</li>
+<li>Added <strong>Agile variable(s) in testbed</strong> and <strong>Why this weight</strong> columns to analysis tables.</li>
+<li>Documented that percentages are transparent simulation assumptions, not empirically estimated Scrum coefficients.</li>
+<li>Created <code>docs/UML_CI_PERFORMANCE_ANALYSIS.html</code> and exported PDF for submission and presentation use.</li>
+<li>Updated <code>PRESENTATION_REPORT.md</code> to align with refined terminology and new references.</li>
+</ul>
+<hr />
+<h2>Connection to learning objectives</h2>
+<ul>
+<li>Demonstrated ability to connect work assignments, university studies, and employer/academic goals in written form.</li>
+<li>Applied research analysis and technical writing at a level suitable for thesis and conference materials.</li>
+<li>Managed time across writing, formatting, and export pipeline within one week.</li>
+</ul>
+<hr />
+<h2>Challenges and how they were handled</h2>
+<p>PDF generation tools (pandoc, wkhtmltopdf) were unavailable locally. I used Chrome headless <code>--print-to-pdf</code> as an alternative export method and documented the workflow.</p>
+<hr />
+<h2>Plan for next week (3–9 Jul 2026)</h2>
+<ul>
+<li>Implement model v2.0 tooling: externalized weights in <code>config/weights.yaml</code>.</li>
+<li>Add preset scenarios, CSV/JSON exports, and expanded UI charts.</li>
+<li>Create <code>config_loader.py</code> and assumptions panel in Streamlit.</li>
+</ul>
+<hr />
+<p><strong>Student signature:</strong> Arslan Sultan — Date: 3 July 2026<br />
+<strong>Supervisor acknowledgment:</strong> Juan Garbajosa</p>
+</body>
+</html>
