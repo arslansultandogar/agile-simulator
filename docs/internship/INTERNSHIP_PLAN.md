@@ -145,13 +145,3 @@ Each weekly progress report will include:
 | Theory-to-code translation is unclear | Document assumptions explicitly; discuss with supervisor before major model changes |
 | Environment/dependency issues | Use virtual environments; validate in isolated test runs |
 | Confidentiality concerns | Exclude sensitive employer information from public reports; ask permission when uncertain |
-
----
-
-## 9. Agreement
-
-**Student:** Arslan Sultan — Date: 1 May 2026 — Signature: ___________________
-
-**Workplace supervisor:** Juan Garbajosa — Signature: ___________________
-
-**University contact (information):** Tonja Molin-Juustila
