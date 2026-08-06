@@ -7,7 +7,40 @@
 
 # Bumped whenever the weighting scheme or model structure changes. Surfaced in
 # run_simulation()["summary"]["model_version"] for reproducibility.
-model_version: "2.0.0"
+model_version: "2.1.0"
+
+# ---------------------------------------------------------------------------
+# Human-AI trust model (added in v2.1).
+#
+# In v2.0 each member's perceived AI reliability was generated directly from the
+# AI's ACTUAL reliability (actual + 0.05). Perception could therefore never
+# diverge from ground truth, trust calibration was pinned near 0.95 for every
+# configuration, and the over-trust / under-trust regimes described by
+# Lee & See (2004) and Hoff & Bashir (2015) could not occur.
+#
+# In v2.1 initial perception is anchored on the team's TRUST disposition
+# (dispositional/situational trust, i.e. a prior belief about the tool), and
+# experience then moves perception toward actual reliability sprint by sprint
+# (learned trust). Set anchor to "actual" to reproduce v2.0 behavior exactly.
+human_ai_trust:
+  perceived_reliability_anchor: "trust"   # "trust" (v2.1) | "actual" (v2.0 legacy)
+  perceived_optimism_offset: 0.05         # mild optimism bias on the prior
+  perceived_reliability_sd: 0.10          # between-member spread in perception
+  perceived_learning_rate: 0.05           # rate perception converges to actual
+
+# ---------------------------------------------------------------------------
+# AI task-allocation assistant (added in v2.1).
+#
+# In v2.0 allocation quality under a wrong recommendation fell back to 0.45,
+# while the non-AI heuristic baseline was 0.40. AI allocation was therefore
+# better than no allocation assistance even at zero reliability, so AI benefit
+# was floored positive by construction. In v2.1 the misallocation fallback sits
+# BELOW the baseline, so following an unreliable assistant can be worse than
+# not using one.
+ai_allocation:
+  misallocation_quality: 0.30   # quality when the assistant's pick is wrong
+  baseline_quality: 0.40        # quality of the non-AI heuristic allocator
+  wrong_pick_score_factor: 0.60 # score penalty when the team follows a bad pick
 
 # Aggregate Collective Intelligence weights. The positive weights sum to 1.00
 # so the CI score reads as a weighted average of its subconstructs.

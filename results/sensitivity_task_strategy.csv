@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+task_strategy,Strategy updating process,0.2,20.0,72.801,62.854,72.598,70.768,15.453,93.396,30.266,4.275
+task_strategy,Strategy updating process,0.3,30.0,73.921,63.485,73.035,70.982,16.719,93.396,27.494,4.7
+task_strategy,Strategy updating process,0.4,40.0,74.411,64.078,73.425,71.062,16.75,93.396,26.653,4.75
+task_strategy,Strategy updating process,0.5,50.0,74.642,64.64,73.78,71.187,16.14,93.396,26.564,4.65
+task_strategy,Strategy updating process,0.6,60.0,75.185,65.242,74.171,71.326,15.995,93.396,25.586,4.675
+task_strategy,Strategy updating process,0.7,70.0,75.436,65.815,74.53,71.425,15.906,93.396,25.335,4.65
+task_strategy,Strategy updating process,0.8,80.0,75.746,66.388,74.892,71.485,15.687,93.396,24.858,4.525
+task_strategy,Strategy updating process,0.9,90.0,76.235,66.982,75.283,71.637,15.781,93.396,23.908,4.55

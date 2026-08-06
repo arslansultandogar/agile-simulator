@@ -1,0 +1,4 @@
+CI baselines,Velocity,Velocity SD,Completion,Completion SD,Defect rate,Defect SD,CI score,Effectiveness,Effectiveness SD,Eff CI low,Eff CI high
+Low (40%),30.967,3.958,72.78,7.365,16.693,6.391,59.218,73.294,3.418,72.819,73.769
+Default (62/60/64%),31.171,3.957,73.4,7.249,16.553,6.332,65.219,74.306,3.331,73.844,74.769
+High (80%),31.497,3.974,74.17,7.396,16.233,6.39,69.539,75.237,3.378,74.768,75.706

@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+trust_in_ai,Trust in AI,0.2,20.0,74.576,65.476,74.592,71.546,15.5,95.174,27.785,4.475
+trust_in_ai,Trust in AI,0.3,30.0,75.112,65.542,74.662,71.654,14.213,95.174,26.816,4.25
+trust_in_ai,Trust in AI,0.4,40.0,75.565,65.588,74.713,71.699,14.14,95.174,25.863,4.3
+trust_in_ai,Trust in AI,0.5,50.0,75.471,65.588,74.709,71.665,14.099,95.174,26.168,4.175
+trust_in_ai,Trust in AI,0.6,60.0,75.628,65.593,74.712,71.678,14.937,95.174,25.483,4.4
+trust_in_ai,Trust in AI,0.7,70.0,75.675,65.596,74.712,71.718,14.166,95.174,25.616,4.275
+trust_in_ai,Trust in AI,0.8,80.0,76.053,65.637,74.758,71.73,13.599,95.174,24.926,4.15
+trust_in_ai,Trust in AI,0.9,90.0,76.244,65.657,74.779,71.782,14.221,95.174,24.317,4.275

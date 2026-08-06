@@ -5,6 +5,8 @@ from typing import Dict, List
 
 import numpy as np
 
+from config_loader import HUMAN_AI_TRUST, PERCEIVED_RELIABILITY_ANCHOR
+
 
 # Week 4: lightweight role model. Roles act as small behavioral modifiers
 # layered on top of the existing per-member attributes; they are not a full
@@ -101,7 +103,21 @@ def generate_team(
         social_sensitivity_baseline = 0.66 if gender == "F" else 0.60
         social_sensitivity = _clamp(rng.normal(social_sensitivity_baseline, 0.12))
         member_trust_in_ai = _clamp(rng.normal(trust_in_ai, 0.12))
-        perceived_ai_reliability = _clamp(rng.normal(ai_reliability + 0.05, 0.10))
+        # v2.1: initial perceived reliability is a PRIOR BELIEF anchored on the
+        # team's trust disposition, not on the AI's true reliability. Anchoring
+        # it on actual reliability (the v2.0 behavior, still selectable via
+        # config/weights.yaml) makes miscalibration structurally impossible.
+        _anchor = (
+            member_trust_in_ai
+            if PERCEIVED_RELIABILITY_ANCHOR == "trust"
+            else ai_reliability
+        )
+        perceived_ai_reliability = _clamp(
+            rng.normal(
+                _anchor + HUMAN_AI_TRUST["perceived_optimism_offset"],
+                HUMAN_AI_TRUST["perceived_reliability_sd"],
+            )
+        )
         work_speed = _clamp(rng.normal(0.95, 0.12), 0.55, 1.35)
 
         # Better skills and communication usually reduce defects, so they lower

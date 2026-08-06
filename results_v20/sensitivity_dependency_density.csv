@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+dependency_density,Dependency density (blockers),0.2,20.0,75.927,65.633,74.749,71.728,13.781,95.174,24.904,4.025
+dependency_density,Dependency density (blockers),0.3,30.0,75.567,65.549,74.666,71.603,15.25,95.174,25.418,4.55
+dependency_density,Dependency density (blockers),0.4,40.0,75.12,65.462,74.585,71.55,15.812,95.174,25.934,4.65
+dependency_density,Dependency density (blockers),0.5,50.0,75.416,65.515,74.658,71.553,16.396,95.174,25.472,4.625
+dependency_density,Dependency density (blockers),0.6,60.0,75.433,65.54,74.67,71.63,17.099,95.174,25.118,5.125
+dependency_density,Dependency density (blockers),0.7,70.0,75.922,65.614,74.739,71.622,13.14,95.174,25.302,3.975
+dependency_density,Dependency density (blockers),0.8,80.0,75.815,65.65,74.761,71.729,16.539,95.174,24.375,4.8
+dependency_density,Dependency density (blockers),0.9,90.0,75.439,65.474,74.6,71.603,16.032,95.174,25.456,4.625

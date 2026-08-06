@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+collective_reasoning,Collective reasoning (CI baseline),0.2,20.0,74.224,61.701,72.662,71.295,14.594,95.174,27.539,4.225
+collective_reasoning,Collective reasoning (CI baseline),0.3,30.0,74.777,62.602,73.149,71.426,14.765,95.174,26.499,4.325
+collective_reasoning,Collective reasoning (CI baseline),0.4,40.0,75.092,63.488,73.612,71.524,15.458,95.174,25.856,4.525
+collective_reasoning,Collective reasoning (CI baseline),0.5,50.0,75.33,64.365,74.069,71.591,14.635,95.174,25.838,4.275
+collective_reasoning,Collective reasoning (CI baseline),0.6,60.0,75.461,65.228,74.512,71.655,14.729,95.174,25.793,4.3
+collective_reasoning,Collective reasoning (CI baseline),0.7,70.0,75.881,66.103,74.976,71.761,14.198,95.174,25.25,4.25
+collective_reasoning,Collective reasoning (CI baseline),0.8,80.0,76.153,66.792,75.356,71.854,14.161,95.174,24.903,4.3
+collective_reasoning,Collective reasoning (CI baseline),0.9,90.0,76.293,67.195,75.587,71.902,13.656,95.174,24.86,4.15

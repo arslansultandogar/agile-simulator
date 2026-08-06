@@ -1,0 +1,24 @@
+{
+  "model_version": "2.0.0",
+  "repetitions": 200,
+  "sensitivity_repetitions": 40,
+  "files": [
+    "ai_reliability_crossing.csv",
+    "exp1_ci_levels.csv",
+    "exp2_paired_S1_high_trust_high_reliability.csv",
+    "exp2_paired_S2_over_trust_low_reliability.csv",
+    "exp2_trust_scenarios.csv",
+    "exp3_task_types.csv",
+    "exp4_process_vs_ai.csv",
+    "sensitivity_ai_reliability.csv",
+    "sensitivity_collective_reasoning.csv",
+    "sensitivity_dashboard_quality.csv",
+    "sensitivity_dependency_density.csv",
+    "sensitivity_effort_management.csv",
+    "sensitivity_importance_ranking.csv",
+    "sensitivity_skills_knowledge_coordination.csv",
+    "sensitivity_stability_all.csv",
+    "sensitivity_task_strategy.csv",
+    "sensitivity_trust_in_ai.csv"
+  ]
+}

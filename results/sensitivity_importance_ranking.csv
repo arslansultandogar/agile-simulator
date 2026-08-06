@@ -1,0 +1,9 @@
+Parameter,Min,Max,Range,Stability
+effort_management,70.178,77.473,7.295,0.906
+ai_reliability,71.298,74.974,3.676,0.951
+task_strategy,72.801,76.235,3.434,0.955
+trust_in_ai,72.2,75.403,3.203,0.958
+dashboard_quality,73.888,75.917,2.029,0.973
+skills_knowledge_coordination,74.294,75.775,1.481,0.98
+collective_reasoning,74.275,75.679,1.404,0.981
+dependency_density,74.84,75.767,0.927,0.988

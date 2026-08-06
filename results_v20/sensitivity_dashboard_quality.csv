@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+dashboard_quality,Dashboard quality,0.2,20.0,72.686,63.482,72.737,70.713,17.359,95.174,30.198,4.85
+dashboard_quality,Dashboard quality,0.3,30.0,72.998,63.835,73.046,70.831,16.51,95.174,29.988,4.55
+dashboard_quality,Dashboard quality,0.4,40.0,73.763,64.28,73.477,71.039,16.276,95.174,28.608,4.7
+dashboard_quality,Dashboard quality,0.5,50.0,74.143,64.691,73.861,71.253,15.547,95.174,28.223,4.5
+dashboard_quality,Dashboard quality,0.6,60.0,74.849,65.128,74.268,71.45,14.786,95.174,27.06,4.325
+dashboard_quality,Dashboard quality,0.7,70.0,75.544,65.573,74.691,71.689,14.729,95.174,25.733,4.3
+dashboard_quality,Dashboard quality,0.8,80.0,76.531,66.054,75.147,71.909,12.375,95.174,24.423,3.775
+dashboard_quality,Dashboard quality,0.9,90.0,76.618,66.459,75.533,72.052,11.8,95.174,24.769,3.475

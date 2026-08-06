@@ -1,0 +1,4 @@
+Scenario,CI score,CI SD,Decision quality,DQ SD,Effectiveness,Eff SD,Viability,Sustainability,Sustain SD
+Default,65.219,1.764,74.574,0.967,74.306,3.331,74.083,70.943,1.236
+S3: Strong process / weak AI,66.505,1.787,70.623,0.881,75.425,3.355,74.765,75.428,1.155
+S4: Weak process / strong AI,62.603,1.777,74.181,1.069,72.847,3.826,72.96,65.585,1.23

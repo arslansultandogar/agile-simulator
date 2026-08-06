@@ -5,6 +5,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
+from config_loader import AI_ALLOCATION, HUMAN_AI_TRUST
 from team import TeamMember
 from tasks import Task
 
@@ -39,8 +40,13 @@ def update_team_trust_after_sprint(
         outcome_effect = 0.04 * (sprint_outcome_signal - 0.5)
         calibration_effect = 0.03 * (actual_ai_reliability - member.perceived_ai_reliability)
         member.trust_in_ai = _clamp(member.trust_in_ai + outcome_effect + calibration_effect)
+        # Learned trust: experience moves perception toward the AI's actual
+        # reliability across sprints (Hoff & Bashir 2015). Miscalibration is
+        # therefore a trajectory that self-corrects, not a fixed state.
         member.perceived_ai_reliability = _clamp(
-            member.perceived_ai_reliability + (0.05 * (actual_ai_reliability - member.perceived_ai_reliability))
+            member.perceived_ai_reliability
+            + (HUMAN_AI_TRUST["perceived_learning_rate"]
+               * (actual_ai_reliability - member.perceived_ai_reliability))
         )
 
 
@@ -91,19 +97,36 @@ def allocate_tasks_with_ai(
         chosen_member = best_member
 
         if len(ranked_members) > 1 and ai_reliability < 1.0:
+            # Uptake is how strongly the team acts on the recommendation. High
+            # trust means a wrong recommendation is more likely to be followed
+            # (misuse / over-reliance: Parasuraman & Riley 1997; Bucinca 2021).
             uptake = ai_support_level * best_member.trust_in_ai
             mistake_probability = (1.0 - ai_reliability) * uptake
             if rng.random() < mistake_probability:
-                _, chosen_member = ranked_members[1]
+                # v2.1: a wrong recommendation picks from anywhere below the top
+                # candidate, not merely the runner-up. Always choosing the
+                # second-best made unreliable AI nearly as good as reliable AI.
+                _, chosen_member = ranked_members[int(rng.integers(1, len(ranked_members)))]
 
         assignments[task.task_id] = chosen_member.member_id
         workloads[chosen_member.member_id] += task.effort_points
-        assignment_scores.append(_clamp(best_score if chosen_member == best_member else best_score * 0.75))
+        assignment_scores.append(
+            _clamp(
+                best_score
+                if chosen_member == best_member
+                else best_score * AI_ALLOCATION["wrong_pick_score_factor"]
+            )
+        )
 
     average_quality = sum(assignment_scores) / len(assignment_scores) if assignment_scores else 0.0
     boosted_quality = _clamp(average_quality * (0.70 + (0.30 * ai_support_level)))
+    # v2.1: the misallocation fallback sits BELOW the no-AI baseline quality, so
+    # relying on an unreliable assistant can be worse than not using one. In
+    # v2.0 this fallback was 0.45 against a 0.40 baseline, which floored AI
+    # benefit positive regardless of reliability.
     reliability_adjusted_quality = _clamp(
-        (ai_reliability * boosted_quality) + ((1.0 - ai_reliability) * 0.45)
+        (ai_reliability * boosted_quality)
+        + ((1.0 - ai_reliability) * AI_ALLOCATION["misallocation_quality"])
     )
     return assignments, dict(workloads), reliability_adjusted_quality
 
@@ -122,7 +145,7 @@ def allocate_tasks_without_ai(tasks: List[Task], team_members: List[TeamMember])
         assignments[task.task_id] = best_member.member_id
         workloads[best_member.member_id] += task.effort_points
 
-    return assignments, dict(workloads), 0.40
+    return assignments, dict(workloads), AI_ALLOCATION["baseline_quality"]
 
 
 def shared_cognition_assistant(

@@ -78,3 +78,35 @@ except (TypeError, ValueError):
 TEAM_EFFECTIVENESS_WEIGHTS: Dict[str, float] = _merge_weights(
     "team_effectiveness_weights", _DEFAULT_TEAM_EFFECTIVENESS_WEIGHTS
 )
+
+# --- v2.1: human-AI trust and allocation parameters ------------------------
+
+_DEFAULT_HUMAN_AI_TRUST: Dict[str, float] = {
+    "perceived_optimism_offset": 0.05,
+    "perceived_reliability_sd": 0.10,
+    "perceived_learning_rate": 0.05,
+}
+
+_DEFAULT_AI_ALLOCATION: Dict[str, float] = {
+    "misallocation_quality": 0.30,
+    "baseline_quality": 0.40,
+    "wrong_pick_score_factor": 0.60,
+}
+
+HUMAN_AI_TRUST: Dict[str, float] = _merge_weights(
+    "human_ai_trust", _DEFAULT_HUMAN_AI_TRUST
+)
+
+# Anchor is a string, so it is read separately from the numeric merge.
+_raw_trust = _RAW.get("human_ai_trust", {})
+PERCEIVED_RELIABILITY_ANCHOR: str = str(
+    _raw_trust.get("perceived_reliability_anchor", "trust")
+    if isinstance(_raw_trust, dict)
+    else "trust"
+).strip().lower()
+if PERCEIVED_RELIABILITY_ANCHOR not in ("trust", "actual"):
+    PERCEIVED_RELIABILITY_ANCHOR = "trust"
+
+AI_ALLOCATION: Dict[str, float] = _merge_weights(
+    "ai_allocation", _DEFAULT_AI_ALLOCATION
+)

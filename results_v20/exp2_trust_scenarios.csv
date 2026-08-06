@@ -1,0 +1,3 @@
+Scenario,Eff delta mean,Eff delta SD,Eff delta CI low,Eff delta CI high,Share runs positive,Defect delta mean,Defect delta CI low,Defect delta CI high,AI benefit score,Trust calibration
+S1_high_trust_high_reliability,2.998,3.717,2.482,3.514,0.795,-5.089,-6.267,-3.91,56.389,96.892
+S2_over_trust_low_reliability,1.931,3.883,1.391,2.47,0.69,-3.097,-4.286,-1.907,42.276,95.445

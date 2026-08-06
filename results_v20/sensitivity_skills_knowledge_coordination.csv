@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+skills_knowledge_coordination,Knowledge / skills process,0.2,20.0,74.129,62.033,72.902,71.297,17.893,95.174,26.983,5.4
+skills_knowledge_coordination,Knowledge / skills process,0.3,30.0,74.821,62.842,73.327,71.445,17.373,95.174,25.738,5.175
+skills_knowledge_coordination,Knowledge / skills process,0.4,40.0,75.239,63.638,73.734,71.565,16.234,95.174,25.357,4.825
+skills_knowledge_coordination,Knowledge / skills process,0.5,50.0,75.359,64.41,74.11,71.61,15.047,95.174,25.678,4.45
+skills_knowledge_coordination,Knowledge / skills process,0.6,60.0,75.512,65.198,74.509,71.675,14.963,95.174,25.595,4.375
+skills_knowledge_coordination,Knowledge / skills process,0.7,70.0,75.998,65.99,74.914,71.758,13.927,95.174,25.0,4.175
+skills_knowledge_coordination,Knowledge / skills process,0.8,80.0,76.04,66.775,75.303,71.794,11.984,95.174,25.859,3.575
+skills_knowledge_coordination,Knowledge / skills process,0.9,90.0,76.301,67.563,75.701,71.827,11.12,95.174,25.883,3.3

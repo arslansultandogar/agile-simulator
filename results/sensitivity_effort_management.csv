@@ -1,0 +1,9 @@
+parameter,parameter_label,value,value_percent,team_effectiveness_mean,collective_intelligence_mean,team_viability_mean,member_sustainability_mean,defect_rate_mean,trust_calibration_mean,carry_over_rate_mean,rework_created_mean
+effort_management,Effort-related process,0.2,20.0,70.178,63.605,73.259,58.924,14.911,93.396,31.713,3.625
+effort_management,Effort-related process,0.3,30.0,71.54,64.058,73.533,61.683,14.619,93.396,29.746,3.675
+effort_management,Effort-related process,0.4,40.0,73.14,64.521,73.814,64.536,15.755,93.396,27.148,4.175
+effort_management,Effort-related process,0.5,50.0,73.655,64.881,73.98,67.196,17.463,93.396,26.806,4.575
+effort_management,Effort-related process,0.6,60.0,74.657,65.305,74.217,69.957,16.468,93.396,26.075,4.625
+effort_management,Effort-related process,0.7,70.0,75.618,65.729,74.457,72.696,15.557,93.396,25.607,4.475
+effort_management,Effort-related process,0.8,80.0,76.325,66.101,74.63,75.311,15.505,93.396,25.329,4.55
+effort_management,Effort-related process,0.9,90.0,77.473,66.527,74.865,78.075,15.114,93.396,24.203,4.625
