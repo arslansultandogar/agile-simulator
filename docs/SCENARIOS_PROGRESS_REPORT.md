@@ -127,5 +127,3 @@ Sign structure is clean — every negative cell is in the over-trust half — bu
 | `python make_scenario_figures.py` | four figures → `results_scenarios/figures/` |
 
 Runs are deterministic given the seed rule; re-running reproduces every number above exactly.
-
-**Also completed this session.** The CI/HCOMP Posters & Demos submission materials in `docs/submission/` were revised: collective intelligence leads the title, Scrum is introduced in the body rather than the title, inline citations support every substantive claim, the demo paper carries tool architecture and operation while the poster carries the conceptual argument, and both fit the two-page limit.
