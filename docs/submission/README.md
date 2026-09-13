@@ -12,6 +12,7 @@ Submission documents for the Agile AI Simulator, split into separate files.
 | [`SUBMISSION_DECISIONS.md`](SUBMISSION_DECISIONS.md) | Track choice, topic affiliation, rationale, and audience engagement plan |
 | [`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md) | Pre-submission checklist |
 | [`figures/`](figures/) | Figure 1 (architecture, provided) + screenshot slots |
+| [`camera-ready/`](camera-ready/) | ACM `acmart` single-column camera-ready extended abstract (Demo track) for CI 2026 |
 
 ## Recommended Submission
 
