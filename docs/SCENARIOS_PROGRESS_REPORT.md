@@ -5,7 +5,7 @@ Two empirically anchored scenarios were encoded, run against CITAS v2.1, and doc
 
 Full numbers: [`../results_scenarios/RESULTS_SUMMARY.md`](../results_scenarios/RESULTS_SUMMARY.md). ODD documentation: [`../scenarios/README.md`](../scenarios/README.md).
 
-## 0. Summary of findings
+## 1. Summary of findings
 
 Every number comes from an executed run. Status labels mark what is established, what was corrected, and what remains a hypothesis.
 
@@ -15,9 +15,9 @@ Every number comes from an executed run. Status labels mark what is established,
 - **[Hypothesis] The remaining candidates are sprint count (12 vs 8) and dependency density / complexity.** Both have a plausible mechanism; neither has been tested. The paper must not attribute the null harm to process discipline.
 - **[Verified] The thesis's `results_v20/` data is genuine v2.0, not a hybrid.** It reproduces bit-for-bit from the pre-v2.1 commit. Only the documentation wording about the config switch needs correcting.
 
-## 1. Scope and deliverables
+## 2. Scope and deliverables
 
-Prof. Garbajosa asked for concrete worked scenarios demonstrating simulator *operation* and *application and use*, anchored in published case studies. The approved plan was implemented in full.
+Two scenarios anchored in published case studies were encoded as configuration, run against CITAS v2.1, and documented to the ODD protocol. The deliverables:
 
 | Deliverable | Location | Notes |
 |---|---|---|
@@ -29,13 +29,13 @@ Prof. Garbajosa asked for concrete worked scenarios demonstrating simulator *ope
 | ODD documentation | `scenarios/README.md` | Grimm et al. (2020) structure; intended as a paper appendix |
 | Results summary | `results_scenarios/RESULTS_SUMMARY.md` | Paper-ready numbers, interpretation, open questions |
 
-## 2. Approach and corrections made during implementation
+## 3. Approach and corrections made during implementation
 
 **Anchoring.** Scenario A — safety-critical embedded (EBCU with coupled ICU, ISO 26262); quantitative anchor Van Schooenderwoert (2006), carried with the caveat that it is an industry experience report, not an independent study; process/regulatory characteristics from Diebold & Mayer (2017) and Heeager & Nielsen (2020). Scenario B — large-scale enterprise IS (public-sector pension provider, ~2,500 stories, 12 parallel teams), anchored in Dingsøyr, Moe & Seim (2018); one representative team modelled. Every parameter carries a basis code (REP / DER / ASS) in the code itself.
 
 **Parameter mapping.** All 19 names in the specification are verbatim `SimulationConfig` identifiers. Three required parameters the specification omitted were added, all ASS: `female_proportion` 0.50, `team_engagement_baseline` 0.65, `random_seed` 42.
 
-**Three design decisions, agreed before running:**
+**Three design decisions:**
 
 - **[Corrected] Four-week-increment variant dropped.** CITAS abstracts over calendar time; iteration length is not a parameter. Halving sprints answers a different question; a linear capacity multiplier encodes an unevidenced assumption. Recorded in the ODD as outside scope, with Heeager & Nielsen's cadence-strain finding flagged as future work.
 - **[Corrected] Skill narrative reframed.** Agent skill is a fixed distribution with no learning; Scenario A's inexperienced staffing is operationalised via reduced collective memory (0.50) and coordination capability (0.60). `skill_diversity` is an output, not an input.
@@ -43,15 +43,15 @@ Prof. Garbajosa asked for concrete worked scenarios demonstrating simulator *ope
 
 **Experimental discipline.** 200 paired runs for arms and sweeps; 40 per grid cell. Seeds `42 + i`, identical within each pair and across every grid cell (common random numbers). 95% CI = mean ± 1.96·SE; SE reported per cell. Runner exits unless model is 2.1.0 with anchor `trust`. Main run: 27,680 simulations in 92.5 s; each supplementary sweep 11,200 in 37 s.
 
-## 3. Integrity checks
+## 4. Integrity checks
 
 - **[Verified] `results_v20/` is genuine v2.0.** Its `exp1_ci_levels.csv` and `exp2_trust_scenarios.csv` reproduce with zero difference from commit `50c9266`, where all four v2.1 mechanics were absent. The thesis Fig 5 overlay is correctly labelled. Only the `weights.yaml` comment and Appendix B.6/C.4.3 wording (claiming the switch restores v2.0 exactly) need correcting.
 - **[Verified] Positive control.** The scenarios harness on the thesis crossing configuration (defaults, trust 0.85, support 0.80, N = 60) reproduces `results/ai_reliability_crossing.csv` exactly — −1.26 [−2.23, −0.29] at reliability 0.30, crossing between 0.45 and 0.50.
 - **[Verified] Nothing existing touched.** `git diff` across `results/`, `results_v20/`, `figures/`, `make_figures.py` and every model file is empty. No TODO markers.
 
-## 4. Results
+## 5. Results
 
-### 4.1 Paired arms (N = 200)
+### 5.1 Paired arms (N = 200)
 
 | Metric | Scenario A | Scenario B |
 |---|---|---|
@@ -69,7 +69,7 @@ The gain is larger in A and carried by both quality and throughput. In B it is a
 
 ![Figure 1](../results_scenarios/figures/fig_scenarios_paired_benefit.png)
 
-### 4.2 Scenario A reliability sweep — no zero crossing
+### 5.2 Scenario A reliability sweep — no zero crossing
 
 | Configuration | Trust | Crossings | Benefit at 0.30 | Benefit at 0.95 | CI wholly > 0 from |
 |---|---|---|---|---|---|
@@ -87,7 +87,7 @@ In every Scenario A variant the benefit stays positive across the whole range. R
 
 > **What this establishes, and what it does not.** Support level and process profile are ruled out, and the harness is validated. What remains different from the thesis run is Scenario A's team size (5 vs 6), sprint count (12 vs 8), backlog mix, task complexity (0.72 vs 0.58), dependency density (0.45 vs 0.25) and CI baselines. Sprint count (longer for learned trust to converge) and coordination need (larger assistant upside) carry plausible mechanisms — but these are untested hypotheses. Present the null harm as *conditional on the scenario configuration*.
 
-### 4.3 Scenario A trust × reliability grid (196 cells, N = 40 each)
+### 5.3 Scenario A trust × reliability grid (196 cells, N = 40 each)
 
 | Statistic | Value |
 |---|---|
@@ -102,7 +102,7 @@ Sign structure is clean — every negative cell is in the over-trust half — bu
 
 ![Figure 3](../results_scenarios/figures/fig_scenarios_trust_x_reliability_A.png)
 
-## 5. Points for the paper
+## 6. Points for the paper
 
 1. **Frame the no-crossing result explicitly** as conditional on configuration — not attributable to process discipline (the isolating test refutes that).
 2. **Scenario B's throughput gain is null**; present its benefit as a quality/decision-quality effect.
@@ -111,7 +111,7 @@ Sign structure is clean — every negative cell is in the over-trust half — bu
 5. **Do not quote individual grid cells**; quote the surface and its sign structure.
 6. **Documentation fix:** reword the `weights.yaml` comment and Appendix B.6/C.4.3 — the anchor switch reverts one of four v2.1 changes, not all.
 
-## 6. Proposed next steps
+## 7. Proposed next steps
 
 - **[Not run]** Pin the mechanism: default-process / support-0.80 with `number_of_sprints = 8`, and separately with `dependency_density = 0.25` (~40 s each).
 - **[Not run]** Optionally the same isolating ladder on Scenario B.
@@ -128,4 +128,4 @@ Sign structure is clean — every negative cell is in the over-trust half — bu
 
 Runs are deterministic given the seed rule; re-running reproduces every number above exactly.
 
-**Also completed this session.** The CI/HCOMP Posters & Demos submission materials in `docs/submission/` were revised to Prof. Garbajosa's feedback: collective intelligence leads the title, Scrum is introduced in the body rather than the title, inline citations support every substantive claim, the demo paper carries tool architecture and operation while the poster carries the conceptual argument, and both fit the two-page limit.
+**Also completed this session.** The CI/HCOMP Posters & Demos submission materials in `docs/submission/` were revised: collective intelligence leads the title, Scrum is introduced in the body rather than the title, inline citations support every substantive claim, the demo paper carries tool architecture and operation while the poster carries the conceptual argument, and both fit the two-page limit.
